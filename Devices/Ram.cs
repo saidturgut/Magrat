@@ -2,7 +2,7 @@ namespace Devices;
 
 public class Ram
 {
-    private readonly byte[] Memory = new byte[0xE000];
+    private readonly byte[] Memory = new byte[0x10000];
 
     public byte Read(uint address)
         => Memory[address];

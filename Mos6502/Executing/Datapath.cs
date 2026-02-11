@@ -38,6 +38,7 @@ public partial class Datapath
 
     private void Protocol()
     {
+        if (signal.Name != "") debugName = signal.Name;
         Sru.Update(Point(Pointer.SR).Get());
         Point(Pointer.NIL).Set(0);
         Point(Pointer.SPH).Set(1);

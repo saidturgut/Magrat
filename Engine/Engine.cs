@@ -1,56 +1,37 @@
 ﻿namespace Engine;
 using Bounds;
-using Devices;
 
 public partial class Engine(IHost Host)
 {
+    public string cpuName = "";
+
+    public Dictionary<string, Action>? OneToken;
+    public Dictionary<string, Action<string>>? TwoToken;
+    public Dictionary<string, Action<string, string>>? ThreeToken;
+
     private readonly Tables Tables = new();
 
     private ICpu? Cpu;
     private ISudo? Bus;
-    
+
+    private byte step;
+    private byte sleep;
     public bool exit;
     
-    public void Set(string name)
+    public void Init()
     {
-        Bus = new Bus(this);
-        Cpu = Tables.CpuTable(name, Bus);
-        Cpu!.Init();
-    }
-    
-    public void Mem(uint address, byte data)
-    {
-        Bus!.Write(address, data, Bus);
-    }
-
-    public void Load(uint address, byte[] image)
-    {
-        for (int i = 0; i < image.Length; i++)
+        OneToken = new Dictionary<string, Action>()
         {
-            Bus!.Write((uint)(address + i), image[i], Bus);
-        }
-    }
-
-    public void Disk(byte[] image)
-    {
-        Bus!.Insert(image);
-    }
-
-    public void Reg(string register, ushort value)
-    {
-    }
-    
-    public void Run()
-    {
-        while (!Cpu!.Halt())
+            ["help"] = Help, ["exit"] = Exit, ["clear"] = Clear, ["run"] = Run,
+        };
+        TwoToken = new Dictionary<string, Action<string>>()
         {
-            Cpu.Tick();
-        }
-    }
-
-    public void Step()
-    {
-        Cpu!.Tick();
+            ["set"] = Set, ["disk"] = Disk, ["sleep"] = Sleep, ["step"] = Step,
+        };
+        ThreeToken = new Dictionary<string, Action<string, string>>()
+        {
+            ["load"] = Load, ["mem"] = Mem, ["reg"] = Reg,
+        };
     }
 }
 

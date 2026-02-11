@@ -10,5 +10,8 @@ public partial class Engine : IEngine
         => Host.ReadInput();
 
     public void Debug(string[] logs)
-        => Host.WriteLog(logs);
+    {
+        Host.WriteLog(logs);
+        step--;
+    }
 }

@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "External", "External\Extern
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mos6502", "Mos6502\Mos6502.csproj", "{95244DE9-72D0-4975-83C7-995E597D51F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZilogZ80", "ZilogZ80\ZilogZ80.csproj", "{BFF24AA2-203C-47C8-977E-E9129D8FC565}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{95244DE9-72D0-4975-83C7-995E597D51F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95244DE9-72D0-4975-83C7-995E597D51F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95244DE9-72D0-4975-83C7-995E597D51F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFF24AA2-203C-47C8-977E-E9129D8FC565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFF24AA2-203C-47C8-977E-E9129D8FC565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFF24AA2-203C-47C8-977E-E9129D8FC565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFF24AA2-203C-47C8-977E-E9129D8FC565}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

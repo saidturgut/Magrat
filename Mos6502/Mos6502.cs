@@ -10,10 +10,11 @@ public class Mos6502(IBus Bus) : ICpu
 
     private bool halt;
     
-    public void Init()
+    public string Init()
     {
         Datapath.Init();
         Control.Init();
+        return "6502";
     }
     
     public void Tick()

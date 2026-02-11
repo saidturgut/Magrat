@@ -2,7 +2,7 @@ namespace Bounds;
 
 public interface ICpu
 {
-    public void Init();
+    public string Init();
     
     public void Tick();
     

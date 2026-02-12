@@ -10,6 +10,7 @@
       <ProjectReference Include="..\Bounds\Bounds.csproj" />
       <ProjectReference Include="..\Devices\Devices.csproj" />
       <ProjectReference Include="..\Mos6502\Mos6502.csproj" />
+      <ProjectReference Include="..\ZilogZ80\ZilogZ80.csproj" />
     </ItemGroup>
 
 </Project>

@@ -23,7 +23,7 @@ public partial class Datapath
         flagLatch = output.Flags;
         
         Point(Pointer.TMP).Set(output.Result);
-        Point(Pointer.SR).Set((byte)
-            ((Point(Pointer.SR).Get() & (byte)~signal.Mask) | (flagLatch & (byte)signal.Mask)));
+        Point(Pointer.F).Set((byte)
+            ((Point(Pointer.F).Get() & (byte)~signal.Mask) | (flagLatch & (byte)signal.Mask)));
     }
 }

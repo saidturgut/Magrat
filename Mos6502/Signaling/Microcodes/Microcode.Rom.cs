@@ -26,12 +26,12 @@ public static partial class Microcode
         ["HLT"] = () => [CHANGE_STATE(Cycle.HALT)],
 
         // LOAD & STORE
-        ["LDA"] = () => LOAD(Pointer.ACC), ["LDX"] = () => LOAD(Pointer.IX), ["LDY"] = () => LOAD(Pointer.IY),
-        ["STA"] = () => STORE(Pointer.ACC), ["STX"] = () => STORE(Pointer.IX), ["STY"] = () => STORE(Pointer.IY),
+        ["LDA"] = () => LOAD(Pointer.A), ["LDX"] = () => LOAD(Pointer.IX), ["LDY"] = () => LOAD(Pointer.IY),
+        ["STA"] = () => STORE(Pointer.A), ["STX"] = () => STORE(Pointer.IX), ["STY"] = () => STORE(Pointer.IY),
 
         // TRANSFER
-        ["TAX"] = () => TRANSFER(Pointer.ACC, Pointer.IX, true), ["TAY"] = () => TRANSFER(Pointer.ACC, Pointer.IY, true),
-        ["TXA"] = () => TRANSFER(Pointer.IX, Pointer.ACC, true), ["TYA"] = () => TRANSFER(Pointer.IY, Pointer.ACC, true),
+        ["TAX"] = () => TRANSFER(Pointer.A, Pointer.IX, true), ["TAY"] = () => TRANSFER(Pointer.A, Pointer.IY, true),
+        ["TXA"] = () => TRANSFER(Pointer.IX, Pointer.A, true), ["TYA"] = () => TRANSFER(Pointer.IY, Pointer.A, true),
         ["TXS"] = () => TRANSFER(Pointer.IX, Pointer.SPL, true), ["TSX"] = () => TRANSFER(Pointer.SPL, Pointer.IX, false),
 
         //-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-//
@@ -42,17 +42,17 @@ public static partial class Microcode
         ["INY"] = () => ALU_REG(Operation.INC, Pointer.IY, FlagMask.ZN), ["DEY"] = () => ALU_REG(Operation.DEC, Pointer.IY, FlagMask.ZN),
         
         // ARITHMETIC & LOGIC
-        ["ADC"] = () => ALU(Operation.ADC, Pointer.ACC, FlagMask.CZVN, true), ["SBC"] = () => ALU(Operation.SBC, Pointer.ACC, FlagMask.CZVN, true),
-        ["AND"] = () => ALU(Operation.AND, Pointer.ACC, FlagMask.ZN, true), ["CMP"] = () => ALU(Operation.CMP, Pointer.ACC, FlagMask.CZN, false),
-        ["ORA"] = () => ALU(Operation.OR, Pointer.ACC, FlagMask.ZN, true), ["CPX"] = () => ALU(Operation.CMP, Pointer.IX, FlagMask.CZN, false),
-        ["EOR"] = () => ALU(Operation.EOR, Pointer.ACC, FlagMask.ZN, true), ["CPY"] = () => ALU(Operation.CMP, Pointer.IY, FlagMask.CZN, false),
+        ["ADC"] = () => ALU(Operation.ADC, Pointer.A, FlagMask.CZVN, true), ["SBC"] = () => ALU(Operation.SBC, Pointer.A, FlagMask.CZVN, true),
+        ["AND"] = () => ALU(Operation.AND, Pointer.A, FlagMask.ZN, true), ["CMP"] = () => ALU(Operation.CMP, Pointer.A, FlagMask.CZN, false),
+        ["ORA"] = () => ALU(Operation.OR, Pointer.A, FlagMask.ZN, true), ["CPX"] = () => ALU(Operation.CMP, Pointer.IX, FlagMask.CZN, false),
+        ["EOR"] = () => ALU(Operation.EOR, Pointer.A, FlagMask.ZN, true), ["CPY"] = () => ALU(Operation.CMP, Pointer.IY, FlagMask.CZN, false),
         
         // SHIFT & ROTATE
-        ["BIT"] = () => ALU(Operation.BIT, Pointer.ACC, FlagMask.ZVN, false),
-        ["ASL"] = () => ALU_MEM(Operation.ASL, FlagMask.CZN), ["ASLA"] = () => ALU_REG(Operation.ASL, Pointer.ACC, FlagMask.CZN), 
-        ["LSR"] = () => ALU_MEM(Operation.LSR, FlagMask.CZN), ["LSRA"] = () => ALU_REG(Operation.LSR, Pointer.ACC, FlagMask.CZN),
-        ["ROL"] = () => ALU_MEM(Operation.ROL, FlagMask.CZN), ["ROLA"] = () => ALU_REG(Operation.ROL, Pointer.ACC, FlagMask.CZN), 
-        ["ROR"] = () => ALU_MEM(Operation.ROR, FlagMask.CZN), ["RORA"] = () => ALU_REG(Operation.ROR, Pointer.ACC, FlagMask.CZN),
+        ["BIT"] = () => ALU(Operation.BIT, Pointer.A, FlagMask.ZVN, false),
+        ["ASL"] = () => ALU_MEM(Operation.ASL, FlagMask.CZN), ["ASLA"] = () => ALU_REG(Operation.ASL, Pointer.A, FlagMask.CZN), 
+        ["LSR"] = () => ALU_MEM(Operation.LSR, FlagMask.CZN), ["LSRA"] = () => ALU_REG(Operation.LSR, Pointer.A, FlagMask.CZN),
+        ["ROL"] = () => ALU_MEM(Operation.ROL, FlagMask.CZN), ["ROLA"] = () => ALU_REG(Operation.ROL, Pointer.A, FlagMask.CZN), 
+        ["ROR"] = () => ALU_MEM(Operation.ROR, FlagMask.CZN), ["RORA"] = () => ALU_REG(Operation.ROR, Pointer.A, FlagMask.CZN),
 
         // FLAG CLEAR & SET
         ["SEC"] = () => FLAG(false, Flag.CARRY), ["SED"] = () => FLAG(false, Flag.DECIMAL), ["SEI"] = () => FLAG(false, Flag.INTERRUPT),
@@ -67,8 +67,8 @@ public static partial class Microcode
         ["BRK"] = () => BREAK,
 
         // PUSH & PULL
-        ["PHA"] = () => PUSH(Pointer.ACC), ["PHP"] = () => PUSH(Pointer.SR),
-        ["PLA"] = () => PULL(Pointer.ACC), ["PLP"] = () => PULL(Pointer.SR),
+        ["PHA"] = () => PUSH(Pointer.A), ["PHP"] = () => PUSH(Pointer.F),
+        ["PLA"] = () => PULL(Pointer.A), ["PLP"] = () => PULL(Pointer.F),
 
         // BRANCH CLEAR & SET
         ["BCC"] = () => BRANCH(Condition.CC), ["BCS"] = () => BRANCH(Condition.CS),

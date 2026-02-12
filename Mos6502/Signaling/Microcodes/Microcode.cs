@@ -7,7 +7,7 @@ public static partial class Microcode
     
     private static readonly Pointer[] PC = [Pointer.PCL, Pointer.PCH];
     private static readonly Pointer[] SP = [Pointer.SPL, Pointer.SPH];
-    private static readonly Pointer[] WZ = [Pointer.WL, Pointer.ZL];
+    private static readonly Pointer[] WZ = [Pointer.W, Pointer.Z];
     
     public static Signal[] FETCH =>
     [

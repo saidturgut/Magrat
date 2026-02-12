@@ -7,8 +7,8 @@ public static partial class Microcode
 
     private static Signal[] PUSH(Pointer source) =>
     [
-        source is Pointer.SR ? ALU_COMPUTE(Operation.PSR, Pointer.SR, Pointer.NIL, Flag.NONE) : REG_COMMIT(source, Pointer.MDR),
-        ..source is Pointer.SR ? [REG_COMMIT(Pointer.TMP, Pointer.MDR)] : NONE,
+        source is Pointer.F ? ALU_COMPUTE(Operation.PSR, Pointer.F, Pointer.NIL, Flag.NONE) : REG_COMMIT(source, Pointer.MDR),
+        ..source is Pointer.F ? [REG_COMMIT(Pointer.TMP, Pointer.MDR)] : NONE,
         MEM_WRITE(SP),
         PAIR_DEC(SP),
     ];
@@ -17,7 +17,7 @@ public static partial class Microcode
     [
         PAIR_INC(SP),
         MEM_READ(SP),
-        destination is Pointer.SR 
+        destination is Pointer.F 
             ? ALU_COMPUTE(Operation.SRP, Pointer.MDR, Pointer.NIL, Flag.NONE) 
             : ALU_COMPUTE(Operation.NONE, Pointer.MDR, Pointer.NIL, FlagMasks[FlagMask.ZN]),
         REG_COMMIT(Pointer.TMP, destination),
@@ -34,8 +34,8 @@ public static partial class Microcode
 
     private static Signal[] JUMP =>
     [
-        REG_COMMIT(Pointer.WL, Pointer.PCL),
-        REG_COMMIT(Pointer.ZL, Pointer.PCH),
+        REG_COMMIT(Pointer.W, Pointer.PCL),
+        REG_COMMIT(Pointer.Z, Pointer.PCH),
     ];
     
     private static Signal[] CALL =>
@@ -48,9 +48,9 @@ public static partial class Microcode
 
     private static Signal[] RETURN(bool rti) =>
     [
-        ..rti ? POP(Pointer.SR) : NONE,
-        ..POP(Pointer.WL),
-        ..POP(Pointer.ZL),
+        ..rti ? POP(Pointer.F) : NONE,
+        ..POP(Pointer.W),
+        ..POP(Pointer.Z),
         ..rti ? NONE : [PAIR_INC(WZ)],
         ..JUMP,
     ];
@@ -60,11 +60,11 @@ public static partial class Microcode
         PAIR_INC(PC),
         ..PUSH(Pointer.PCH),
         ..PUSH(Pointer.PCL),
-        ..PUSH(Pointer.SR),
+        ..PUSH(Pointer.F),
 
         ALU_COMPUTE(Operation.SET, Pointer.NIL, Pointer.NIL, Flag.INTERRUPT),
-        REG_COMMIT(Pointer.TMP, Pointer.WL), // LOAD 0XFF ON WZ
-        REG_COMMIT(Pointer.TMP, Pointer.ZL),
+        REG_COMMIT(Pointer.TMP, Pointer.W), // LOAD 0XFF ON WZ
+        REG_COMMIT(Pointer.TMP, Pointer.Z),
         
         MEM_READ(WZ),
         REG_COMMIT(Pointer.MDR, Pointer.PCH),

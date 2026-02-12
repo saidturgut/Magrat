@@ -1,9 +1,9 @@
 namespace ZilogZ80.Signaling;
 using Microcodes;
 
-public class Decoder
+public partial class Decoder
 {
-    private readonly Signal[][] MainPage = [];
+    private readonly Signal[][] MainPage = Microcode.OpcodeRom(true);
     private readonly Signal[][] MiscPage = [];
     private readonly Signal[][] BitPage = [];
     private readonly Signal[][] IxPage = [];
@@ -12,69 +12,36 @@ public class Decoder
     private readonly Signal[][] IyBitPage = [];
 
     public readonly Signal[] Fetch = Microcode.FETCH;
-    private readonly Signal[] Save = Microcode.SAVE;
+    public readonly Signal[] Disp = Microcode.DISP;
     
-    private Dictionary<byte, Func<bool>>? PrefixTable;
-    
-    private byte pageIndex;
-    private bool dispSwap;
-    
-    public void Init()
-    {
-        PrefixTable = new()
-            { { 0xED, ED }, { 0xCB, CB }, { 0xDD, DD }, { 0xFD, FD }, };
-    }
-    
-    private bool ED()
-    {
-        pageIndex = 1;
-        dispSwap = false;
-        return true;
-    }
-    private bool CB()
-    {
-        switch (pageIndex)
-        {
-            case 0:
-                pageIndex += 2;
-                return true;
-            case 3 or 4:
-                pageIndex += 2;
-                dispSwap = true;
-                return true;
-            default:
-                return false;
-        }
-    }
-    private bool DD()
-    {
-        if (pageIndex is not (0 or 3 or 4)) return false;
-        pageIndex = 3;
-        dispSwap = false;
-        return true;
-    }
-    private bool FD()
-    {
-        if (pageIndex is not (0 or 3 or 4)) return false;
-        pageIndex = 4;
-        dispSwap = false;
-        return true;
-    }
-
     public Signal[] Decode(byte opcode)
     {
         Signal[] output;
-        
-        if (PrefixTable!.TryGetValue(opcode, out var PrefixMethod))
-            output = PrefixMethod() ? MainPage[opcode] : IndexPage(opcode);
+
+        if (PrefixCheck(opcode))
+        {
+            output = Fetch;
+        }
+        else if (dispSwap)
+        {
+            output = Disp;
+            dispSwap = false;
+        }
         else
-            output = !dispSwap ? IndexPage(opcode) : DispSwap();
+        {
+            output = IndexPage(opcode);
+        }
         
         return output.Length != 0
             ? output
             : throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
     }
 
+    private bool PrefixCheck(byte opcode) => opcode switch
+    {
+        0xED => ED(), 0xCB => CB(), 0xDD => DD(), 0xFD => FD(), _=>false,
+    };
+    
     private Signal[] IndexPage(byte opcode) => pageIndex switch
     {
         0 => MainPage[opcode],
@@ -86,13 +53,7 @@ public class Decoder
         6 => IyBitPage[opcode],
         _ => throw new Exception($"INVALID PAGE \"{pageIndex}\""),
     };
-
-    private Signal[] DispSwap()
-    {
-        dispSwap = false;
-        return Save;
-    }
-
+    
     public void Clear()
     {
         pageIndex = 0;

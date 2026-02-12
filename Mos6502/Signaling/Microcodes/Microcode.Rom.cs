@@ -21,9 +21,9 @@ public static partial class Microcode
     
     private static readonly Dictionary<string, Func<Signal[]>> MnemonicTable = new()
     {
-        ["-"] = () => [CHANGE_STATE(Cycle.IDLE)],
-        ["NOP"] = () => [CHANGE_STATE(Cycle.IDLE)],
-        ["HLT"] = () => [CHANGE_STATE(Cycle.HALT)],
+        ["-"] = () => [STATE_COMMIT(Cycle.IDLE)],
+        ["NOP"] = () => [STATE_COMMIT(Cycle.IDLE)],
+        ["HLT"] = () => [STATE_COMMIT(Cycle.HALT)],
 
         // LOAD & STORE
         ["LDA"] = () => LOAD(Pointer.A), ["LDX"] = () => LOAD(Pointer.IX), ["LDY"] = () => LOAD(Pointer.IY),
@@ -75,44 +75,5 @@ public static partial class Microcode
         ["BNE"] = () => BRANCH(Condition.NE), ["BEQ"] = () => BRANCH(Condition.EQ),
         ["BPL"] = () => BRANCH(Condition.PL), ["BMI"] = () => BRANCH(Condition.MI),
         ["BVC"] = () => BRANCH(Condition.VC), ["BVS"] = () => BRANCH(Condition.VS),
-    };
-    
-    public static Signal[][] OpcodeRom(bool dump)
-    {
-        Signal[][] table = new Signal[256][];
-        string[] lines = File.ReadAllLines("Opcodes.csv");
-
-        for (int i = 0; i < 16; i++)
-        {
-            string[] cells = lines[i].Split(',').Select(x => x.Trim()).ToArray();   
-            
-            for (int j = 0; j < 16; j++)
-            {
-                string[] cell = cells[j].Split(' ');
-                var index = (i << 4) | j;
-                table[index] = [..AddressingTable[cell[1]](), ..MnemonicTable[cell[0]]()];
-                table[index][0].Name = $"{cell[0]} {DebugAddressingModes[cell[1]]}";
-            }
-        }
-        
-        if (dump)
-        {
-            for (int i = 0; i < 256; i++)
-            {
-                Console.WriteLine($"OPCODE {i:X2}");
-                foreach (Signal signal in table[i]) Console.WriteLine(signal.Cycle);
-                Console.WriteLine("-----------------------------");
-            }
-        
-            Environment.Exit(20);
-        }
-        
-        return table;
-    }
-    
-    private static readonly Dictionary<string, string> DebugAddressingModes = new()
-    {
-        {"-", "ILLEGAL"}, {"IMP", "imp"}, {"IMM", "#$??"}, {"ZP", "$??"}, {"ZPX", "$??,X"}, {"ZPY", "$??,Y"},
-        {"ABS", "$????"}, {"ABSX", "$????,X"}, {"ABSY", "$????,Y"}, {"IND", "($????)"}, {"INDX", "($??,X)"}, {"INDY", "($??),Y"},
     };
 }

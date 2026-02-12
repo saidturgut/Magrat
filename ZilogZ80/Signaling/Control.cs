@@ -13,7 +13,6 @@ public class Control
 
     public void Init()
     {
-        Decoder.Init();
         decoded = Decoder.Fetch;
     }
 

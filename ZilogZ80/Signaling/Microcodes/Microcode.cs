@@ -7,7 +7,10 @@ public static partial class Microcode
     
     private static readonly Pointer[] PC = [Pointer.PCL, Pointer.PCH];
     private static readonly Pointer[] SP = [Pointer.SPL, Pointer.SPH];
+    private static readonly Pointer[] HL = [Pointer.L, Pointer.H];
     private static readonly Pointer[] WZ = [Pointer.W, Pointer.Z];
+    private static readonly Pointer[] BC = [Pointer.C, Pointer.B];
+    private static readonly Pointer[] DE = [Pointer.E, Pointer.D];
     
     public static Signal[] FETCH =>
     [
@@ -18,26 +21,10 @@ public static partial class Microcode
         STATE_COMMIT(Cycle.DECODE),
     ];
     
-    public static Signal[] PREFIX =>
+    public static Signal[] DISP =>
     [
+        REG_COMMIT(Pointer.IR, Pointer.W),
         ..FETCH,
-    ];
-    
-    public static Signal[] PREFIX_IND_BIT =>
-    [
-        ..FETCH,
-        REG_COMMIT(Pointer.MDR, Pointer.TMP),
-    ];
-
-    public static readonly Signal[] SAVE =
-    [
-        REG_COMMIT(Pointer.IR, Pointer.TMP),
-    ];
-    
-    private static Signal[] READ_IMM =>
-    [
-        MEM_READ(PC),
-        PAIR_INC(PC),
     ];
     
     private static Signal STATE_COMMIT(Cycle state) => new()
@@ -61,8 +48,8 @@ public static partial class Microcode
     
     private static readonly Dictionary<FlagMask, Flag> FlagMasks = new()
     {
+        
     };
-
 }
 
 public enum FlagMask

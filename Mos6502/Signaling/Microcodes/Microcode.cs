@@ -13,10 +13,10 @@ public static partial class Microcode
     [
         ..READ_IMM,
         REG_COMMIT(Pointer.MDR, Pointer.IR),
-        CHANGE_STATE(Cycle.DECODE),
+        STATE_COMMIT(Cycle.DECODE),
     ];
     
-    private static Signal CHANGE_STATE(Cycle state) => new()
+    private static Signal STATE_COMMIT(Cycle state) => new()
         { Cycle = state, };
     
     private static Signal REG_COMMIT(Pointer source, Pointer destination) => new()

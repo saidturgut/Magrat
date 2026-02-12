@@ -1,0 +1,45 @@
+namespace ZilogZ80.Signaling.Microcodes;
+using Microsoft.VisualBasic.FileIO;
+
+public partial class Microcode
+{
+    public static Signal[][] OpcodeRom(bool dump)
+    {
+        var table = new Signal[256][];
+
+        using var parser = new TextFieldParser("MainPage.csv");
+        parser.SetDelimiters(",");
+        parser.HasFieldsEnclosedInQuotes = true;
+
+        int row = 0;
+        while (!parser.EndOfData)
+        {
+            var cells = parser.ReadFields();
+
+            for (int col = 0; col < 16; col++)
+            {
+                string[] cell = cells[col].Split('\n');
+                var index = (row << 4) | col;
+
+                table[index] = MainPage[cell[0].Trim()]();
+                table[index][0].Name = cell[1];
+            }
+
+            row++;
+        }
+        
+        if (dump)
+        {
+            for (int i = 0; i < 256; i++)
+            {
+                Console.WriteLine($"OPCODE {i:X2}");
+                foreach (Signal signal in table[i]) Console.WriteLine(signal.Cycle);
+                Console.WriteLine("-----------------------------");
+            }
+        
+            Environment.Exit(20);
+        }
+        
+        return table;
+    }
+}

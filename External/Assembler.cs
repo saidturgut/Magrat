@@ -3,12 +3,12 @@ using System.Diagnostics;
 
 public static class Assembler
 {
-    public static void Run()
+    public static void Run(string file)
     {
         var psi = new ProcessStartInfo
         {
             FileName = "/bin/bash",
-            Arguments = "assembler.sh",
+            Arguments = $"{file}.sh",
             WorkingDirectory = AppContext.BaseDirectory,
             RedirectStandardOutput = true,
             RedirectStandardError = true,

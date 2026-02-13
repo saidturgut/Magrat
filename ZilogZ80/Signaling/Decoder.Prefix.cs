@@ -18,6 +18,7 @@ public partial class Decoder
         {
             case 0:
                 pageIndex += 2;
+                dispSwap = false;
                 return true;
             case 3 or 4:
                 pageIndex += 2;

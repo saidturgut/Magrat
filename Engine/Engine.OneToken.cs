@@ -20,5 +20,6 @@ public partial class Engine
                 Thread.Sleep(sleep);
             }
         }
+        Reset();
     }
 }

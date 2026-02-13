@@ -7,8 +7,6 @@ public class ZilogZ80(IBus Bus) : ICpu
 {
     private readonly Datapath Datapath = new();
     private readonly Control Control = new();
-
-    private bool halt;
     
     public string Init()
     {
@@ -30,7 +28,6 @@ public class ZilogZ80(IBus Bus) : ICpu
 
     private void Commit()
     {
-        halt = Control.halt;
         Datapath.Debug();
         Bus.Poll();
         Bus.Debug(Datapath.logs);
@@ -39,5 +36,5 @@ public class ZilogZ80(IBus Bus) : ICpu
     }
 
     public bool Halt() 
-        => halt;
+        => Control.halt;
 }

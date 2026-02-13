@@ -1,4 +1,5 @@
 namespace Console;
+using External;
 using Engine;
 using Bounds;
 
@@ -11,22 +12,49 @@ public class Host : IHost
         Engine = new Engine(this);
         Engine.Init();
         
+        Boot();
+        
         while (!Engine.exit) Tick();
     }
+
+    private void Boot()
+    {
+        Assembler.Run("z80");
+        Execute("set z80");
+        Execute("load 0 z80.bin");
+        Execute("sleep 40");
+        Execute("run");
+    }
+    /*private void Boot()
+    {
+        Assembler.Run("6502");
+        Execute("set 6502");
+        Execute("load 0 6502.bin");
+        Execute("sleep 40");
+        Execute("run");
+    }*/
+
 
     private void Tick()
     {
         System.Console.Write($"magrat{Engine.cpuName}>");
         
-        var input = System.Console.ReadLine()?.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var input = System.Console.ReadLine();
         
-        switch (input?.Length)
+        Execute(input);
+    }
+
+    private void Execute(string input)
+    {
+        string[] tokens = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        
+        switch (tokens.Length)
         {
-            case 1: if (Engine.OneToken!.TryGetValue(input[0], out var one)) one();
+            case 1: if (Engine.OneToken!.TryGetValue(tokens[0], out var one)) one();
                 else Fault(); break;
-            case 2: if (Engine.TwoToken!.TryGetValue(input[0], out var two)) two(input[1]);
+            case 2: if (Engine.TwoToken!.TryGetValue(tokens[0], out var two)) two(tokens[1]);
                 else Fault(); break;
-            case 3: if (Engine.ThreeToken!.TryGetValue(input[0], out var three)) three(input[1], input[2]);
+            case 3: if (Engine.ThreeToken!.TryGetValue(tokens[0], out var three)) three(tokens[1], tokens[2]);
                 else Fault(); break;
             default: Fault(); break;
         }

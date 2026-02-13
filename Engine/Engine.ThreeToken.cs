@@ -6,7 +6,7 @@ public partial class Engine
     {
         uint address = Convert.ToUInt32(addr);
         byte data = Convert.ToByte(dat);
-        Bus!.Write(address, data, Bus);
+        Bus!.Load(address, data);
     }
 
     private void Load(string addr, string name)
@@ -15,7 +15,7 @@ public partial class Engine
         byte[] image = File.ReadAllBytes(name);
         for (int i = 0; i < image.Length; i++)
         {
-            Bus!.Write((uint)(address + i), image[i], Bus);
+            Bus!.Load((uint)(address + i), image[i]);
         }
     }
     

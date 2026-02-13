@@ -6,6 +6,8 @@ public interface IBus
 
     public void Write(uint address, byte data, IBus bus);
     
+    public void Load(uint address, byte data);
+    
     public void Print(char character);
     
     public void Poll();

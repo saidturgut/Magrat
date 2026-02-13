@@ -11,7 +11,7 @@ public partial class Microcode
     
     private static Signal[] REG_TO_MEM(bool imm) => // IMM_TO_MEM
     [
-        ..imm ? READ_IMM : [REG_COMMIT(EncodedRegisters[aa_XXX_aaa], Pointer.MDR)],
+        ..imm ? READ_IMM : [REG_COMMIT(EncodedRegisters[aa_aaa_XXX], Pointer.MDR)],
         MEM_WRITE(HL),
     ];
     private static Signal[] MEM_TO_REG(bool imm) => // IMM_TO_REG

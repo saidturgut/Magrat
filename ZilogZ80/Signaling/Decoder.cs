@@ -3,7 +3,7 @@ using Microcodes;
 
 public partial class Decoder
 {
-    private readonly Signal[][] MainPage = Microcode.OpcodeRom(true);
+    private readonly Signal[][] MainPage = Microcode.OpcodeRom(false);
     private readonly Signal[][] MiscPage = [];
     private readonly Signal[][] BitPage = [];
     private readonly Signal[][] IxPage = [];

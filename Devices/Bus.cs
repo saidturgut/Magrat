@@ -36,6 +36,12 @@ public partial class Bus(IEngine Engine) : IBus
         AddWriteLog("RAM", Log.Hex(address), data);
         Ram.Write(address, data); 
     }
+
+    public void Load(uint address, byte data)
+    {
+        address &= 0xFFFFF;
+        Ram.Write(address, data);
+    }
     
     public void Print(char character)
         => Engine.Print(character);

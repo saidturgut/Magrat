@@ -19,10 +19,14 @@ public partial class Microcode
             for (int col = 0; col < 16; col++)
             {
                 string[] cell = cells[col].Split('\n');
-                var index = (row << 4) | col;
+                var opcode = (row << 4) | col;
 
-                table[index] = MainPage[cell[0].Trim()]();
-                table[index][0].Name = cell[1];
+                aa_aaa_XXX = (byte)(opcode & 0x7);
+                aa_XXa_aaa = (byte)((opcode >> 4) & 0x3);
+                aa_XXX_aaa = (byte)((opcode >> 3) & 0x7);
+
+                table[opcode] = MainPage[cell[0].Trim()]();
+                table[opcode][0].Name = cell[1];
             }
 
             row++;

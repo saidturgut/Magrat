@@ -33,6 +33,13 @@ public partial class Engine(IHost Host)
             ["load"] = Load, ["mem"] = Mem, ["reg"] = Reg,
         };
     }
+
+    private void Reset()
+    {
+        Cpu = null;
+        Bus = null;
+        cpuName = "";
+    }
 }
 
 public enum Cpus

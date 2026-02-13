@@ -5,7 +5,7 @@ using Signaling;
 public partial class Datapath
 {
     private readonly Alu Alu = new ();
-    private readonly Sru Sru = new ();
+    private readonly Fru Fru = new ();
     
     private byte flagLatch;
 
@@ -15,9 +15,9 @@ public partial class Datapath
         {
             A = Point(signal.First).Get(),
             B = Point(signal.Second).Get(),
-            C = (byte)(Sru.Carry ? 1 : 0),
+            C = (byte)(Fru.Carry ? 1 : 0),
             F = flagLatch,
-            DecimalMode = Sru.Decimal,
+            DecimalMode = Fru.Decimal,
         }, signal.Operation);
         
         flagLatch = output.Flags;

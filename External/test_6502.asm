@@ -1,0 +1,46 @@
+    org $0000
+    
+    LDA $E001
+        LDA #<table
+        STA $FF
+        LDA #>table
+        STA $00
+        db $ff
+
+        LDY #$01
+
+        ; load via (zp),Y
+        LDA ($FF),Y        ; A = table[1]
+        PHA                ; save it
+
+        ; absolute,X test
+        LDX #$01
+        LDA table,X      ; same value as above
+        CMP ($FF),Y
+        BNE fail
+
+        ; stack + flags
+        PLA                ; restore A
+        CMP #$42
+        BEQ ok
+
+fail:
+        BRK                ; should not hit
+
+ok:
+        ; subroutine + indirect jump
+        JSR subbb
+        JMP (jmpvec)
+
+subbb:
+        RTS
+
+table:
+        db $10, $42, $99
+
+jmpvec:
+        byte done
+
+done:
+     db $ff
+    

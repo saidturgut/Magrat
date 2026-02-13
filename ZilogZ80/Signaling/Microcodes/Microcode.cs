@@ -48,10 +48,15 @@ public static partial class Microcode
     
     private static readonly Dictionary<FlagMask, Flag> FlagMasks = new()
     {
-        
+        { FlagMask.CNV3H5ZS , Flag.CARRY | Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
+        { FlagMask.CV3H5ZS , Flag.CARRY | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
+        { FlagMask.NV3H5ZS , Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
+        { FlagMask.CN3H5 , Flag.CARRY | Flag.SUBT | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
+        { FlagMask.N3H5 , Flag.SUBT | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
     };
 }
 
 public enum FlagMask
 {
+    CNV3H5ZS, CV3H5ZS, NV3H5ZS, CN3H5, N3H5
 }

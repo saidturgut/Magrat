@@ -36,7 +36,6 @@ public partial class Datapath
         Point(Pointer.TMP).Set(0);
         Point(Pointer.W).Set(0);
         Point(Pointer.Z).Set(0);
-        flagLatch = 0;
         stall = false;
         logs = [];
     }

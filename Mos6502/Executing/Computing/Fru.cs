@@ -1,7 +1,7 @@
 namespace Mos6502.Executing.Computing;
 
-// STATUS REGISTER UNIT
-public class Sru
+// FLAGS REGISTER UNIT
+public class Fru
 {
     public bool Carry;
     public bool Zero;
@@ -41,7 +41,7 @@ public class Sru
 [Flags]
 public enum Flag
 {
-    NONE = -1,
+    NONE = 0,
     CARRY = 1 << 0,
     ZERO = 1 << 1,
     INTERRUPT = 1 << 2,

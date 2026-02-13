@@ -3,6 +3,10 @@ using Microsoft.VisualBasic.FileIO;
 
 public partial class Microcode
 {
+    private static byte aa_XXa_aaa;
+    private static byte aa_XXX_aaa;
+    private static byte aa_aaa_XXX;
+
     public static Signal[][] OpcodeRom(bool dump)
     {
         var table = new Signal[256][];

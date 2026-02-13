@@ -8,6 +8,7 @@ public struct Signal()
     public Pointer First = Pointer.NIL;
     public Pointer Second = Pointer.NIL;
     public Operation Operation = Operation.NONE;
+    public Condition Condition = Condition.NONE;
     public Flag Mask = Flag.NONE;
 }
 

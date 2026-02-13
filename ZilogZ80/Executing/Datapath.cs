@@ -31,7 +31,7 @@ public partial class Datapath
             case Cycle.ALU_COMPUTE: AluCompute(); break;
             case Cycle.PAIR_INC: Increment(); break;
             case Cycle.PAIR_DEC: Decrement(); break;
-            //default: stall = !Sru.Check(signal.Condition); break;
+            default: stall = !Fru.Check(signal.Condition); break;
         }
         Protocol();
     }

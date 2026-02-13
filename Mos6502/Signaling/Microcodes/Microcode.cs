@@ -33,9 +33,9 @@ public static partial class Microcode
         { Cycle = Cycle.IDLE, Condition = condition };
 
     private static Signal PAIR_INC(Pointer[] pair) => new()
-        { Cycle = Cycle.PAIR_INC, First = pair[0], };
+        { Cycle = Cycle.PAIR_INC, First = pair[0], Second = pair[1] };
     private static Signal PAIR_DEC(Pointer[] pair) => new()
-        { Cycle = Cycle.PAIR_DEC, First = pair[0] };
+        { Cycle = Cycle.PAIR_DEC, First = pair[0], Second = pair[1]  };
     
     private static readonly Dictionary<FlagMask, Flag> FlagMasks = new()
     {

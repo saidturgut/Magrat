@@ -25,4 +25,9 @@ public partial class Alu
         output.Flags |= (byte)Flag.SUBT;
         return output;
     }
+    
+    private static AluOutput RST(AluInput input) => new()
+    {
+        Result = (byte)(((input.A >> 3) & 0x07) << 3),
+    };
 }

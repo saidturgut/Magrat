@@ -3,19 +3,32 @@ namespace ZilogZ80.Executing.Computing;
 // FLAGS REGISTER UNIT
 public class Fru
 {
-    public Flags Flags = new ();
+    public Flags Flags;
 
     public void Update(byte sr)
     {
-        Flags.Carry = (byte)(sr & (byte)Flag.CARRY) != 0; // C
-        Flags.Subt = (byte)(sr & (byte)Flag.SUBT) != 0; // N
-        Flags.Over = (byte)(sr & (byte)Flag.OVER) != 0; // P
-        Flags.Bit3 = (byte)(sr & (byte)Flag.BIT3) != 0; // bit 3 of result
-        Flags.Half = (byte)(sr & (byte)Flag.HALF) != 0; // H
-        Flags.Bit5 = (byte)(sr & (byte)Flag.BIT5) != 0; // bit 5 of result
-        Flags.Zero = (byte)(sr & (byte)Flag.ZERO) != 0; // Z
-        Flags.Sign = (byte)(sr & (byte)Flag.SIGN) != 0; // S
+        Flags.Carry = (sr & (byte)Flag.CARRY) != 0; // C
+        Flags.Subt = (sr & (byte)Flag.SUBT) != 0; // N
+        Flags.Over = (sr & (byte)Flag.OVER) != 0; // P
+        Flags.Bit3 = (sr & (byte)Flag.BIT3) != 0; // bit 3 of result
+        Flags.Half = (sr & (byte)Flag.HALF) != 0; // H
+        Flags.Bit5 = (sr & (byte)Flag.BIT5) != 0; // bit 5 of result
+        Flags.Zero = (sr & (byte)Flag.ZERO) != 0; // Z
+        Flags.Sign = (sr & (byte)Flag.SIGN) != 0; // S
     }
+    
+    public bool Check(Condition condition) => condition switch
+    {
+        Condition.NONE => true,
+        Condition.NZ => !Flags.Zero,
+        Condition.Z => Flags.Zero,
+        Condition.NC => !Flags.Carry,
+        Condition.C => Flags.Carry,
+        Condition.PO => !Flags.Over,
+        Condition.PE => Flags.Over,
+        Condition.P => !Flags.Sign,
+        Condition.M => Flags.Sign,
+    };
 }
 
 public struct Flags
@@ -42,4 +55,9 @@ public enum Flag
     BIT5 = 1 << 5,
     ZERO = 1 << 6,
     SIGN = 1 << 7,
+}
+
+public enum Condition
+{
+    NONE, NZ, Z, NC, C, PO, PE, P, M,
 }

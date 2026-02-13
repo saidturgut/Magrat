@@ -14,14 +14,14 @@ public class Fru
 
     public void Update(byte sr)
     {
-        Carry = (byte)(sr & (byte)Flag.CARRY) != 0;
-        Zero = (byte)(sr & (byte)Flag.ZERO) != 0;
-        Interrupt = (byte)(sr & (byte)Flag.INTERRUPT) != 0;
-        Decimal = (byte)(sr & (byte)Flag.DECIMAL) != 0;
-        Break = (byte)(sr & (byte)Flag.BREAK) != 0;
-        Unused = (byte)(sr & (byte)Flag.UNUSED) != 0;
-        Overflow = (byte)(sr & (byte)Flag.OVERFLOW) != 0;
-        Negative = (byte)(sr & (byte)Flag.NEGATIVE) != 0;
+        Carry = (sr & (byte)Flag.CARRY) != 0;
+        Zero = (sr & (byte)Flag.ZERO) != 0;
+        Interrupt = (sr & (byte)Flag.INTERRUPT) != 0;
+        Decimal = (sr & (byte)Flag.DECIMAL) != 0;
+        Break = (sr & (byte)Flag.BREAK) != 0;
+        Unused = (sr & (byte)Flag.UNUSED) != 0;
+        Overflow = (sr & (byte)Flag.OVERFLOW) != 0;
+        Negative = (sr & (byte)Flag.NEGATIVE) != 0;
     }
     
     public bool Check(Condition condition) => condition switch

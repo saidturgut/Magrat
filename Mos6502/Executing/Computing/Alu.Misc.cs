@@ -46,9 +46,9 @@ public partial class Alu
     }
 
     private static AluOutput CRY(AluInput input) => new()
-        { Result = (byte)(input.A + (input.F & (byte)Flag.CARRY)) };
+        { Result = (byte)(input.A + (input.FL & (byte)Flag.CARRY)) };
     private static AluOutput SXT(AluInput input) => new()
-        { Result = (byte)(input.A + (byte)((input.B & 0x80) != 0 ? 0xFF : 0x00) + (input.F & (byte)Flag.CARRY)) };
+        { Result = (byte)(input.A + (byte)((input.B & 0x80) != 0 ? 0xFF : 0x00) + (input.FL & (byte)Flag.CARRY)) };
     
     private static AluOutput PSR(AluInput input) => new()
         { Result = (byte)(input.A | (byte)Flag.BREAK | (byte)Flag.UNUSED) };

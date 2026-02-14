@@ -31,7 +31,7 @@ public partial class Datapath
             case Cycle.ALU_COMPUTE: AluCompute(); break;
             case Cycle.PAIR_INC: Increment(); break;
             case Cycle.PAIR_DEC: Decrement(); break;
-            default: stall = !Fru.Check(signal.Condition); break;
+            default: stall = ConditionCompute(); break;
         }
         Protocol();
     }
@@ -39,7 +39,6 @@ public partial class Datapath
     private void Protocol()
     {
         if (signal.Name != "") debugName = signal.Name;
-        Fru.Update(Point(Pointer.F).Get());
         Point(Pointer.NIL).Set(0);
         Point(Pointer.SPH).Set(1);
     }
@@ -53,6 +52,6 @@ public partial class Datapath
 
 public struct ControlSignal(byte opcode, bool stall)
 {
-    public byte Opcode = opcode;
-    public bool Stall = stall;
+    public readonly byte Opcode = opcode;
+    public readonly bool Stall = stall;
 }

@@ -8,8 +8,8 @@ public class Ioc
     public readonly Clk Clk = new (); // TIMER
     public readonly Dsk Dsk = new (); // DISK
     
-    public const uint start = 0xDFF0;
-    public const uint end = 0xDFFF;
+    public const uint start = 0xFF00;
+    public const uint end = 0xFF0F;
     
     public byte Read(uint address, IBus bus)
     {

@@ -29,15 +29,15 @@ public partial class Microcode
 
     private static Signal[] JMP(bool cond) =>
     [
-        ..cond ? [COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
         ..LOAD_PAIR_IMM(WZ),
+        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
         ..JUMP_TO_PAIR(WZ),
     ];
 
     private static Signal[] CALL(bool cond) =>
     [
-        ..cond ? [COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
         ..LOAD_PAIR_IMM(WZ),
+        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
         ..PUSH(true),
         ..JUMP_TO_PAIR(WZ),
     ];
@@ -46,12 +46,48 @@ public partial class Microcode
     [
         ..PUSH(true),
         ALU_COMPUTE(Operation.RST, Pointer.IR, Pointer.NIL, Flag.NONE),
-        ..JUMP_TO_PAIR([Pointer.TMP, Pointer.NIL]),
+        ..JUMP_TO_PAIR(TMP),
     ];
 
     private static Signal[] RET(bool cond) =>
     [
-        ..cond ? [COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
+        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
         ..POP(true),
+    ];
+    
+    private static Signal[] JMP_HL =>
+    [
+        MEM_READ(HL),
+        REG_COMMIT(Pointer.L, Pointer.SPL),
+        REG_COMMIT(Pointer.H, Pointer.SPH),
+    ];
+    
+    // ------------------------- BRANCHING ------------------------- //
+    
+    private static Signal[] BRANCH(Condition condition) =>
+    [
+        ..READ_IMM,
+        ..condition is not Condition.NONE ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE(condition)] : NONE,
+        ..JUMP_INDEXED,
+    ];
+    
+    private static Signal[] BRANCH_DJ =>
+    [
+        ..READ_IMM,
+        REG_COMMIT(Pointer.F, Pointer.W),
+        ALU_COMPUTE(Operation.DEC, Pointer.B, Pointer.NIL, Flag.ZERO),
+        REG_COMMIT(Pointer.TMP, Pointer.B),
+        REG_COMMIT(Pointer.F, Pointer.TMP),
+        REG_COMMIT(Pointer.W, Pointer.F),
+        COND_COMPUTE(Condition.NZ),
+        ..JUMP_INDEXED,
+    ];
+
+    private static Signal[] JUMP_INDEXED =>
+    [
+        ALU_COMPUTE(Operation.IDX, Pointer.PCL, Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.PCL),
+        ALU_COMPUTE(Operation.SXT, Pointer.PCH, Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.PCH),
     ];
 }

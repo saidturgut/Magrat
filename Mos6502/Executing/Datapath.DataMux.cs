@@ -1,3 +1,5 @@
+using Mos6502.Executing.Computing;
+
 namespace Mos6502.Executing;
 using Signaling;
 using Bounds;
@@ -26,6 +28,10 @@ public partial class Datapath
         if (Point(signal.First).Get() == 0xFF)
             Point(signal.Second).Set((byte)(Point(signal.Second).Get() - 1));
     }
+
+    private bool ConditionCompute()
+        => signal.Condition is not Condition.NONE 
+           && Fru.Check(signal.Condition, Fru.Flags(Point(Pointer.TMP).Get()));
     
     private ushort Merge(byte low, byte high)
         => (ushort)(low + (high << 8));

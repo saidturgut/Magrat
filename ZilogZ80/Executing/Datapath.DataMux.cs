@@ -1,4 +1,5 @@
 namespace ZilogZ80.Executing;
+using Computing;
 using Signaling;
 using Bounds;
 
@@ -27,15 +28,21 @@ public partial class Datapath
             Point(signal.Second).Set((byte)(Point(signal.Second).Get() - 1));
     }
     
+    private bool ConditionCompute()
+        => signal.Condition is not Condition.NONE 
+           && Fru.Check(signal.Condition, Fru.Flags(Point(Pointer.TMP).Get()));
+    
     private ushort Merge(byte low, byte high)
         => (ushort)(low + (high << 8));
     
     public void Clear()
     {
+        debugName = "NULL";
         Point(Pointer.MDR).Set(0);
         Point(Pointer.TMP).Set(0);
         Point(Pointer.W).Set(0);
         Point(Pointer.Z).Set(0);
+        flagLatch = 0;
         stall = false;
         logs = [];
     }

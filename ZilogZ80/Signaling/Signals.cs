@@ -17,6 +17,7 @@ public enum Cycle
     IDLE, DECODE, HALT, 
     REG_COMMIT, MEM_READ, MEM_WRITE,
     ALU_COMPUTE, PAIR_INC, PAIR_DEC,
+    IO_READ, IO_WRITE,
 }
 
 public enum Pointer

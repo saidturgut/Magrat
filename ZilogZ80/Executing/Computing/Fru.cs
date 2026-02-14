@@ -3,31 +3,29 @@ namespace ZilogZ80.Executing.Computing;
 // FLAGS REGISTER UNIT
 public class Fru
 {
-    public Flags Flags;
-
-    public void Update(byte sr)
+    public Flags Flags(byte source) => new ()
     {
-        Flags.Carry = (sr & (byte)Flag.CARRY) != 0; // C
-        Flags.Subt = (sr & (byte)Flag.SUBT) != 0; // N
-        Flags.Over = (sr & (byte)Flag.OVER) != 0; // P
-        Flags.Bit3 = (sr & (byte)Flag.BIT3) != 0; // bit 3 of result
-        Flags.Half = (sr & (byte)Flag.HALF) != 0; // H
-        Flags.Bit5 = (sr & (byte)Flag.BIT5) != 0; // bit 5 of result
-        Flags.Zero = (sr & (byte)Flag.ZERO) != 0; // Z
-        Flags.Sign = (sr & (byte)Flag.SIGN) != 0; // S
-    }
+        Carry = (source & (byte)Flag.CARRY) != 0,
+        Subt = (source & (byte)Flag.SUBT) != 0,
+        Over = (source & (byte)Flag.OVER) != 0,
+        Bit3 = (source & (byte)Flag.BIT3) != 0,
+        Half = (source & (byte)Flag.HALF) != 0,
+        Bit5 = (source & (byte)Flag.BIT5) != 0,
+        Zero = (source & (byte)Flag.ZERO) != 0,
+        Sign = (source & (byte)Flag.SIGN) != 0,
+    };
     
-    public bool Check(Condition condition) => condition switch
+    public bool Check(Condition condition, Flags tmp) => condition switch
     {
-        Condition.NONE => true,
-        Condition.NZ => !Flags.Zero,
-        Condition.Z => Flags.Zero,
-        Condition.NC => !Flags.Carry,
-        Condition.C => Flags.Carry,
-        Condition.PO => !Flags.Over,
-        Condition.PE => Flags.Over,
-        Condition.P => !Flags.Sign,
-        Condition.M => Flags.Sign,
+        Condition.NONE => false,
+        Condition.NZ => !tmp.Zero,
+        Condition.Z => tmp.Zero,
+        Condition.NC => !tmp.Carry,
+        Condition.C => tmp.Carry,
+        Condition.PO => !tmp.Over,
+        Condition.PE => tmp.Over,
+        Condition.P => !tmp.Sign,
+        Condition.M => tmp.Sign,
     };
 }
 

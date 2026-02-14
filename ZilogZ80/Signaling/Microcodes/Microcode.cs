@@ -7,28 +7,12 @@ public static partial class Microcode
     
     private static readonly Pointer[] PC = [Pointer.PCL, Pointer.PCH];
     private static readonly Pointer[] SP = [Pointer.SPL, Pointer.SPH];
+    private static readonly Pointer[] AF = [Pointer.A, Pointer.F];
     private static readonly Pointer[] HL = [Pointer.L, Pointer.H];
     private static readonly Pointer[] WZ = [Pointer.W, Pointer.Z];
     private static readonly Pointer[] BC = [Pointer.C, Pointer.B];
     private static readonly Pointer[] DE = [Pointer.E, Pointer.D];
-
-    private static Signal[] IDLE =>
-        [STATE_COMMIT(Cycle.IDLE)];
-    
-    public static Signal[] FETCH =>
-    [
-        ..READ_IMM,
-        REG_COMMIT(Pointer.MDR, Pointer.IR),
-        ALU_COMPUTE(Operation.RFR, Pointer.RR, Pointer.NIL, Flag.NONE),
-        REG_COMMIT(Pointer.TMP, Pointer.RR),
-        STATE_COMMIT(Cycle.DECODE),
-    ];
-    
-    public static Signal[] DISP =>
-    [
-        REG_COMMIT(Pointer.IR, Pointer.W),
-        ..FETCH,
-    ];
+    private static readonly Pointer[] TMP = [Pointer.TMP, Pointer.NIL];
     
     private static Signal STATE_COMMIT(Cycle state) => new()
         { Cycle = state, };

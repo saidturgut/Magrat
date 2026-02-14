@@ -27,11 +27,11 @@ public partial class Alu
     {
         byte a = input.A;
         byte fixer = 0;
-        bool carry = input.F.Carry;
+        bool carry = input.FR.Carry;
 
-        if (!input.F.Subt)
+        if (!input.FR.Subt)
         {
-            if (input.F.Half || (a & 0x0F) > 9)
+            if (input.FR.Half || (a & 0x0F) > 9)
                 fixer |= 0x06;
 
             if (carry || a > 0x99)
@@ -44,7 +44,7 @@ public partial class Alu
         }
         else
         {
-            if (input.F.Half)
+            if (input.FR.Half)
                 fixer |= 0x06;
 
             if (carry)

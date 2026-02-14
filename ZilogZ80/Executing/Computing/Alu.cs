@@ -19,7 +19,7 @@ public partial class Alu
     [
         NONE, ADD, ADC, SUB, SBC, ANA, XRA, ORA, INC, DEC,
         RLC, RRC, RAL, RAR, DAA, SCF, CCF, CPL,
-        RFR, RST,
+        RFR, RST, TOP, IDX, SXT,
     ];
 }
 
@@ -27,7 +27,7 @@ public enum Operation
 {
     NONE, ADD, ADC, SUB, SBC, ANA, XRA, ORA, INC, DEC,
     RLC, RRC, RAL, RAR, DAA, SCF, CCF, CPL,
-    RFR, RST,
+    RFR, RST, TOP, IDX, SXT,
 }
 
 public struct AluInput
@@ -35,7 +35,8 @@ public struct AluInput
     public byte A;
     public byte B;
     public byte C;
-    public Flags F;
+    public byte FL;
+    public Flags FR;
 }
 
 public struct AluOutput

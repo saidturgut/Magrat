@@ -11,19 +11,21 @@ public partial class Datapath
 
     private void AluCompute()
     {
+        byte flagReg = Point(Pointer.F).Get();
+        Flags flagRegister = Fru.Flags(flagReg);
+        
         AluOutput output = Alu.Compute(new AluInput
         {
             A = Point(signal.First).Get(),
             B = Point(signal.Second).Get(),
-            C = (byte)(Fru.Carry ? 1 : 0),
-            F = flagLatch,
-            DecimalMode = Fru.Decimal,
+            C = (byte)(flagRegister.Carry ? 1 : 0),
+            FL = flagLatch,
+            FR = flagRegister,
         }, signal.Operation);
-        
+
         flagLatch = output.Flags;
         
         Point(Pointer.TMP).Set(output.Result);
-        Point(Pointer.F).Set((byte)
-            ((Point(Pointer.F).Get() & (byte)~signal.Mask) | (flagLatch & (byte)signal.Mask)));
+        Point(Pointer.F).Set((byte)((flagReg & (byte)~signal.Mask) | (flagLatch & (byte)signal.Mask)));
     }
 }

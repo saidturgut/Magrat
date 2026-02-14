@@ -18,8 +18,7 @@ public partial class Alu
     private static readonly Func<AluInput, AluOutput>[] Operations =
     [
         NONE, 
-        ADC, SBC, CMP,
-        AND, OR, EOR, INC, DEC,
+        ADC, SBC, CMP, AND, OR, EOR, INC, DEC,
         ASL, LSR, ROL, ROR, BIT,
         CLR, SET, PSR, SRP, IDX, CRY, SXT,
     ];
@@ -39,8 +38,8 @@ public struct AluInput
     public byte A;
     public byte B;
     public byte C;
-    public byte F;
-    public bool DecimalMode;
+    public byte FL;
+    public Flags FR;
 }
 
 public struct AluOutput

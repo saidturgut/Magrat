@@ -31,7 +31,7 @@ public partial class Datapath
             case Cycle.ALU_COMPUTE: AluCompute(); break;
             case Cycle.PAIR_INC: Increment(); break;
             case Cycle.PAIR_DEC: Decrement(); break;
-            default: stall = !Fru.Check(signal.Condition); break;
+            default: stall = ConditionCompute(); break;
         }
         Protocol();
     }
@@ -39,7 +39,6 @@ public partial class Datapath
     private void Protocol()
     {
         if (signal.Name != "") debugName = signal.Name;
-        Fru.Update(Point(Pointer.F).Get());
         Point(Pointer.NIL).Set(0);
     }
 

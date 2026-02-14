@@ -7,7 +7,7 @@ public partial class Alu
     
     private static AluOutput ADC(AluInput input)
     {
-        if (input.DecimalMode) return DAD(input);
+        if (input.FR.Decimal) return DAD(input);
         
         var result = input.A + input.B + input.C;
         AluOutput output = new() { Result = (byte)result };
@@ -19,7 +19,7 @@ public partial class Alu
     }
     private static AluOutput SBC(AluInput input)
     {
-        if (input.DecimalMode) return DSB(input);
+        if (input.FR.Decimal) return DSB(input);
 
         var result = input.A + ~input.B + input.C;
         AluOutput output = new() { Result = (byte)result };

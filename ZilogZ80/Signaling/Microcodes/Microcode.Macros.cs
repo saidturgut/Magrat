@@ -23,4 +23,17 @@ public partial class Microcode
         REG_COMMIT(pair[0], Pointer.PCL),
         REG_COMMIT(pair[1], Pointer.PCH),
     ];
+    
+    private static Signal[] REG_SWAP(Pointer first, Pointer second) =>
+    [
+        REG_COMMIT(first, Pointer.TMP),
+        REG_COMMIT(second, first),
+        REG_COMMIT(Pointer.TMP, second),
+    ];
+    
+    private static Signal[] PAIR_SWAP(Pointer[] first, Pointer[] second) =>
+    [
+        ..REG_SWAP(first[0], second[0]),
+        ..REG_SWAP(first[1], second[1]),
+    ];
 }

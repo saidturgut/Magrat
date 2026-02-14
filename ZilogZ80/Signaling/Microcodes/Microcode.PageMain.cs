@@ -5,9 +5,15 @@ public static partial class Microcode
 {
     private static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
     {
-        // BASIC
+        // ------------------------- BASIC INSTRUCTIONS ------------------------- //
+
+        // STATE OPS
         ["-"] = () => [STATE_COMMIT(Cycle.IDLE)], 
         ["NOP"] = () => IDLE, ["HALT"] = () => [STATE_COMMIT(Cycle.HALT)],
+        ["INT_ON"] = () => IDLE, ["INT_OFF"] = () => IDLE,
+        ["INPUT"] = () => INPUT_OUTPUT(true), ["OUTPUT"] = () => INPUT_OUTPUT(false),
+
+        // ------------------------- LOAD INSTRUCTIONS ------------------------- //
         
         // 8 BIT LOAD
         ["REG_TO_REG"] = () => REG_TO_REG,
@@ -20,13 +26,13 @@ public static partial class Microcode
         ["ACC_TO_ABS"] = () => ACC_TO_ABS, ["ABS_TO_ACC"] = () => ABS_TO_ACC,
         ["HL_TO_ABS"] = () => HL_TO_ABS, ["ABS_TO_HL"] = () => ABS_TO_HL,
         
+        // ------------------------- ALU INSTRUCTIONS ------------------------- //
+        
         // ARITHMETIC & LOGIC
         ["ALU_REG"] = () => ALU_REG(EncodedOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, true), 
-        ["ALU_MEM"] = () => ALU_MEM(EncodedOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, true), 
-        ["ALU_IMM"] = () => ALU_IMM(EncodedOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, true),
+        ["ALU_MEM"] = () => ALU_MEM(true), ["ALU_IMM"] = () => ALU_IMM(true),
         ["CMP_REG"] = () => ALU_REG(EncodedOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, false), 
-        ["CMP_MEM"] = () => ALU_MEM(EncodedOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, false), 
-        ["CMP_IMM"] = () => ALU_IMM(EncodedOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, false),
+        ["CMP_MEM"] = () => ALU_MEM(false), ["CMP_IMM"] = () => ALU_IMM(false),
         ["ADD_WORD"] = () => ADD_WORD, 
         
         // INCREMENT & DECREMENT
@@ -38,15 +44,28 @@ public static partial class Microcode
         ["ALU_SHIFT"] = () => ALU_REG(EncodedOperations![aa_XXX_aaa + 8], FlagMask.CN3H5, true),
         ["DAA"] = () => ALU_REG(Operation.DAA, FlagMask.CV3H5ZS, true), 
 
-        // FLAGS
+        // FLAG OPS
         ["SCF"] = () => ALU_FLAG(Operation.SCF), ["CCF"] = () => ALU_FLAG(Operation.CCF),
         ["CPL"] = () => ALU_REG(Operation.CPL, FlagMask.N3H5, true),
         
+        // ------------------------- CONTROL INSTRUCTIONS ------------------------- //
+        
         // CONTROL FLOW
-        ["JMP"] = () => JMP(false), ["JCC"] = () => JMP(true),
-        ["CALL"] = () => CALL(false), ["CCC"] = () => CALL(true),
-        ["RET"] = () => RET(false), ["RCC"] = () => RET(true),
-        ["RST"] = () => RST,
+        ["PUSH"] = () => PUSH(false), ["POP"] = () => POP(false),
+        ["JMP"] = () => JMP(false), ["JMP_CN"] = () => JMP(true),
+        ["CALL"] = () => CALL(false), ["CALL_CN"] = () => CALL(true),
+        ["RET"] = () => RET(false), ["RET_CN"] = () => RET(true),
+        ["RST"] = () => RST, ["JMP_HL"] = () => JMP_HL,
+        
+        // BRANCH OPS
+        ["BRANCH"] = () => BRANCH(Condition.NONE), ["BRANCH_DJ"] = () => BRANCH_DJ,
+        ["BRANCH_CN"] = () => BRANCH((Condition)(aa_XXX_aaa - 4)),
+        
+        // ------------------------- SWAP INSTRUCTIONS ------------------------- //
+        
+        // SWAP OPS
+        ["SWAP_ALL"] = () => SWAP_ALL, ["SWAP_XTHL"] = () => SWAP_XTHL,
+        ["SWAP_AF"] = () => SWAP_AF, ["SWAP_XCHG"] = () => SWAP_XCHG,
     };
     
     private static readonly Pointer[] EncodedRegisters =

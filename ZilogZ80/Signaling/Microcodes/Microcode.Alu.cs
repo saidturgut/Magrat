@@ -10,16 +10,16 @@ public partial class Microcode
         ALU_COMPUTE(operation, Pointer.A, EncodedRegisters[aa_aaa_XXX], FlagMasks[mask]),
         ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,
     ];
-    private static Signal[] ALU_MEM(Operation operation, FlagMask mask, bool commit) =>
+    private static Signal[] ALU_MEM(bool commit) =>
     [
         MEM_READ(HL),
-        ALU_COMPUTE(operation, Pointer.A, Pointer.MDR, FlagMasks[mask]),
+        ALU_COMPUTE(EncodedOperations[aa_XXX_aaa], Pointer.A, Pointer.MDR, FlagMasks[FlagMask.CNV3H5ZS]),
         ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,
     ];
-    private static Signal[] ALU_IMM(Operation operation, FlagMask mask, bool commit) =>
+    private static Signal[] ALU_IMM(bool commit) =>
     [
         ..READ_IMM,
-        ALU_COMPUTE(operation, Pointer.A, Pointer.MDR, FlagMasks[mask]),
+        ALU_COMPUTE(EncodedOperations[aa_XXX_aaa], Pointer.A, Pointer.MDR, FlagMasks[FlagMask.CNV3H5ZS]),
         ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,
     ];
     

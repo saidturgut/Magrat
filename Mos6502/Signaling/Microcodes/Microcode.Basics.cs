@@ -55,6 +55,7 @@ public static partial class Microcode
     
     private static Signal[] BRANCH(Condition condition) =>
     [
+        REG_COMMIT(Pointer.F, Pointer.TMP),
         CHECK_COND(condition),
         MEM_READ(WZ),
         ..COMMIT_INDEX(Operation.IDX, Pointer.PCL, Pointer.PCL, Pointer.MDR),

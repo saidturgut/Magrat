@@ -3,6 +3,34 @@ namespace Mos6502.Executing.Computing;
 // FLAGS REGISTER UNIT
 public class Fru
 {
+    public Flags Flags(byte source) => new ()
+    {
+        Carry = (source & (byte)Flag.CARRY) != 0,
+        Zero = (source & (byte)Flag.ZERO) != 0,
+        Interrupt = (source & (byte)Flag.INTERRUPT) != 0,
+        Decimal = (source & (byte)Flag.DECIMAL) != 0,
+        Break = (source & (byte)Flag.BREAK) != 0,
+        Unused = (source & (byte)Flag.UNUSED) != 0,
+        Overflow = (source & (byte)Flag.OVERFLOW) != 0,
+        Negative = (source & (byte)Flag.NEGATIVE) != 0,
+    };
+
+    public bool Check(Condition condition, Flags tmp) => condition switch
+    {
+        Condition.NONE => false,
+        Condition.NE => !tmp.Zero,
+        Condition.EQ => tmp.Zero,
+        Condition.CC => !tmp.Carry,
+        Condition.CS => tmp.Carry,
+        Condition.VC => !tmp.Overflow,
+        Condition.VS => tmp.Overflow,
+        Condition.PL => !tmp.Negative,
+        Condition.MI => tmp.Negative,
+    };
+}
+
+public struct Flags
+{
     public bool Carry;
     public bool Zero;
     public bool Interrupt;
@@ -11,32 +39,8 @@ public class Fru
     public bool Unused;
     public bool Overflow;
     public bool Negative;
-
-    public void Update(byte sr)
-    {
-        Carry = (sr & (byte)Flag.CARRY) != 0;
-        Zero = (sr & (byte)Flag.ZERO) != 0;
-        Interrupt = (sr & (byte)Flag.INTERRUPT) != 0;
-        Decimal = (sr & (byte)Flag.DECIMAL) != 0;
-        Break = (sr & (byte)Flag.BREAK) != 0;
-        Unused = (sr & (byte)Flag.UNUSED) != 0;
-        Overflow = (sr & (byte)Flag.OVERFLOW) != 0;
-        Negative = (sr & (byte)Flag.NEGATIVE) != 0;
-    }
-    
-    public bool Check(Condition condition) => condition switch
-    {
-        Condition.NONE => true,
-        Condition.CC => !Carry,
-        Condition.CS => Carry,
-        Condition.NE => !Zero,
-        Condition.EQ => Zero,
-        Condition.VC => !Overflow,
-        Condition.VS => Overflow,
-        Condition.PL => !Negative,
-        Condition.MI => Negative,
-    };
 }
+
 
 [Flags]
 public enum Flag
@@ -53,6 +57,6 @@ public enum Flag
 }
 
 public enum Condition
-{       // CARRY, ZERO, OVERFLOW, NEGATIVE
-    NONE, CC, CS, NE, EQ, VC, VS, PL, MI,
+{
+    NONE, NE, EQ, CC, CS, VC, VS, PL, MI,
 }

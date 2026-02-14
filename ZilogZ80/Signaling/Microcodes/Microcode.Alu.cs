@@ -13,13 +13,13 @@ public partial class Microcode
     private static Signal[] ALU_MEM(bool commit) =>
     [
         MEM_READ(HL),
-        ALU_COMPUTE(EncodedOperations[aa_XXX_aaa], Pointer.A, Pointer.MDR, FlagMasks[FlagMask.CNV3H5ZS]),
+        ALU_COMPUTE(EncodedAluOperations[aa_XXX_aaa], Pointer.A, Pointer.MDR, FlagMasks[FlagMask.CNV3H5ZS]),
         ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,
     ];
     private static Signal[] ALU_IMM(bool commit) =>
     [
         ..READ_IMM,
-        ALU_COMPUTE(EncodedOperations[aa_XXX_aaa], Pointer.A, Pointer.MDR, FlagMasks[FlagMask.CNV3H5ZS]),
+        ALU_COMPUTE(EncodedAluOperations[aa_XXX_aaa], Pointer.A, Pointer.MDR, FlagMasks[FlagMask.CNV3H5ZS]),
         ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,
     ];
     

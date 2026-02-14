@@ -31,7 +31,7 @@ public partial class Datapath
             case Cycle.ALU_COMPUTE: AluCompute(); break;
             case Cycle.PAIR_INC: Increment(); break;
             case Cycle.PAIR_DEC: Decrement(); break;
-            default: stall = ConditionCompute(); break;
+            default: ConditionCompute(); break;
         }
         Protocol();
     }
@@ -51,6 +51,6 @@ public partial class Datapath
 
 public struct ControlSignal(byte opcode, bool stall)
 {
-    public byte Opcode = opcode;
-    public bool Stall = stall;
+    public readonly byte Opcode = opcode;
+    public readonly bool Stall = stall;
 }

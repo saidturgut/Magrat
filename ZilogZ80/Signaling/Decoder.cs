@@ -3,16 +3,16 @@ using Microcodes;
 
 public partial class Decoder
 {
-    private readonly Signal[][] MainPage = Microcode.OpcodeRom(false);
+    private readonly Signal[][] MainPage = Microcode.PageMain("PageMain", Microcode.MainPage, false);
     private readonly Signal[][] MiscPage = [];
-    private readonly Signal[][] BitPage = [];
+    private readonly Signal[][] BitPage = Microcode.PageBit(false);
     private readonly Signal[][] IxPage = [];
     private readonly Signal[][] IyPage = [];
     private readonly Signal[][] IxBitPage = [];
     private readonly Signal[][] IyBitPage = [];
 
     public readonly Signal[] Fetch = Microcode.FETCH;
-    public readonly Signal[] Disp = Microcode.DISP;
+    private readonly Signal[] Disp = Microcode.DISP;
     
     public Signal[] Decode(byte opcode)
     {

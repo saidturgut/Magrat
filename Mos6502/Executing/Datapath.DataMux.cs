@@ -29,9 +29,9 @@ public partial class Datapath
             Point(signal.Second).Set((byte)(Point(signal.Second).Get() - 1));
     }
 
-    private bool ConditionCompute()
-        => signal.Condition is not Condition.NONE 
-           && Fru.Check(signal.Condition, Fru.Flags(Point(Pointer.TMP).Get()));
+    private void ConditionCompute()
+        => stall = signal.Condition is not Condition.NONE 
+                   && !Fru.Check(signal.Condition, Fru.Flags(Point(Pointer.TMP).Get()));
     
     private ushort Merge(byte low, byte high)
         => (ushort)(low + (high << 8));

@@ -63,3 +63,12 @@ public partial class Bus(IEngine Engine) : IBus
     public void AddWriteLog(string device, string address, byte data)
         => logs.Add($"{device}[{address}]: WRITE \"{Log.Hex(data)}\"");
 }
+
+public partial class Bus : ISudo
+{
+    public void Insert(byte[] image)
+        => Ioc.Dsk.Insert(image);
+
+    public void Dump(uint start, uint end)
+        => Ram.Dump(start, end);
+}

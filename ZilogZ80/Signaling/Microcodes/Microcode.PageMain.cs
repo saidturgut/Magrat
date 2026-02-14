@@ -3,7 +3,7 @@ using Executing.Computing;
 
 public static partial class Microcode
 {
-    private static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
+    public static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
     {
         // ------------------------- BASIC INSTRUCTIONS ------------------------- //
 
@@ -29,9 +29,9 @@ public static partial class Microcode
         // ------------------------- ALU INSTRUCTIONS ------------------------- //
         
         // ARITHMETIC & LOGIC
-        ["ALU_REG"] = () => ALU_REG(EncodedOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, true), 
+        ["ALU_REG"] = () => ALU_REG(EncodedAluOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, true), 
         ["ALU_MEM"] = () => ALU_MEM(true), ["ALU_IMM"] = () => ALU_IMM(true),
-        ["CMP_REG"] = () => ALU_REG(EncodedOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, false), 
+        ["CMP_REG"] = () => ALU_REG(EncodedAluOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, false), 
         ["CMP_MEM"] = () => ALU_MEM(false), ["CMP_IMM"] = () => ALU_IMM(false),
         ["ADD_WORD"] = () => ADD_WORD, 
         
@@ -41,7 +41,7 @@ public static partial class Microcode
         ["INC_WORD"] = () => INC_WORD(true), ["DEC_WORD"] = () => INC_WORD(false),
         
         // SHIFT & ROTATE
-        ["ALU_SHIFT"] = () => ALU_REG(EncodedOperations![aa_XXX_aaa + 8], FlagMask.CN3H5, true),
+        ["ALU_SHIFT"] = () => ALU_REG(EncodedBitOperations![aa_XXX_aaa], FlagMask.CN3H5, true),
         ["DAA"] = () => ALU_REG(Operation.DAA, FlagMask.CV3H5ZS, true), 
 
         // FLAG OPS
@@ -59,7 +59,7 @@ public static partial class Microcode
         
         // BRANCH OPS
         ["BRANCH"] = () => BRANCH(Condition.NONE), ["BRANCH_DJ"] = () => BRANCH_DJ,
-        ["BRANCH_CN"] = () => BRANCH((Condition)(aa_XXX_aaa - 4)),
+        ["BRANCH_CN"] = () => BRANCH((Condition)(aa_XXX_aaa & 0b011)),
         
         // ------------------------- SWAP INSTRUCTIONS ------------------------- //
         
@@ -82,13 +82,11 @@ public static partial class Microcode
         [Pointer.SPL, Pointer.SPH],
     ];
 
-    private static readonly Operation[] EncodedOperations =
+    private static readonly Operation[] EncodedAluOperations =
     [
         Operation.ADD, Operation.ADC, 
         Operation.SUB, Operation.SBC, 
         Operation.ANA, Operation.XRA, 
         Operation.ORA, Operation.SUB,
-        Operation.RLC, Operation.RRC, 
-        Operation.RAL, Operation.RAR, 
     ];
 }

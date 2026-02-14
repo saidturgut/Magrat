@@ -37,6 +37,7 @@ public static partial class Microcode
     
     private static readonly Dictionary<FlagMask, Flag> FlagMasks = new()
     {
+        { FlagMask.NONE , Flag.NONE },
         { FlagMask.CNV3H5ZS , Flag.CARRY | Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
         { FlagMask.CV3H5ZS , Flag.CARRY | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
         { FlagMask.NV3H5ZS , Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
@@ -48,5 +49,6 @@ public static partial class Microcode
 
 public enum FlagMask
 {
+    NONE,
     CNV3H5ZS, CV3H5ZS, NV3H5ZS, CN3H5, N3H5, CNH
 }

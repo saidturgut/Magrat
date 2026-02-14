@@ -11,10 +11,10 @@ public partial class Datapath
     
     private void AluCompute()
     {
-        byte flagReg = Point(Pointer.F).Get();
-        Flags flagRegister = Fru.Flags(flagReg);
+        var flagReg = Point(Pointer.F).Get();
+        var flagRegister = Fru.Flags(flagReg);
         
-        AluOutput output = Alu.Compute(new AluInput
+        var output = Alu.Compute(new AluInput
         {
             A = Point(signal.First).Get(),
             B = Point(signal.Second).Get(),

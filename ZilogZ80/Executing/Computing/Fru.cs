@@ -14,10 +14,10 @@ public class Fru
         Zero = (source & (byte)Flag.ZERO) != 0,
         Sign = (source & (byte)Flag.SIGN) != 0,
     };
-    
+
     public bool Check(Condition condition, Flags tmp) => condition switch
     {
-        Condition.NONE => false,
+        Condition.NONE => true,
         Condition.NZ => !tmp.Zero,
         Condition.Z => tmp.Zero,
         Condition.NC => !tmp.Carry,
@@ -57,5 +57,5 @@ public enum Flag
 
 public enum Condition
 {
-    NONE, NZ, Z, NC, C, PO, PE, P, M,
+    NONE = -1, NZ, Z, NC, C, PO, PE, P, M,
 }

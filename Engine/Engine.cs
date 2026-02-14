@@ -30,7 +30,7 @@ public partial class Engine(IHost Host)
         };
         ThreeToken = new Dictionary<string, Action<string, string>>()
         {
-            ["load"] = Load, ["mem"] = Mem, ["reg"] = Reg,
+            ["load"] = Load, ["mem"] = Mem, ["reg"] = Reg, ["dump"] = Dump,
         };
     }
 

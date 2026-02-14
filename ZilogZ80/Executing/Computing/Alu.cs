@@ -7,6 +7,8 @@ public partial class Alu
     {
         AluOutput output = Operations[(byte)operation](input);
         
+        if(output.Custom) return output;
+        
         if ((output.Result & 0x80) != 0) output.Flags |= (byte)Flag.SIGN;
         if (output.Result == 0) output.Flags |= (byte)Flag.ZERO;
         if ((output.Result & 0x08) != 0) output.Flags |= (byte)Flag.BIT3;
@@ -18,7 +20,8 @@ public partial class Alu
     private static readonly Func<AluInput, AluOutput>[] Operations =
     [
         NONE, ADD, ADC, SUB, SBC, ANA, XRA, ORA, INC, DEC,
-        RLC, RRC, RAL, RAR, DAA, SCF, CCF, CPL,
+        RLC, RRC, RAL, RAR, SLA, SLL, SRA, SRL, BIT, RES, SET,
+        DAA, SCF, CCF, CPL,
         RFR, RST, TOP, IDX, SXT,
     ];
 }
@@ -26,7 +29,8 @@ public partial class Alu
 public enum Operation
 {
     NONE, ADD, ADC, SUB, SBC, ANA, XRA, ORA, INC, DEC,
-    RLC, RRC, RAL, RAR, DAA, SCF, CCF, CPL,
+    RLC, RRC, RAL, RAR, SLA, SLL, SRA, SRL, BIT, RES, SET,
+    DAA, SCF, CCF, CPL,
     RFR, RST, TOP, IDX, SXT,
 }
 

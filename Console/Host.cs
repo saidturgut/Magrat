@@ -19,11 +19,12 @@ public class Host : IHost
 
     private void Boot()
     {
-        Assembler.Run("z80");
+        Assembler.Run("zz80");
         Execute("set z80");
         Execute("load 0 z80.bin");
         Execute("sleep 40");
         Execute("run");
+        //Execute("dump 0 1000");
     }
     /*private void Boot()
     {

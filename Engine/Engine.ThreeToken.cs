@@ -20,4 +20,10 @@ public partial class Engine
     }
     
     private void Reg(string reg, string dat) { }
+    
+        
+    private void Dump(string start, string end)
+    {
+        Bus.Dump(Convert.ToUInt32(start), Convert.ToUInt32(end));
+    }
 }

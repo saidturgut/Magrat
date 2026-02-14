@@ -21,4 +21,6 @@ public interface IBus
 public interface ISudo : IBus
 {
     public void Insert(byte[] image);
+
+    public void Dump(uint start, uint end);
 }

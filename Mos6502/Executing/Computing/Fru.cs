@@ -17,7 +17,7 @@ public class Fru
 
     public bool Check(Condition condition, Flags tmp) => condition switch
     {
-        Condition.NONE => false,
+        Condition.NONE => true,
         Condition.NE => !tmp.Zero,
         Condition.EQ => tmp.Zero,
         Condition.CC => !tmp.Carry,

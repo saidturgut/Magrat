@@ -58,8 +58,8 @@ public partial class Microcode
     private static Signal[] JMP_HL =>
     [
         MEM_READ(EncodedPairs[2]),
-        REG_COMMIT(EncodedRegisters[5], Pointer.SPL),
-        REG_COMMIT(EncodedRegisters[4], Pointer.SPH),
+        REG_COMMIT(PointL, Pointer.SPL),
+        REG_COMMIT(PointH, Pointer.SPH),
     ];
     
     // ------------------------- BRANCHING ------------------------- //

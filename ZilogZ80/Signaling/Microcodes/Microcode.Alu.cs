@@ -33,10 +33,10 @@ public partial class Microcode
     
     private static Signal[] ADD_WORD =>
     [
-        ALU_COMPUTE(Operation.ADD, EncodedRegisters[5], EncodedPairs[aa_XXa_aaa][0], Flag.CARRY),
-        REG_COMMIT(Pointer.TMP, EncodedRegisters[5]),
-        ALU_COMPUTE(Operation.ADC, EncodedRegisters[4], EncodedPairs[aa_XXa_aaa][1], FlagMasks[FlagMask.CNH]),
-        REG_COMMIT(Pointer.TMP, EncodedRegisters[4]),
+        ALU_COMPUTE(Operation.ADD, PointL, EncodedPairs[aa_XXa_aaa][0], Flag.CARRY),
+        REG_COMMIT(Pointer.TMP, PointL),
+        ALU_COMPUTE(Operation.ADC, PointH, EncodedPairs[aa_XXa_aaa][1], FlagMasks[FlagMask.CNH]),
+        REG_COMMIT(Pointer.TMP, PointH),
     ];
     
     // ------------------------- INCREMENT & DECREMENT  ------------------------- //

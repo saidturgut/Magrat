@@ -5,10 +5,11 @@ public static partial class Microcode
 {
     private static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
     {
-        // ------------------------- BASIC INSTRUCTIONS ------------------------- //
+        ["-"] = () => IDLE, 
+
+        // ------------------------- DEF MAIN PAGE ------------------------- //
 
         // STATE OPS
-        ["-"] = () => [STATE_COMMIT(Cycle.IDLE)], 
         ["NOP"] = () => IDLE, ["HALT"] = () => [STATE_COMMIT(Cycle.HALT)],
         ["INT_ON"] = () => IDLE, ["INT_OFF"] = () => IDLE,
         ["INPUT"] = () => INPUT_OUTPUT(true), ["OUTPUT"] = () => INPUT_OUTPUT(false),
@@ -67,8 +68,8 @@ public static partial class Microcode
         ["SWAP_ALL"] = () => SWAP_ALL, ["SWAP_XTHL"] = () => SWAP_XTHL,
         ["SWAP_AF"] = () => SWAP_AF, ["SWAP_XCHG"] = () => SWAP_XCHG,
         
-        // ------------------------- DISPLACEMENT OPS ------------------------- //
-
+        // ------------------------- IDX MAIN PAGE ------------------------- //
+        
         ["REG_TO_MEM_D"] = () => [..IDX, ..REG_TO_MEM(false)],
         ["MEM_TO_REG_D"] = () => [..IDX, ..MEM_TO_REG(false)],
         ["IMM_TO_MEM_D"] = () => [..IDX, ..REG_TO_MEM(true)],
@@ -99,4 +100,7 @@ public static partial class Microcode
         Operation.ANA, Operation.XRA, 
         Operation.ORA, Operation.SUB,
     ];
+    
+    private static Pointer PointH => EncodedRegisters[4];
+    private static Pointer PointL => EncodedRegisters[5];
 }

@@ -23,16 +23,16 @@ public partial class Microcode
     [
         MEM_READ(SP),
         REG_COMMIT(Pointer.MDR, Pointer.TMP),
-        REG_COMMIT(EncodedRegisters[5], Pointer.MDR),
+        REG_COMMIT(PointL, Pointer.MDR),
         MEM_WRITE(SP),
-        REG_COMMIT(Pointer.TMP, EncodedRegisters[5]),
+        REG_COMMIT(Pointer.TMP, PointL),
         PAIR_INC(SP),
         
         MEM_READ(SP),
         REG_COMMIT(Pointer.MDR, Pointer.TMP),
-        REG_COMMIT(EncodedRegisters[4], Pointer.MDR),
+        REG_COMMIT(PointH, Pointer.MDR),
         MEM_WRITE(SP),
-        REG_COMMIT(Pointer.TMP, EncodedRegisters[4]),
+        REG_COMMIT(Pointer.TMP, PointH),
         PAIR_DEC(SP),
     ];
 }

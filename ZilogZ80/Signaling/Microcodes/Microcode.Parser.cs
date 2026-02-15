@@ -34,7 +34,7 @@ public partial class Microcode
 
     private static void Dump(Signal[][] table)
     {
-        for (byte i = 0; i < 256; i++)
+        for (ushort i = 0; i < 256; i++)
         {
             Console.WriteLine($"OPCODE {i:X2}");
             foreach (Signal signal in table[i]) Console.WriteLine(signal.Cycle);

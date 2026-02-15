@@ -1,0 +1,272 @@
+"-
+-","-
+-","-
+-","-
+-","ROT_REG
+RLC IYh","ROT_REG
+RLC IYl","ROT_MEM_D
+RLC (IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ROT_REG
+RRC IYh","ROT_REG
+RRC IYl","ROT_MEM_D
+RRC (IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ROT_REG
+RL IYh","ROT_REG
+RL IYl","ROT_MEM_D
+RL (IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ROT_REG
+RR IYh","ROT_REG
+RR IYl","ROT_MEM_D
+RR (IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ROT_REG
+SLA IYh","ROT_REG
+SLA IYl","ROT_MEM_D
+SLA (IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ROT_REG
+SRA IYh","ROT_REG
+SRA IYl","ROT_MEM_D
+SRA (IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ROT_REG
+SLL IYh","ROT_REG
+SLL IYl","ROT_MEM_D
+SLL (IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ROT_REG
+SRL IYh","ROT_REG
+SRL IYl","ROT_MEM_D
+SRL (IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 0,IYh","BIT_REG
+BIT 0,IYl","BIT_MEM_D
+BIT 0,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 1,IYh","BIT_REG
+BIT 1,IYl","BIT_MEM_D
+BIT 1,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 2,IYh","BIT_REG
+BIT 2,IYl","BIT_MEM_D
+BIT 2,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 3,IYh","BIT_REG
+BIT 3,IYl","BIT_MEM_D
+BIT 3,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 4,IYh","BIT_REG
+BIT 4,IYl","BIT_MEM_D
+BIT 4,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 5,IYh","BIT_REG
+BIT 5,IYl","BIT_MEM_D
+BIT 5,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 6,IYh","BIT_REG
+BIT 6,IYl","BIT_MEM_D
+BIT 6,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 7,IYh","BIT_REG
+BIT 7,IYl","BIT_MEM_D
+BIT 7,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 0,IYh","RES_REG
+RES 0,IYl","RES_MEM_D
+RES 0,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 1,IYh","RES_REG
+RES 1,IYl","RES_MEM_D
+RES 1,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 2,IYh","RES_REG
+RES 2,IYl","RES_MEM_D
+RES 2,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 3,IYh","RES_REG
+RES 3,IYl","RES_MEM_D
+RES 3,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 4,IYh","RES_REG
+RES 4,IYl","RES_MEM_D
+RES 4,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 5,IYh","RES_REG
+RES 5,IYl","RES_MEM_D
+RES 5,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 6,IYh","RES_REG
+RES 6,IYl","RES_MEM_D
+RES 6,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 7,IYh","RES_REG
+RES 7,IYl","RES_MEM_D
+RES 7,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 0,IYh","SET_REG
+SET 0,IYl","SET_MEM_D
+SET 0,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 1,IYh","SET_REG
+SET 1,IYl","SET_MEM_D
+SET 1,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 2,IYh","SET_REG
+SET 2,IYl","SET_MEM_D
+SET 2,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 3,IYh","SET_REG
+SET 3,IYl","SET_MEM_D
+SET 3,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 4,IYh","SET_REG
+SET 4,IYl","SET_MEM_D
+SET 4,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 5,IYh","SET_REG
+SET 5,IYl","SET_MEM_D
+SET 5,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 6,IYh","SET_REG
+SET 6,IYl","SET_MEM_D
+SET 6,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 7,IYh","SET_REG
+SET 7,IYl","SET_MEM_D
+SET 7,(IY+??)","-
+-"

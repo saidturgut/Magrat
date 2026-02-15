@@ -1,0 +1,272 @@
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","ADD_WORD
+ADD IY,BC","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","ADD_WORD
+ADD IY,DE","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","IMM_TO_PAIR
+LD IY,????","HL_TO_ABS
+LD (????),IY","INC_WORD
+INC IY","INC_REG
+INC IYh","DEC_REG
+DEC IYh","IMM_TO_REG
+LD IYh,??","-
+-","-
+-","ADD_WORD
+ADD IY,IY","ABS_TO_HL
+LD IY,(????)","DEC_WORD
+DEC IY","INC_REG
+INC IYl","DEC_REG
+DEC IYl","IMM_TO_REG
+LD L,??","-
+-"
+"-
+-","-
+-","-
+-","-
+-","INC_MEM_D
+INC (IY+??)","DEC_MEM_D
+DEC (IY+??)","IMM_TO_MEM_D
+LD (IY+??),??","-
+-","-
+-","ADD_WORD
+ADD IY,SP","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","REG_TO_REG
+LD B,IYh","REG_TO_REG
+LD B,IYl","MEM_TO_REG_D
+LD B,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","REG_TO_REG
+LD C,IYh","REG_TO_REG
+LD C,IYl","MEM_TO_REG_D
+LD C,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","REG_TO_REG
+LD D,IYh","REG_TO_REG
+LD D,IYl","MEM_TO_REG_D
+LD D,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","REG_TO_REG
+LD E,IYh","REG_TO_REG
+LD E,IYl","MEM_TO_REG_D
+LD E,(IY+??)","-
+-"
+"REG_TO_REG
+LD IYh,B","REG_TO_REG
+LD IYh,C","REG_TO_REG
+LD IYh,D","REG_TO_REG
+LD IYh,E","REG_TO_REG
+LD IYh,IYh","REG_TO_REG
+LD IYh,IYl","MEM_TO_REG_D
+LD IYh,(IY+??)","REG_TO_REG
+LD IYh,A","REG_TO_REG
+LD IYl,B","REG_TO_REG
+LD IYl,C","REG_TO_REG
+LD IYl,D","REG_TO_REG
+LD IYl,E","REG_TO_REG
+LD IYl,IYh","REG_TO_REG
+LD IYl,IYl","MEM_TO_REG_D
+LD IYl,(IY+??)","REG_TO_REG
+LD IYl,A"
+"REG_TO_MEM_D
+LD (IY+??),B","REG_TO_MEM_D
+LD (IY+??),C","REG_TO_MEM_D
+LD (IY+??),D","REG_TO_MEM_D
+LD (IY+??),E","REG_TO_MEM_D
+LD (IY+??),IYh","REG_TO_MEM_D
+LD (IY+??),IYl","-
+-","REG_TO_MEM_D
+LD (IY+??),A","-
+-","-
+-","-
+-","-
+-","REG_TO_REG
+LD A,IYh","REG_TO_REG
+LD A,IYl","MEM_TO_REG_D
+LD A,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ALU_REG
+ADD A,IYh","ALU_REG
+ADD A,IYl","ALU_MEM_D
+ADD A,(IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ALU_REG
+ADC A,IYh","ALU_REG
+ADC A,IYl","ALU_MEM_D
+ADC A,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ALU_REG
+SUB IYh","ALU_REG
+SUB IYl","ALU_MEM_D
+SUB (IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ALU_REG
+SBC A,IYh","ALU_REG
+SBC A,IYl","ALU_MEM_D
+SBC A,(IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ALU_REG
+AND IYh","ALU_REG
+AND IYl","ALU_MEM_D
+AND (IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ALU_REG
+XOR IYh","ALU_REG
+XOR IYl","ALU_MEM_D
+XOR (IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ALU_REG
+OR IYh","ALU_REG
+OR IYl","ALU_MEM_D
+OR (IY+??)","-
+-","-
+-","-
+-","-
+-","-
+-","CMP_REG
+CP IYh","CMP_REG
+CP IYl","CMP_MEM_D
+CP (IY+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+DDCB","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","POP
+POP IY","-
+-","SWAP_XTHL
+EX (SP),IY","-
+-","PUSH
+PUSH IY","-
+-","-
+-","-
+-","JMP_HL
+JP (IY)","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","HL_TO_SP
+LD SP,IY","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"

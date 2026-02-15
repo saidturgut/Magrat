@@ -1,0 +1,272 @@
+"-
+-","-
+-","-
+-","-
+-","ROT_REG
+RLC IXh","ROT_REG
+RLC IXl","ROT_MEM_D
+RLC (IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ROT_REG
+RRC IXh","ROT_REG
+RRC IXl","ROT_MEM_D
+RRC (IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ROT_REG
+RL IXh","ROT_REG
+RL IXl","ROT_MEM_D
+RL (IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ROT_REG
+RR IXh","ROT_REG
+RR IXl","ROT_MEM_D
+RR (IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ROT_REG
+SLA IXh","ROT_REG
+SLA IXl","ROT_MEM_D
+SLA (IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ROT_REG
+SRA IXh","ROT_REG
+SRA IXl","ROT_MEM_D
+SRA (IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","ROT_REG
+SLL IXh","ROT_REG
+SLL IXl","ROT_MEM_D
+SLL (IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","ROT_REG
+SRL IXh","ROT_REG
+SRL IXl","ROT_MEM_D
+SRL (IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 0,IXh","BIT_REG
+BIT 0,IXl","BIT_MEM_D
+BIT 0,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 1,IXh","BIT_REG
+BIT 1,IXl","BIT_MEM_D
+BIT 1,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 2,IXh","BIT_REG
+BIT 2,IXl","BIT_MEM_D
+BIT 2,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 3,IXh","BIT_REG
+BIT 3,IXl","BIT_MEM_D
+BIT 3,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 4,IXh","BIT_REG
+BIT 4,IXl","BIT_MEM_D
+BIT 4,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 5,IXh","BIT_REG
+BIT 5,IXl","BIT_MEM_D
+BIT 5,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 6,IXh","BIT_REG
+BIT 6,IXl","BIT_MEM_D
+BIT 6,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","BIT_REG
+BIT 7,IXh","BIT_REG
+BIT 7,IXl","BIT_MEM_D
+BIT 7,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 0,IXh","RES_REG
+RES 0,IXl","RES_MEM_D
+RES 0,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 1,IXh","RES_REG
+RES 1,IXl","RES_MEM_D
+RES 1,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 2,IXh","RES_REG
+RES 2,IXl","RES_MEM_D
+RES 2,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 3,IXh","RES_REG
+RES 3,IXl","RES_MEM_D
+RES 3,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 4,IXh","RES_REG
+RES 4,IXl","RES_MEM_D
+RES 4,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 5,IXh","RES_REG
+RES 5,IXl","RES_MEM_D
+RES 5,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 6,IXh","RES_REG
+RES 6,IXl","RES_MEM_D
+RES 6,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","RES_REG
+RES 7,IXh","RES_REG
+RES 7,IXl","RES_MEM_D
+RES 7,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 0,IXh","SET_REG
+SET 0,IXl","SET_MEM_D
+SET 0,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 1,IXh","SET_REG
+SET 1,IXl","SET_MEM_D
+SET 1,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 2,IXh","SET_REG
+SET 2,IXl","SET_MEM_D
+SET 2,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 3,IXh","SET_REG
+SET 3,IXl","SET_MEM_D
+SET 3,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 4,IXh","SET_REG
+SET 4,IXl","SET_MEM_D
+SET 4,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 5,IXh","SET_REG
+SET 5,IXl","SET_MEM_D
+SET 5,(IX+??)","-
+-"
+"-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 6,IXh","SET_REG
+SET 6,IXl","SET_MEM_D
+SET 6,(IX+??)","-
+-","-
+-","-
+-","-
+-","-
+-","SET_REG
+SET 7,IXh","SET_REG
+SET 7,IXl","SET_MEM_D
+SET 7,(IX+??)","-
+-"

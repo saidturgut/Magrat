@@ -5,6 +5,8 @@ public partial class Microcode
 {
     private static readonly Dictionary<string, Func<Signal[]>> BitPage = new()
     {
+        ["-"] = () => IDLE,
+        
         // ------------------------- DEF BIT PAGE ------------------------- //
 
          ["ROT_REG"] = () => CB_REG(EncodedBitOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, true),

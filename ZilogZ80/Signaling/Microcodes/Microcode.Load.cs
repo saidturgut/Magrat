@@ -39,8 +39,8 @@ public partial class Microcode
     ];
     private static Signal[] HL_TO_SP =>
     [
-        REG_COMMIT(EncodedRegisters[5], Pointer.SPL),
-        REG_COMMIT(EncodedRegisters[4], Pointer.SPH),
+        REG_COMMIT(PointL, Pointer.SPL),
+        REG_COMMIT(PointH, Pointer.SPH),
     ];
     
     private static Signal[] ACC_TO_ABS =>
@@ -59,19 +59,19 @@ public partial class Microcode
     private static Signal[] HL_TO_ABS =>
     [
         ..LOAD_PAIR_IMM(WZ),
-        REG_COMMIT(EncodedRegisters[5], Pointer.MDR),
+        REG_COMMIT(PointL, Pointer.MDR),
         MEM_WRITE(WZ),
         PAIR_INC(WZ),
-        REG_COMMIT(EncodedRegisters[4], Pointer.MDR),
+        REG_COMMIT(PointH, Pointer.MDR),
         MEM_WRITE(WZ),
     ];
     private static Signal[] ABS_TO_HL =>
     [
         ..LOAD_PAIR_IMM(WZ),
         MEM_READ(WZ),
-        REG_COMMIT(Pointer.MDR, EncodedRegisters[5]),
+        REG_COMMIT(Pointer.MDR, PointL),
         PAIR_INC(WZ),
         MEM_READ(WZ),
-        REG_COMMIT(Pointer.MDR, EncodedRegisters[4]),
+        REG_COMMIT(Pointer.MDR, PointH),
     ];
 }

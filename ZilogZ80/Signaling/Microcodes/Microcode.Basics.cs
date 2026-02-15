@@ -36,9 +36,9 @@ public static partial class Microcode
     
     private static Signal[] DISPLACEMENT =>
     [
-        ALU_COMPUTE(Operation.IDX, EncodedRegisters[5], Pointer.MDR, Flag.NONE),
+        ALU_COMPUTE(Operation.IDX, PointL, Pointer.MDR, Flag.NONE),
         REG_COMMIT(Pointer.TMP, Pointer.W),
-        ALU_COMPUTE(Operation.SXT, EncodedRegisters[4], Pointer.MDR, Flag.NONE),
+        ALU_COMPUTE(Operation.SXT, PointH, Pointer.MDR, Flag.NONE),
         REG_COMMIT(Pointer.TMP, Pointer.Z),
     ];
 

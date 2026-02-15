@@ -43,7 +43,7 @@ public partial class Alu
         if (Carry(result, 8)) output.Flags |= (byte)Flag.CARRY;
         return output;
     }
-
+    
     private static AluOutput SXT(AluInput input) => new()
         { Result = (byte)(input.A + (byte)((input.B & 0x80) != 0 ? 0xFF : 0x00) + (input.FL & (byte)Flag.CARRY)) };
 }

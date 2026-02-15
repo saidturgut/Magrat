@@ -5,22 +5,25 @@ public partial class Microcode
 {
     // ------------------------- ARITHMETIC & LOGIC ------------------------- //
 
+    private static Signal[] WRITE_BACK(bool commit) =>
+        [..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,];
+    
     private static Signal[] ALU_REG(Operation operation, FlagMask mask, bool commit) =>
     [
         ALU_COMPUTE(operation, Pointer.A, EncodedRegisters[aa_aaa_XXX], FlagMasks[mask]),
-        ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,
+        ..WRITE_BACK(commit),
     ];
     private static Signal[] ALU_MEM(bool commit) =>
     [
-        MEM_READ(HL),
-        ALU_COMPUTE(EncodedAluOperations[aa_XXX_aaa], Pointer.A, Pointer.MDR, FlagMasks[FlagMask.CNV3H5ZS]),
-        ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,
+        MEM_READ(addrSrc),
+        ALU_COMPUTE(EncodedAluOperations[aa_XXX_aaa], Pointer.A, EncodedRegisters[aa_aaa_XXX], FlagMasks[FlagMask.CNV3H5ZS]),
+        ..WRITE_BACK(commit),
     ];
     private static Signal[] ALU_IMM(bool commit) =>
     [
         ..READ_IMM,
         ALU_COMPUTE(EncodedAluOperations[aa_XXX_aaa], Pointer.A, Pointer.MDR, FlagMasks[FlagMask.CNV3H5ZS]),
-        ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.A)] : NONE,
+        ..WRITE_BACK(commit),
     ];
     
     private static Signal[] ALU_FLAG(Operation operation) =>
@@ -30,10 +33,10 @@ public partial class Microcode
     
     private static Signal[] ADD_WORD =>
     [
-        ALU_COMPUTE(Operation.ADD, Pointer.L, EncodedPairs[aa_XXa_aaa][0], Flag.CARRY),
-        REG_COMMIT(Pointer.TMP, Pointer.L),
-        ALU_COMPUTE(Operation.ADC, Pointer.H, EncodedPairs[aa_XXa_aaa][1], FlagMasks[FlagMask.CNH]),
-        REG_COMMIT(Pointer.TMP, Pointer.H),
+        ALU_COMPUTE(Operation.ADD, EncodedRegisters[5], EncodedPairs[aa_XXa_aaa][0], Flag.CARRY),
+        REG_COMMIT(Pointer.TMP, EncodedRegisters[5]),
+        ALU_COMPUTE(Operation.ADC, EncodedRegisters[4], EncodedPairs[aa_XXa_aaa][1], FlagMasks[FlagMask.CNH]),
+        REG_COMMIT(Pointer.TMP, EncodedRegisters[4]),
     ];
     
     // ------------------------- INCREMENT & DECREMENT  ------------------------- //
@@ -45,14 +48,28 @@ public partial class Microcode
     ];
     private static Signal[] INC_MEM(Operation operation) =>
     [
-        MEM_READ(HL),
+        MEM_READ(addrSrc),
         ALU_COMPUTE(operation, Pointer.A, Pointer.MDR, FlagMasks[FlagMask.NV3H5ZS]),
         REG_COMMIT(Pointer.TMP, Pointer.MDR),
-        MEM_WRITE(HL)
+        MEM_WRITE(addrSrc)
     ];
 
     private static Signal[] INC_WORD(bool inx) =>
     [
         inx ? PAIR_INC(EncodedPairs[aa_XXa_aaa]) : PAIR_DEC(EncodedPairs[aa_XXa_aaa]),
+    ];
+    
+    // ------------------------- CB PAGE OPS  ------------------------- //
+    
+    private static Signal[] CB_REG(Operation operation, FlagMask mask, bool commit) =>
+    [
+        ALU_COMPUTE(operation, EncodedRegisters[aa_aaa_XXX], Pointer.IR, FlagMasks[mask]),
+        ..commit ? [REG_COMMIT(Pointer.TMP, EncodedRegisters[aa_aaa_XXX])] : NONE,
+    ];
+    private static Signal[] CB_MEM(Operation operation, FlagMask mask, bool commit) =>
+    [
+        MEM_READ(addrSrc),
+        ALU_COMPUTE(operation, Pointer.MDR, Pointer.IR, FlagMasks[mask]),
+        ..commit ? [REG_COMMIT(Pointer.TMP, Pointer.MDR), MEM_WRITE(addrSrc)] : NONE,
     ];
 }

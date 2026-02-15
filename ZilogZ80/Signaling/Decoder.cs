@@ -1,46 +1,50 @@
 namespace ZilogZ80.Signaling;
 using Microcodes;
 
-public partial class Decoder
+public class Decoder
 {
-    private readonly Signal[][] MainPage = Microcode.PageMain("PageMain", Microcode.MainPage, false);
+    private readonly Signal[][] MainPage = Microcode.PageMain(false);
     private readonly Signal[][] MiscPage = [];
     private readonly Signal[][] BitPage = Microcode.PageBit(false);
-    private readonly Signal[][] IxPage = [];
+    private readonly Signal[][] IxPage = Microcode.PageIx(false);
     private readonly Signal[][] IyPage = [];
-    private readonly Signal[][] IxBitPage = [];
+    private readonly Signal[][] IxBitPage = Microcode.PageIxBit(false);
     private readonly Signal[][] IyBitPage = [];
-
+    
     public readonly Signal[] Fetch = Microcode.FETCH;
-    private readonly Signal[] Disp = Microcode.DISP;
+    private readonly Signal[] Prefix = Microcode.PREFIX;
+    
+    private byte pageIndex;
     
     public Signal[] Decode(byte opcode)
     {
-        Signal[] output;
-
-        if (PrefixCheck(opcode))
-        {
-            output = Fetch;
-        }
-        else if (dispSwap)
-        {
-            output = Disp;
-            dispSwap = false;
-        }
-        else
-        {
-            output = IndexPage(opcode);
-        }
-        
-        return output.Length != 0
-            ? output
-            : throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
+        var output = PrefixCheck(opcode) ? Prefix : IndexPage(opcode);
+        return output.Length != 0 ? output : throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
     }
 
-    private bool PrefixCheck(byte opcode) => opcode switch
+    private bool PrefixCheck(byte opcode)
     {
-        0xED => ED(), 0xCB => CB(), 0xDD => DD(), 0xFD => FD(), _=>false,
-    };
+        switch (opcode)
+        {
+            case 0xED: pageIndex = 1; return true;
+            case 0xCB:
+            {
+                if (pageIndex is not (0 or 3 or 4)) return false;
+                pageIndex += 2; return true;
+            }
+            case 0xDD:
+            {
+                if (pageIndex is not (0 or 3 or 4)) return false;
+                pageIndex = 3; return true;
+            }
+            case 0xFD:
+            {
+                if (pageIndex is not (0 or 3 or 4)) return false;
+                pageIndex = 4; return true;
+            }
+            default: return false;
+        }
+    }
     
     private Signal[] IndexPage(byte opcode) => pageIndex switch
     {
@@ -57,6 +61,5 @@ public partial class Decoder
     public void Clear()
     {
         pageIndex = 0;
-        dispSwap = false;
     }
 }

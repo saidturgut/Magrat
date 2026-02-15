@@ -12,11 +12,11 @@ public partial class Microcode
     private static Signal[] REG_TO_MEM(bool imm) => // IMM_TO_MEM
     [
         ..imm ? READ_IMM : [REG_COMMIT(EncodedRegisters[aa_aaa_XXX], Pointer.MDR)],
-        MEM_WRITE(HL),
+        MEM_WRITE(addrSrc),
     ];
     private static Signal[] MEM_TO_REG(bool imm) => // IMM_TO_REG
     [
-        ..imm ? READ_IMM : [MEM_READ(HL)],
+        ..imm ? READ_IMM : [MEM_READ(addrSrc)],
         REG_COMMIT(Pointer.MDR, EncodedRegisters[aa_XXX_aaa])
     ];
     
@@ -39,8 +39,8 @@ public partial class Microcode
     ];
     private static Signal[] HL_TO_SP =>
     [
-        REG_COMMIT(Pointer.L, Pointer.SPL),
-        REG_COMMIT(Pointer.H, Pointer.SPH),
+        REG_COMMIT(EncodedRegisters[5], Pointer.SPL),
+        REG_COMMIT(EncodedRegisters[4], Pointer.SPH),
     ];
     
     private static Signal[] ACC_TO_ABS =>
@@ -59,19 +59,19 @@ public partial class Microcode
     private static Signal[] HL_TO_ABS =>
     [
         ..LOAD_PAIR_IMM(WZ),
-        REG_COMMIT(Pointer.L, Pointer.MDR),
+        REG_COMMIT(EncodedRegisters[5], Pointer.MDR),
         MEM_WRITE(WZ),
         PAIR_INC(WZ),
-        REG_COMMIT(Pointer.H, Pointer.MDR),
+        REG_COMMIT(EncodedRegisters[4], Pointer.MDR),
         MEM_WRITE(WZ),
     ];
     private static Signal[] ABS_TO_HL =>
     [
         ..LOAD_PAIR_IMM(WZ),
         MEM_READ(WZ),
-        REG_COMMIT(Pointer.MDR, Pointer.L),
+        REG_COMMIT(Pointer.MDR, EncodedRegisters[5]),
         PAIR_INC(WZ),
         MEM_READ(WZ),
-        REG_COMMIT(Pointer.MDR, Pointer.H),
+        REG_COMMIT(Pointer.MDR, EncodedRegisters[4]),
     ];
 }

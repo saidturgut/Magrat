@@ -1,4 +1,5 @@
 namespace ZilogZ80.Signaling.Microcodes;
+using Executing.Computing;
 
 public partial class Microcode
 {
@@ -22,6 +23,14 @@ public partial class Microcode
     [
         REG_COMMIT(pair[0], Pointer.PCL),
         REG_COMMIT(pair[1], Pointer.PCH),
+    ];
+    
+    private static Signal[] JUMP_INDEXED =>
+    [
+        ALU_COMPUTE(Operation.IDX, Pointer.PCL, Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.PCL),
+        ALU_COMPUTE(Operation.SXT, Pointer.PCH, Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.PCH),
     ];
     
     private static Signal[] REG_SWAP(Pointer first, Pointer second) =>

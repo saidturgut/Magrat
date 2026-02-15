@@ -3,7 +3,7 @@ using Executing.Computing;
 
 public static partial class Microcode
 {
-    public static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
+    private static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
     {
         // ------------------------- BASIC INSTRUCTIONS ------------------------- //
 
@@ -66,13 +66,23 @@ public static partial class Microcode
         // SWAP OPS
         ["SWAP_ALL"] = () => SWAP_ALL, ["SWAP_XTHL"] = () => SWAP_XTHL,
         ["SWAP_AF"] = () => SWAP_AF, ["SWAP_XCHG"] = () => SWAP_XCHG,
+        
+        // ------------------------- DISPLACEMENT OPS ------------------------- //
+
+        ["REG_TO_MEM_D"] = () => [..IDX, ..REG_TO_MEM(false)],
+        ["MEM_TO_REG_D"] = () => [..IDX, ..MEM_TO_REG(false)],
+        ["IMM_TO_MEM_D"] = () => [..IDX, ..REG_TO_MEM(true)],
+        ["ALU_MEM_D"] = () => [..IDX, ..ALU_MEM(true)], 
+        ["CMP_MEM_D"] = () => [..IDX, ..ALU_MEM(false)],
+        ["INC_MEM_D"] = () => [..IDX, ..INC_MEM(Operation.INC)], 
+        ["DEC_MEM_D"] = () => [..IDX, ..INC_MEM(Operation.DEC)],
     };
     
     private static readonly Pointer[] EncodedRegisters =
     [
         Pointer.B, Pointer.C, Pointer.D, Pointer.E, 
         Pointer.H, Pointer.L,
-        Pointer.NIL, Pointer.A,
+        Pointer.MDR, Pointer.A,
     ];
     private static readonly Pointer[][] EncodedPairs =
     [

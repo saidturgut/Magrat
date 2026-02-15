@@ -15,10 +15,31 @@ public static partial class Microcode
         STATE_COMMIT(Cycle.DECODE),
     ];
     
-    public static Signal[] DISP =>
+    public static Signal[] PREFIX =>
     [
         REG_COMMIT(Pointer.IR, Pointer.W),
         ..FETCH,
+    ];
+
+    private static Signal[] IDX =>
+    [
+        ..READ_IMM,
+        ..DISPLACEMENT,
+    ];
+
+    private static Signal[] IDX_BIT =>
+    [
+        REG_COMMIT(Pointer.W, Pointer.MDR),
+        REG_COMMIT(Pointer.NIL, Pointer.W),
+        ..DISPLACEMENT,
+    ];
+    
+    private static Signal[] DISPLACEMENT =>
+    [
+        ALU_COMPUTE(Operation.IDX, EncodedRegisters[5], Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.W),
+        ALU_COMPUTE(Operation.SXT, EncodedRegisters[4], Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.Z),
     ];
 
     private static Signal[] INPUT_OUTPUT(bool input) =>

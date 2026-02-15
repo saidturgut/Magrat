@@ -57,9 +57,9 @@ public partial class Microcode
     
     private static Signal[] JMP_HL =>
     [
-        MEM_READ(HL),
-        REG_COMMIT(Pointer.L, Pointer.SPL),
-        REG_COMMIT(Pointer.H, Pointer.SPH),
+        MEM_READ(EncodedPairs[2]),
+        REG_COMMIT(EncodedRegisters[5], Pointer.SPL),
+        REG_COMMIT(EncodedRegisters[4], Pointer.SPH),
     ];
     
     // ------------------------- BRANCHING ------------------------- //
@@ -81,13 +81,5 @@ public partial class Microcode
         REG_COMMIT(Pointer.W, Pointer.F),
         COND_COMPUTE(Condition.NZ),
         ..JUMP_INDEXED,
-    ];
-
-    private static Signal[] JUMP_INDEXED =>
-    [
-        ALU_COMPUTE(Operation.IDX, Pointer.PCL, Pointer.MDR, Flag.NONE),
-        REG_COMMIT(Pointer.TMP, Pointer.PCL),
-        ALU_COMPUTE(Operation.SXT, Pointer.PCH, Pointer.MDR, Flag.NONE),
-        REG_COMMIT(Pointer.TMP, Pointer.PCH),
     ];
 }

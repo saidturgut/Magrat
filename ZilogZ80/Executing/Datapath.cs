@@ -8,13 +8,13 @@ public partial class Datapath
     
     private Signal signal = new();
 
-    private bool stall;
+    private bool abort;
 
     public List<string> logs = [];
     
     public void Init()
     {
-        for (int i = 0; i < Registers.Length; i++)
+        for (byte i = 0; i < Registers.Length; i++)
             Registers[i] =  new Register();
     }
     
@@ -29,9 +29,9 @@ public partial class Datapath
             case Cycle.MEM_READ: MemoryRead(bus); break;
             case Cycle.MEM_WRITE: MemoryWrite(bus); break;
             case Cycle.ALU_COMPUTE: AluCompute(); break;
+            case Cycle.COND_COMPUTE: CondCompute(); break;
             case Cycle.PAIR_INC: Increment(); break;
             case Cycle.PAIR_DEC: Decrement(); break;
-            default: ConditionCompute(); break;
         }
         Protocol();
     }
@@ -46,11 +46,11 @@ public partial class Datapath
         => Registers[(byte)pointer];
 
     public ControlSignal Emit()
-        => new(Point(Pointer.IR).Get(), stall);
+        => new(Point(Pointer.IR).Get(), abort);
 }
 
-public struct ControlSignal(byte opcode, bool stall)
+public struct ControlSignal(byte opcode, bool abort)
 {
     public readonly byte Opcode = opcode;
-    public readonly bool Stall = stall;
+    public readonly bool Abort = abort;
 }

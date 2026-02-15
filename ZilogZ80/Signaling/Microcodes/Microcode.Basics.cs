@@ -4,15 +4,15 @@ using Executing.Computing;
 public static partial class Microcode
 {
     private static Signal[] IDLE =>
-        [STATE_COMMIT(Cycle.IDLE)];
+        [new ()];
     
     public static Signal[] FETCH =>
     [
         ..READ_IMM,
         REG_COMMIT(Pointer.MDR, Pointer.IR),
-        ALU_COMPUTE(Operation.RFR, Pointer.RR, Pointer.NIL, Flag.NONE),
-        REG_COMMIT(Pointer.TMP, Pointer.RR),
-        STATE_COMMIT(Cycle.DECODE),
+        ALU_COMPUTE(Operation.RFR, Pointer.R, Pointer.NIL, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.R),
+        STATE_COMMIT(State.DECODE),
     ];
     
     public static Signal[] PREFIX =>
@@ -33,15 +33,14 @@ public static partial class Microcode
         REG_COMMIT(Pointer.NIL, Pointer.W),
         ..DISPLACEMENT,
     ];
-    
-    private static Signal[] DISPLACEMENT =>
-    [
-        ALU_COMPUTE(Operation.IDX, PointL, Pointer.MDR, Flag.NONE),
-        REG_COMMIT(Pointer.TMP, Pointer.W),
-        ALU_COMPUTE(Operation.SXT, PointH, Pointer.MDR, Flag.NONE),
-        REG_COMMIT(Pointer.TMP, Pointer.Z),
-    ];
 
+    public static Signal[] INT_1 =>
+    [
+        ..PUSH(true),
+        ALU_COMPUTE(Operation.VEC, Pointer.NIL, Pointer.NIL, Flag.NONE),
+        ..JUMP_TO_PAIR([Pointer.TMP, Pointer.NIL]),
+    ];
+    
     private static Signal[] INPUT_OUTPUT(bool input) =>
     [
         ..READ_IMM,

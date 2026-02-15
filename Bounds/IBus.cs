@@ -10,7 +10,7 @@ public interface IBus
     
     public void Print(char character);
     
-    public void Poll();
+    public bool Poll();
 
     public void Debug(List<string> input);
 

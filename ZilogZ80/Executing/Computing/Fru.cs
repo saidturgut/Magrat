@@ -26,6 +26,7 @@ public class Fru
         Condition.PE => tmp.Over,
         Condition.P => !tmp.Sign,
         Condition.M => tmp.Sign,
+        Condition.ED => !tmp.Over && !tmp.Zero,
     };
 }
 
@@ -57,5 +58,5 @@ public enum Flag
 
 public enum Condition
 {
-    NONE = -1, NZ, Z, NC, C, PO, PE, P, M,
+    NONE = -1, NZ, Z, NC, C, PO, PE, P, M, ED,
 }

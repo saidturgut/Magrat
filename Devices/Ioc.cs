@@ -5,7 +5,7 @@ using Bounds;
 public class Ioc
 {
     public readonly Tty Tty = new (); // TERMINAL
-    public readonly Clk Clk = new (); // TIMER
+    public readonly Tmr Clk = new (); // TIMER
     public readonly Dsk Dsk = new (); // DISK
     
     public const uint start = 0xFF00;
@@ -19,7 +19,7 @@ public class Ioc
         {
             case 0x0: output = Tty.ReadStatus(); bus.AddReadLog("TTY","STATUS",output); return output;
             case 0x1: output = Tty.ReadData(); bus.AddReadLog("TTY","DATA",output); return output;
-            
+            case 0x3: output = Clk.ReadStatus(); bus.AddReadLog("CLK","STATUS",output); return output;
             case 0xF: output = Dsk.ReadStatus(); bus.AddReadLog("DISK","STATUS",output); return output;
         }
         throw new Exception($"INVALID IO ADDRESS TO READ \"{Log.Hex(address)}\"");
@@ -31,7 +31,12 @@ public class Ioc
         switch (index)
         {
             case 0x2: Tty.WriteData(data, bus); bus.AddWriteLog("TTY", "DATA", data); return;
-            
+            case 0x4: Clk.WriteStatus(data); bus.AddWriteLog("CLK", "STATUS", data); return;
+            case 0x5: Clk.WriteCounterLow(data); bus.AddWriteLog("CLK", "COUNTER L", data); return;
+            case 0x6: Clk.WriteCounterHigh(data); bus.AddWriteLog("CLK", "COUNTER L", data); return;
+            case 0x7: Clk.WriteReloadLow(data); bus.AddWriteLog("CLK", "RELOAD", data); return;
+            case 0x8: Clk.WriteReloadHigh(data); bus.AddWriteLog("CLK", "RELOAD", data); return;
+            case 0x9: Clk.WriteEnable(data); bus.AddWriteLog("CLK", "ENABLE", data); return;
             case 0xA: Dsk.WriteBlockLow(data); bus.AddWriteLog("DISK", "BLOCK L", data); return;
             case 0xB: Dsk.WriteBlockHigh(data); bus.AddWriteLog("DISK", "BLOCK H", data); return;
             case 0xC: Dsk.WriteDmaLow(data); bus.AddWriteLog("DISK", "DMA L", data); return;

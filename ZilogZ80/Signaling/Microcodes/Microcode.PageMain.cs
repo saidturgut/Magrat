@@ -10,7 +10,7 @@ public static partial class Microcode
         // ------------------------- DEF MAIN PAGE ------------------------- //
 
         // STATE OPS
-        ["NOP"] = () => IDLE, ["HALT"] = () => [STATE_COMMIT(Cycle.HALT)],
+        ["NOP"] = () => IDLE, ["HALT"] = () => [STATE_COMMIT(State.HALT)],
         ["INT_ON"] = () => IDLE, ["INT_OFF"] = () => IDLE,
         ["INPUT"] = () => INPUT_OUTPUT(true), ["OUTPUT"] = () => INPUT_OUTPUT(false),
 
@@ -25,7 +25,7 @@ public static partial class Microcode
         // 16 BIT LOAD
         ["IMM_TO_PAIR"] = () => IMM_TO_PAIR, ["HL_TO_SP"] = () => HL_TO_SP,
         ["ACC_TO_ABS"] = () => ACC_TO_ABS, ["ABS_TO_ACC"] = () => ABS_TO_ACC,
-        ["HL_TO_ABS"] = () => HL_TO_ABS, ["ABS_TO_HL"] = () => ABS_TO_HL,
+        ["HL_TO_ABS"] = () => PAIR_TO_ABS([PointL, PointH]), ["ABS_TO_HL"] = () => ABS_TO_PAIR([PointL, PointH]),
         
         // ------------------------- ALU INSTRUCTIONS ------------------------- //
         
@@ -34,7 +34,7 @@ public static partial class Microcode
         ["ALU_MEM"] = () => ALU_MEM(true), ["ALU_IMM"] = () => ALU_IMM(true),
         ["CMP_REG"] = () => ALU_REG(EncodedAluOperations![aa_XXX_aaa], FlagMask.CNV3H5ZS, false), 
         ["CMP_MEM"] = () => ALU_MEM(false), ["CMP_IMM"] = () => ALU_IMM(false),
-        ["ADD_WORD"] = () => ADD_WORD, 
+        ["ADD_WORD"] = () => ALU_WORD(Operation.ADD, Operation.ADC, FlagMask.CN3H5), 
         
         // INCREMENT & DECREMENT
         ["INC_REG"] = () => INC_REG(Operation.INC), ["INC_MEM"] = () => INC_MEM(Operation.INC),

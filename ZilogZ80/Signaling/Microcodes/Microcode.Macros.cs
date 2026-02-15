@@ -33,6 +33,14 @@ public partial class Microcode
         REG_COMMIT(Pointer.TMP, Pointer.PCH),
     ];
     
+    private static Signal[] DISPLACEMENT =>
+    [
+        ALU_COMPUTE(Operation.IDX, PointL, Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.W),
+        ALU_COMPUTE(Operation.SXT, PointH, Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.Z),
+    ];
+    
     private static Signal[] REG_SWAP(Pointer first, Pointer second) =>
     [
         REG_COMMIT(first, Pointer.TMP),

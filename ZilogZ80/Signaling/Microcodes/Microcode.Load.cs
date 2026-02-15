@@ -56,22 +56,22 @@ public partial class Microcode
         REG_COMMIT(Pointer.MDR, Pointer.A),
     ];
     
-    private static Signal[] HL_TO_ABS =>
+    private static Signal[] PAIR_TO_ABS(Pointer[] pair) =>
     [
         ..LOAD_PAIR_IMM(WZ),
-        REG_COMMIT(PointL, Pointer.MDR),
+        REG_COMMIT(pair[0], Pointer.MDR),
         MEM_WRITE(WZ),
         PAIR_INC(WZ),
-        REG_COMMIT(PointH, Pointer.MDR),
+        REG_COMMIT(pair[1], Pointer.MDR),
         MEM_WRITE(WZ),
     ];
-    private static Signal[] ABS_TO_HL =>
+    private static Signal[] ABS_TO_PAIR(Pointer[] pair) =>
     [
         ..LOAD_PAIR_IMM(WZ),
         MEM_READ(WZ),
-        REG_COMMIT(Pointer.MDR, PointL),
+        REG_COMMIT(Pointer.MDR, pair[0]),
         PAIR_INC(WZ),
         MEM_READ(WZ),
-        REG_COMMIT(Pointer.MDR, PointH),
+        REG_COMMIT(Pointer.MDR, pair[1]),
     ];
 }

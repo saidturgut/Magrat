@@ -46,8 +46,12 @@ public partial class Bus(IEngine Engine) : IBus
     public void Print(char character)
         => Engine.Print(character);
 
-    public void Poll()
-        => Ioc.Tty.KeyInput(Engine.Poll());
+    public bool Poll()
+    {
+        Ioc.Tty.KeyInput(Engine.Poll());
+        Ioc.Clk.Advance();
+        return Ioc.Clk.Sample();
+    }
     
     public void Debug(List<string> input)
     {

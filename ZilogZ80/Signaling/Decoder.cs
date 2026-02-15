@@ -4,7 +4,7 @@ using Microcodes;
 public class Decoder
 {
     private readonly Signal[][] MainPage = Microcode.PageMain(false);
-    private readonly Signal[][] MiscPage = [];
+    private readonly Signal[][] MiscPage = Microcode.PageMisc(false);
     private readonly Signal[][] BitPage = Microcode.PageBit(false);
     private readonly Signal[][] IxPage = Microcode.PageIx(false);
     private readonly Signal[][] IyPage = Microcode.PageIy(false);
@@ -13,6 +13,7 @@ public class Decoder
     
     public readonly Signal[] Fetch = Microcode.FETCH;
     private readonly Signal[] Prefix = Microcode.PREFIX;
+    public readonly Signal[] Int1 = Microcode.INT_1;
     
     private byte pageIndex;
     private bool skipByte;

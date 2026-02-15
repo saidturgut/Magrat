@@ -25,17 +25,19 @@ public partial class Alu
         output.Flags |= (byte)Flag.SUBT;
         return output;
     }
-    
+
     private static AluOutput RST(AluInput input) => new()
-    {
-        Result = (byte)(((input.A >> 3) & 0x07) << 3),
-    };
+        { Result = (byte)(((input.A >> 3) & 0x07) << 3), };
 
     private static AluOutput TOP(AluInput input) => new()
-    {
-        Result = 0xFF 
-    };
-    
+        { Result = 0xFF };
+    private static AluOutput IOP(AluInput input) => new()
+        { Flags = (byte)(EvenParity(input.A) ? (byte)Flag.OVER : 0) };
+    private static AluOutput BLK(AluInput input) => new()
+        { Flags = (byte)(input.A != 0 || input.B != 0 ? (byte)Flag.OVER : 0) };
+    private static AluOutput VEC(AluInput input) => new() 
+        { Result = 0x38, };
+
     private static AluOutput IDX(AluInput input)
     {
         var result = input.A + input.B;

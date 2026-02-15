@@ -28,8 +28,8 @@ public partial class Datapath
             Point(signal.Second).Set((byte)(Point(signal.Second).Get() - 1));
     }
 
-    private void ConditionCompute()
-        => stall = signal.Condition is not Condition.NONE
+    private void CondCompute()
+        => abort = signal.Condition is not Condition.NONE
                    && !Fru.Check(signal.Condition, Fru.Flags(Point(Pointer.TMP).Get()));
     
     private ushort Merge(byte low, byte high)
@@ -43,7 +43,7 @@ public partial class Datapath
         Point(Pointer.W).Set(0);
         Point(Pointer.Z).Set(0);
         flagLatch = 0;
-        stall = false;
+        abort = false;
         logs = [];
     }
 }

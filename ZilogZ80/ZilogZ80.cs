@@ -29,7 +29,7 @@ public class ZilogZ80(IBus Bus) : ICpu
     private void Commit()
     {
         Datapath.Debug();
-        Bus.Poll();
+        Control.Receive(Bus.Poll());
         Bus.Debug(Datapath.logs);
         Datapath.Clear();
         Control.Clear();

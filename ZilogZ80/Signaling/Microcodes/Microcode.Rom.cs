@@ -14,8 +14,8 @@ public static partial class Microcode
     private static readonly Pointer[] DE = [Pointer.E, Pointer.D];
     private static readonly Pointer[] TMP = [Pointer.TMP, Pointer.NIL];
     
-    private static Signal STATE_COMMIT(Cycle state) => new()
-        { Cycle = state, };
+    private static Signal STATE_COMMIT(State state) => new()
+        { Cycle = Cycle.STATE_COMMIT, State = state, };
     
     private static Signal REG_COMMIT(Pointer source, Pointer destination) => new()
         { Cycle = Cycle.REG_COMMIT, First = source, Second = destination };
@@ -27,8 +27,8 @@ public static partial class Microcode
 
     private static Signal ALU_COMPUTE(Operation operation, Pointer source, Pointer operand, Flag mask) => new()
         { Cycle = Cycle.ALU_COMPUTE, Operation = operation, First = source, Second = operand, Mask =  mask };
-    private static Signal COND_COMPUTE(Condition condition) => new()
-        { Cycle = Cycle.IDLE, Condition = condition };
+    private static Signal COND_COMPUTE(State state, Condition condition) => new()
+        { Cycle = Cycle.COND_COMPUTE, State = state, Condition = condition };
 
     private static Signal PAIR_INC(Pointer[] pair) => new()
         { Cycle = Cycle.PAIR_INC, First = pair[0], Second = pair[1] };
@@ -41,14 +41,18 @@ public static partial class Microcode
         { FlagMask.CNV3H5ZS , Flag.CARRY | Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
         { FlagMask.CV3H5ZS , Flag.CARRY | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
         { FlagMask.NV3H5ZS , Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
+        { FlagMask.N3H5ZS , Flag.SUBT  | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
         { FlagMask.CN3H5 , Flag.CARRY | Flag.SUBT | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
+        { FlagMask.NVHZS , Flag.SUBT | Flag.OVER | Flag.HALF | Flag.ZERO | Flag.SIGN },
+        { FlagMask.NV3H5 , Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
         { FlagMask.N3H5 , Flag.SUBT | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
         { FlagMask.CNH , Flag.CARRY | Flag.SUBT | Flag.HALF },
+        { FlagMask.NZ , Flag.SUBT | Flag.ZERO },
     };
 }
 
 public enum FlagMask
 {
     NONE,
-    CNV3H5ZS, CV3H5ZS, NV3H5ZS, CN3H5, N3H5, CNH
+    CNV3H5ZS, CV3H5ZS, NV3H5ZS, N3H5ZS, CN3H5, NVHZS,  NV3H5, N3H5, CNH, NZ,
 }

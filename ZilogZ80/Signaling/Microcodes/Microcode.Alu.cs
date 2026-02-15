@@ -31,11 +31,11 @@ public partial class Microcode
         ALU_COMPUTE(operation, Pointer.NIL, Pointer.NIL, FlagMasks[FlagMask.CN3H5]),
     ];
     
-    private static Signal[] ADD_WORD =>
+    private static Signal[] ALU_WORD(Operation low, Operation high, FlagMask mask) =>
     [
-        ALU_COMPUTE(Operation.ADD, PointL, EncodedPairs[aa_XXa_aaa][0], Flag.CARRY),
+        ALU_COMPUTE(low, PointL, EncodedPairs[aa_XXa_aaa][0], Flag.CARRY),
         REG_COMMIT(Pointer.TMP, PointL),
-        ALU_COMPUTE(Operation.ADC, PointH, EncodedPairs[aa_XXa_aaa][1], FlagMasks[FlagMask.CNH]),
+        ALU_COMPUTE(high, PointH, EncodedPairs[aa_XXa_aaa][1], FlagMasks[mask]),
         REG_COMMIT(Pointer.TMP, PointH),
     ];
     

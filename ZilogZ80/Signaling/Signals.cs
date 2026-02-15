@@ -4,6 +4,7 @@ using Executing.Computing;
 public struct Signal()
 {
     public string Name = "";
+    public State State = State.FETCH;
     public Cycle Cycle = Cycle.IDLE;
     public Pointer First = Pointer.NIL;
     public Pointer Second = Pointer.NIL;
@@ -14,10 +15,10 @@ public struct Signal()
 
 public enum Cycle
 {
-    IDLE, DECODE, HALT, 
+    IDLE, STATE_COMMIT,
     REG_COMMIT, MEM_READ, MEM_WRITE,
-    ALU_COMPUTE, PAIR_INC, PAIR_DEC,
-    IO_READ, IO_WRITE,
+    ALU_COMPUTE, COND_COMPUTE,
+    PAIR_INC, PAIR_DEC,
 }
 
 public enum Pointer
@@ -29,5 +30,5 @@ public enum Pointer
     F, A, C, B, E, D, L, H, // REGISTER PAIRS
     FF, AA, CC, BB, EE, DD, LL, HH, // SHADOW PAIRS
     W, Z, TMP, MDR, // TEMPORARY LATCHES
-    IR, VR, RR, // CONTROL REGISTERS
+    IR, I, R, V, // CONTROL REGISTERS
 }

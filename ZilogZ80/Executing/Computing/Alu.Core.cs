@@ -5,7 +5,9 @@ public partial class Alu
 {
     private static AluOutput NONE(AluInput input) => new()
         { Result = input.A, };
-    private static AluOutput RFR(AluInput input) => new();
+
+    private static AluOutput RFR(AluInput input) => new()
+        { Result = (byte)((input.A & 0x80) | (byte)((input.A + 1) & 0x7F)), };
     
     private static AluOutput ADC(AluInput input)
     {

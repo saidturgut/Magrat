@@ -30,14 +30,14 @@ public partial class Microcode
     private static Signal[] JMP(bool cond) =>
     [
         ..LOAD_PAIR_IMM(WZ),
-        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
+        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE(State.FETCH, (Condition)aa_XXX_aaa)] : NONE,
         ..JUMP_TO_PAIR(WZ),
     ];
 
     private static Signal[] CALL(bool cond) =>
     [
         ..LOAD_PAIR_IMM(WZ),
-        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
+        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE(State.FETCH, (Condition)aa_XXX_aaa)] : NONE,
         ..PUSH(true),
         ..JUMP_TO_PAIR(WZ),
     ];
@@ -51,7 +51,7 @@ public partial class Microcode
 
     private static Signal[] RET(bool cond) =>
     [
-        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE((Condition)aa_XXX_aaa)] : NONE,
+        ..cond ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE(State.FETCH, (Condition)aa_XXX_aaa)] : NONE,
         ..POP(true),
     ];
     
@@ -67,7 +67,7 @@ public partial class Microcode
     private static Signal[] BRANCH(Condition condition) =>
     [
         ..READ_IMM,
-        ..condition is not Condition.NONE ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE(condition)] : NONE,
+        ..condition is not Condition.NONE ? [REG_COMMIT(Pointer.F, Pointer.TMP), COND_COMPUTE(State.FETCH, condition)] : NONE,
         ..JUMP_INDEXED,
     ];
     
@@ -79,7 +79,7 @@ public partial class Microcode
         REG_COMMIT(Pointer.TMP, Pointer.B),
         REG_COMMIT(Pointer.F, Pointer.TMP),
         REG_COMMIT(Pointer.W, Pointer.F),
-        COND_COMPUTE(Condition.NZ),
+        COND_COMPUTE(State.FETCH, Condition.NZ),
         ..JUMP_INDEXED,
     ];
 }

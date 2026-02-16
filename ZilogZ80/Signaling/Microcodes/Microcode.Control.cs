@@ -18,10 +18,10 @@ public partial class Microcode
     private static Signal[] POP(bool pc) =>
     [
         MEM_READ(SP),
-        REG_COMMIT(pc ? Pointer.PCL : EncodedPairs[aa_XXa_aaa][0], Pointer.MDR),
+        REG_COMMIT(Pointer.MDR, pc ? Pointer.PCL : EncodedPairs[aa_XXa_aaa][0]),
         PAIR_INC(SP),
         MEM_READ(SP),
-        REG_COMMIT(pc ? Pointer.PCH : EncodedPairs[aa_XXa_aaa][1], Pointer.MDR),
+        REG_COMMIT(Pointer.MDR, pc ? Pointer.PCH : EncodedPairs[aa_XXa_aaa][1]),
         PAIR_INC(SP),
     ];
     

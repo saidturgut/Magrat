@@ -1,0 +1,272 @@
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"INPUT_BC
+IN B,(C)","OUTPUT_BC
+OUT (C),B","SUB_WORD
+SBC HL,BC","PAIR_TO_ABS
+LD (????),BC","NEG
+NEG","INT_R
+RETN","INT_0
+IM 0","INT_IA
+LD I,A","INPUT_BC
+IN C,(C)","OUTPUT_BC
+OUT (C),C","ADD_WORD
+ADC HL,BC","ABS_TO_PAIR
+LD BC,(????)","-
+-","INT_I
+RETI","-
+-","INT_RA
+LD R,A"
+"INPUT_BC
+IN D,(C)","OUTPUT_BC
+OUT (C),D","SUB_WORD
+SBC HL,DE","PAIR_TO_ABS
+LD (????),DE","-
+-","-
+-","INT_1
+IM 1","INT_AI
+LD A,I","INPUT_BC
+IN E,(C)","OUTPUT_BC
+OUT (C),E","ADD_WORD
+ADC HL,DE","ABS_TO_PAIR
+LD DE,(????)","-
+-","-
+-","INT_2
+IM 2","INT_AR
+LD A,R"
+"INPUT_BC
+IN H,(C)","OUTPUT_BC
+OUT (C),H","SUB_WORD
+SBC HL,HL","PAIR_TO_ABS
+LD (????),HL","-
+-","-
+-","-
+-","DECIMAL_ROT_R
+RRD","INPUT_BC
+IN L,(C)","OUTPUT_BC
+OUT (C),L","ADD_WORD
+ADC HL,HL","ABS_TO_PAIR
+LD HL,(????)","-
+-","-
+-","-
+-","DECIMAL_ROT_L
+RLD"
+"INPUT_BC
+IN (C)","OUTPUT_BC
+OUT (C),0","SUB_WORD
+SBC HL,SP","PAIR_TO_ABS
+LD (????),SP","-
+-","-
+-","-
+-","-
+-","INPUT_BC
+IN A,(C)","OUTPUT_BC
+OUT (C),A","ADD_WORD
+ADC HL,SP","ABS_TO_PAIR
+LD SP,(????)","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"COPY_INC
+LDI","COMP_INC
+CPI","INPUT_BLK_INC
+INI","OUTPUT_BLK_INC
+OUTI","-
+-","-
+-","-
+-","-
+-","COPY_DEC
+LDD","COMP_DEC
+CPD","INPUT_BLK_DEC
+IND","OUTPUT_BLK_DEC
+OUTD","-
+-","-
+-","-
+-","-
+-"
+"COPY_REP_INC
+LDIR","COMP_REP_INC
+CPIR","INPUT_REP_INC
+INIR","OUTPUT_REP_INC
+OTIR","-
+-","-
+-","-
+-","-
+-","COPY_REP_DEC
+LDDR","COMP_REP_DEC
+CPDR","INPUT_REP_DEC
+INDR","OUTPUT_REP_DEC
+OTDR","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"
+"-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-","-
+-"

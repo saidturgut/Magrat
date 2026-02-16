@@ -11,7 +11,7 @@ public static partial class Microcode
 
         // STATE OPS
         ["NOP"] = () => IDLE, ["HALT"] = () => [STATE_COMMIT(State.HALT)],
-        ["INT_ON"] = () => IDLE, ["INT_OFF"] = () => IDLE,
+        ["INT_ON"] = () => INT_CONTROL(State.INT_E, false), ["INT_OFF"] = () => INT_CONTROL(State.INT_D, false),
         ["INPUT"] = () => INPUT_OUTPUT(true), ["OUTPUT"] = () => INPUT_OUTPUT(false),
 
         // ------------------------- LOAD INSTRUCTIONS ------------------------- //

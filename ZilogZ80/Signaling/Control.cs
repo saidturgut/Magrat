@@ -42,7 +42,7 @@ public class Control
             case State.FETCH: decoded = Decoder.Fetch; commit = true; break;
             case State.DECODE: decoded = Decoder.Decode(signal.Opcode); break;
             case State.HALT: halt = true; break;
-            default: Interrupt.Execute(decoded[timeState].State); break;
+            default: Interrupt.Execute(decoded[timeState].State); decoded = Decoder.Fetch; commit = true; break;
         }
         timeState = 0;
     }
@@ -60,5 +60,5 @@ public class Control
 public enum State
 {
     FETCH, DECODE, HALT, 
-    INT_E, INT_D, INT_0, INT_1, INT_2, RET_N,
+    INT_E, INT_D, INT_0, INT_1, INT_2, INT_R,
 }

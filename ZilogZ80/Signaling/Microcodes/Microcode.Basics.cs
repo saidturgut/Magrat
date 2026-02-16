@@ -40,6 +40,12 @@ public static partial class Microcode
         ALU_COMPUTE(Operation.VEC, Pointer.NIL, Pointer.NIL, Flag.NONE),
         ..JUMP_TO_PAIR([Pointer.TMP, Pointer.NIL]),
     ];
+
+    private static Signal[] INT_CONTROL(State state, bool pop) =>
+    [
+        ..pop ? POP(true) : NONE,
+        STATE_COMMIT(state),
+    ];
     
     private static Signal[] INPUT_OUTPUT(bool input) =>
     [

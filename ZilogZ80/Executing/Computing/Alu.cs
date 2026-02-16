@@ -7,6 +7,12 @@ public partial class Alu
     {
         AluOutput output = Operations[(byte)operation](input);
         
+        /*Console.WriteLine("----");
+        Console.WriteLine(operation);
+        Console.WriteLine(input.A);
+        Console.WriteLine(input.B);
+        Console.WriteLine("----");*/
+
         if(output.Custom) return output;
         
         if ((output.Result & 0x80) != 0) output.Flags |= (byte)Flag.SIGN;
@@ -22,6 +28,7 @@ public partial class Alu
         NONE, ADD, ADC, SUB, SBC, ANA, XRA, ORA, INC, DEC,
         RLC, RRC, RAL, RAR, SLA, SLL, SRA, SRL, BIT, RES, SET,
         DAA, SCF, CCF, CPL, RFR, RST, TOP, IOP, IDX, SXT, BLK, VEC,
+        RRL, RRH, RLL, RLH,
     ];
 }
 
@@ -30,6 +37,7 @@ public enum Operation
     NONE, ADD, ADC, SUB, SBC, ANA, XRA, ORA, INC, DEC,
     RLC, RRC, RAL, RAR, SLA, SLL, SRA, SRL, BIT, RES, SET,
     DAA, SCF, CCF, CPL, RFR, RST, TOP, IOP, IDX, SXT, BLK, VEC,
+    RRL, RRH, RLL, RLH,
 }
 
 public struct AluInput

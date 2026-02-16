@@ -21,7 +21,7 @@ public partial class Datapath
         logs.Add($"B: {Log.Hex(DebugGet(Pointer.B))}   C: {Log.Hex(DebugGet(Pointer.C))}");
         logs.Add($"D: {Log.Hex(DebugGet(Pointer.D))}   E: {Log.Hex(DebugGet(Pointer.E))}");
         
-        logs.Add($"V: {Log.Hex(DebugGet(Pointer.I))}   R: {Log.Hex(DebugGet(Pointer.R))}");
+        logs.Add($"I: {Log.Hex(DebugGet(Pointer.I))}   R: {Log.Hex(DebugGet(Pointer.R))}");
         
         ushort flags = DebugGet(Pointer.F);
         logs.Add("CNVHZS");

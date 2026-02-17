@@ -9,7 +9,7 @@ public class Decoder : IDecoder
     private readonly Signal[][] MainPage = Microcode.PageMain(false);
 
     public Signal[] Fetch() => Microcode.FETCH;
-    public Signal[] Interrupt() => [];
+    public Signal[] Interrupt() => Microcode.BREAK(false);
 
     public Signal[] Decode(byte opcode)
     {

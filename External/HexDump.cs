@@ -7,19 +7,19 @@ public static class HexDump
     {
         const int bytesPerLine = 16;
 
-        for (var i = 0; i < end; i += bytesPerLine)
+        for (var i = 0; i < Memory.Length; i += bytesPerLine)
         {
             Console.Write($"{0 + i:X4}: ");
 
             for (var j = 0; j < bytesPerLine; j++)
             {
-                Console.Write(i + j < end ? 
+                Console.Write(i + j < Memory.Length ? 
                     $"{Memory[i + j]:X2} " : "   ");
             }
 
             Console.Write(" |");
 
-            for (var j = 0; j < bytesPerLine && i + j < end; j++)
+            for (var j = 0; j < bytesPerLine && i + j < Memory.Length; j++)
             {
                 var b = Memory[i + j];
                 Console.Write(b is >= 32 and <= 126 ? (char)b : '.');

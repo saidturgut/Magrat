@@ -1,5 +1,6 @@
 namespace Intel8080.Computing;
 using Kernel.Devices;
+using Decoding;
 
 public class Alu : ZilogZ80.Computing.Alu, IAlu
 {

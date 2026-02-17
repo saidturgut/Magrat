@@ -66,7 +66,7 @@ public static partial class Microcode
         // CONTROL FLOW
         ["JMP"] = () => JUMP, ["JSR"] = () => CALL,
         ["RTI"] = () => RETURN(true), ["RTS"] = () => RETURN(false),
-        ["BRK"] = () => BREAK,
+        ["BRK"] = () => BREAK(true),
 
         // PUSH & PULL
         ["PHA"] = () => PUSH(Pointer.A), ["PHP"] = () => PUSH(Pointer.FR),

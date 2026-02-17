@@ -1,4 +1,5 @@
 namespace Kernel;
+using Devices;
 using Bounds;
 
 public partial class Datapath
@@ -28,7 +29,7 @@ public partial class Datapath
 
     private void CondCompute()
         => abort = signal.Condition is not 0
-                   && !Fru.Check(signal.Condition, Fru.Flags(PointK(PointerK.TMP).Get()));
+                   && !Fru.Check(signal.Condition, new Flags(PointK(PointerK.TMP).Get()));
     
     private ushort Merge(byte low, byte high)
         => (ushort)(low + (high << 8));

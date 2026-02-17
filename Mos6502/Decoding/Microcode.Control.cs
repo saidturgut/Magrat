@@ -57,14 +57,14 @@ public static partial class Microcode
         ..JUMP,
     ];
 
-    private static Signal[] BREAK =>
+    public static Signal[] BREAK(bool brk) =>
     [
         PAIR_INC(PC),
         ..PUSH(Pointer.PCH),
         ..PUSH(Pointer.PCL),
         ..PUSH(Pointer.FR),
 
-        ALU_COMPUTE(Operation.SET, Pointer.NIL, Pointer.NIL, Flag.INTERRUPT),
+        ..brk ? [ALU_COMPUTE(Operation.SET, Pointer.NIL, Pointer.NIL, Flag.INTERRUPT)] : NONE,
         REG_COMMIT(Pointer.TMP, Pointer.W), // LOAD 0XFF ON WZ
         REG_COMMIT(Pointer.TMP, Pointer.Z),
         

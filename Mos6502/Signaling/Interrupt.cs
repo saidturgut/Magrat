@@ -14,6 +14,6 @@ public class Interrupt : IInterrupt
 
     public bool Check()
     {
-        return false;
+        return irq;
     }
 }

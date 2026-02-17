@@ -17,6 +17,8 @@ public partial class Datapath(byte registerCount, IAlu Alu, IFru Fru, ILogger Lo
     {
         for (byte i = 0; i < Registers.Length; i++)
             Registers[i] =  new Register();
+        
+        Point(7).Set(0x80);
     }
     
     public void Receive(Signal input)

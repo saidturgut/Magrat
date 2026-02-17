@@ -8,7 +8,7 @@ public partial class Datapath
     private void AluCompute()
     {
         var flagReg = PointK(PointerK.FR).Get();
-        var flagRegister = Fru.Flags(flagReg);
+        var flagRegister = new Flags(flagReg);
         
         var output = Alu.Compute(new AluInput
         {

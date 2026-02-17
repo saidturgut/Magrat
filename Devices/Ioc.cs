@@ -33,7 +33,7 @@ public class Ioc
             case 0x2: Terminal.WriteData(data, bus); bus.AddWriteLog("TERMINAL", "DATA", data); return;
             case 0x4: Timer.WriteStatus(data); bus.AddWriteLog("TIMER", "STATUS", data); return;
             case 0x5: Timer.WriteCounterLow(data); bus.AddWriteLog("TIMER", "COUNTER L", data); return;
-            case 0x6: Timer.WriteCounterHigh(data); bus.AddWriteLog("TIMER", "COUNTER L", data); return;
+            case 0x6: Timer.WriteCounterHigh(data); bus.AddWriteLog("TIMER", "COUNTER H", data); return;
             case 0x7: Timer.WriteReloadLow(data); bus.AddWriteLog("TIMER", "RELOAD", data); return;
             case 0x8: Timer.WriteReloadHigh(data); bus.AddWriteLog("TIMER", "RELOAD", data); return;
             case 0x9: Timer.WriteEnable(data); bus.AddWriteLog("TIMER", "ENABLE", data); return;
@@ -43,6 +43,6 @@ public class Ioc
             case 0xD: Disk.WriteDmaHigh(data); bus.AddWriteLog("DISK", "DMA H", data); return;
             case 0xE: Disk.WriteCommand(data, bus); bus.AddWriteLog("DISK", "COMMAND", data); return;
         }
-        throw new Exception($"INVALID IO ADDRESS TO WRITE \"{Log.Hex(address)}\"");
+        throw new Exception($"INVALID IO ADDRESS TO WRITE  ADDR:\"{Log.Hex(address)}\"  DATA:\"{Log.Hex(data)}\"");
     }
 }

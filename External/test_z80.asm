@@ -1,3 +1,5 @@
         org 0000h
- LD A,I
+  ld a,$1
+  dec a
+ jp z,$1000
  halt

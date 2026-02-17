@@ -12,3 +12,4 @@ public static class Microcode
     public static Signal[] FETCH => ZilogZ80.Decoding.Microcode.FETCH_DEF;
     public static Signal[] INT_1 => [];
 }
+

@@ -8,10 +8,13 @@ public partial class Engine
         => exit = true;
     private void Clear()
         => Host.Clear();
+
+    private void Debug()
+        => debug = !debug;
     
     private void Run()
     {
-        while (!Cpu!.Halt())
+        while (!Cpu!.Halt() || !debug)
         {
             Cpu.Tick();
 

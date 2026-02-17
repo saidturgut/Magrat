@@ -19,7 +19,7 @@ public partial class Bus(IEngine Engine) : IBus
         }
 
         var output = Ram.Read(address);
-        AddReadLog("RAM", Log.Hex(address), output);
+        //AddReadLog("RAM", Log.Hex(address), output);
         return output;
     }
     
@@ -50,12 +50,12 @@ public partial class Bus(IEngine Engine) : IBus
     {
         Ioc.Terminal.KeyInput(Engine.Poll());
         Ioc.Timer.Advance();
-        return Ioc.Timer.Sample();
+        return Ioc.Timer.Emit();
     }
     
     public void Debug(List<string> input)
     {
-        input.Add("MEMORY:");
+        if (logs.Count > 0) input.Add("MEMORY:");
         input.AddRange(logs);
         input.Add("---------------------");
         Engine.Debug(input.ToArray());

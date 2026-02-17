@@ -16,5 +16,5 @@ public enum State
 
 public enum Condition
 {
-    NONE, NE, EQ, CC, CS, VC, VS, PL, MI,
+    NONE = -1, NE, EQ, CC, CS, VC, VS, PL, MI,
 }

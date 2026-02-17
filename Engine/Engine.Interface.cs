@@ -11,7 +11,10 @@ public partial class Engine : IEngine
 
     public void Debug(string[] logs)
     {
-        Host.WriteLog(logs);
+        if (debug)
+        {
+            Host.WriteLog(logs);
+        }
         step--;
     }
 }

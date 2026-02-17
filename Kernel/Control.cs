@@ -39,7 +39,7 @@ public class Control(IDecoder Decoder, IInterrupt Interrupt)
         {
             case 0: decoded = Decoder.Fetch(); commit = true; break;
             case 1: decoded = Decoder.Decode(signal.Opcode); break;
-            case 2: halt = true; break;
+            case 2: halt = true; decoded = [new Signal()]; break;
             default: Interrupt.Execute(decoded[timeState].State); decoded = Decoder.Fetch(); commit = true; break;
         }
         timeState = 0;

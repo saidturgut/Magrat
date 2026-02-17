@@ -5,7 +5,7 @@ public class Timer
     private byte enable;
     private ushort counter;
     private ushort reload;
-    private byte interrupt;
+    private byte interrupt = 0xFF;
 
     public void Advance()
     {
@@ -16,18 +16,18 @@ public class Timer
 
         if (counter != 0) return;
         
-        interrupt = 0xFF;
+        interrupt = 0x00;
 
         if (reload != 0) counter = reload;
     }
 
-    public bool Sample()
-        => interrupt != 0;
+    public bool Emit()
+        => interrupt == 0;
 
     public byte ReadStatus()
         => interrupt;
     public void WriteStatus(byte data)
-        => interrupt = data != 0 ? (byte)0xFF : (byte)0x00;
+        => interrupt = data != 0 ? (byte)0x00 : (byte)0xFF;
 
     public void WriteCounterLow(byte data)
         => counter = (ushort)((counter & 0xFF00) | data);

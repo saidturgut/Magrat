@@ -39,20 +39,22 @@ public class Disk
     {
         uint offset = CalculateOffset();
         if(CheckFault(offset)) return;
+        var dma = dmaAddress;
         
         for (int i = 0; i < blockSize; i++)
         {
-            bus.Write(dmaAddress++, diskImage[offset + i], bus);
+            bus.Write(dma++, diskImage[offset + i], bus);
         }
     }
     private void WriteBlockDisk(IBus bus)
     {
         uint offset = CalculateOffset();
         if(CheckFault(offset)) return;
+        var dma = dmaAddress;
 
         for (int i = 0; i < blockSize; i++)
         {
-            diskImage[offset + i] = bus.Read(dmaAddress++, bus);
+            diskImage[offset + i] = bus.Read(dma++, bus);
         }
     }
 
@@ -62,7 +64,7 @@ public class Disk
     private bool CheckFault(uint offset)
     {
         bool fault = diskImage.Length == 0 || offset + blockSize > diskImage.Length;
-        status = (byte)(fault ? 0x00 : 0xFF);
+        status = (byte)(fault ? 0xFF : 0x00);
         return fault;
     } 
 }

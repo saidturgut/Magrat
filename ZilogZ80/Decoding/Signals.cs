@@ -6,8 +6,8 @@ public enum Pointer
     MDR, TMP, W, Z, // TEMPORARY LATCHES
     PCL, PCH, // PROGRAM COUNTER
     SPL, SPH,  // STACK POINTER
-    IXL, IXH, IYL, IYH, // INDEX REGISTERS
     A, C, B, E, D, L, H, // REGISTER PAIRS
+    IXL, IXH, IYL, IYH, // INDEX REGISTERS
     AA, CC, BB, EE, DD, LL, HH, FF, // SHADOW PAIRS
     I, R, // CONTROL REGISTERS
 }
@@ -20,5 +20,5 @@ public enum State
 
 public enum Condition
 {
-    NONE, NZ, Z, NC, C, PO, PE, P, M, ED,
+    NONE = -1, NZ, Z, NC, C, PO, PE, P, M, ED,
 }

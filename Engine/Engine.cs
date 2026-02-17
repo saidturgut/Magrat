@@ -17,12 +17,13 @@ public partial class Engine(IHost Host)
     private byte step;
     private byte sleep;
     public bool exit;
+    private bool debug;
     
     public void Init()
     {
         OneToken = new Dictionary<string, Action>()
         {
-            ["help"] = Help, ["exit"] = Exit, ["clear"] = Clear, ["run"] = Run,
+            ["help"] = Help, ["exit"] = Exit, ["clear"] = Clear, ["debug"] = Debug, ["run"] = Run,
         };
         TwoToken = new Dictionary<string, Action<string>>()
         {

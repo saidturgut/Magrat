@@ -10,7 +10,7 @@ public partial class Microcode
     private static byte aa_aaa_XXX;
     private static Pointer[] addrSrc = [];
 
-    private static Signal[][] ParseOpcodeTable(string file, Dictionary<string, Func<Signal[]>> dictionary, bool dump)
+    public static Signal[][] ParseOpcodeTable(string file, Dictionary<string, Func<Signal[]>> dictionary, bool dump)
     {
         var table = new Signal[256][];
         using var parser = new TextFieldParser($"{file}.csv");

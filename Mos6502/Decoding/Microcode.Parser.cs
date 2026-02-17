@@ -4,10 +4,10 @@ using Kernel;
 
 public partial class Microcode
 {
-    public static Signal[][] OpcodeRom(bool dump)
+    public static Signal[][] PageMain(bool dump)
     {
         Signal[][] table = new Signal[256][];
-        string[] lines = File.ReadAllLines("Opcodes.csv");
+        string[] lines = File.ReadAllLines("6502_PageMain.csv");
 
         for (int row = 0; row < 16; row++)
         {

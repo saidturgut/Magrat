@@ -88,6 +88,6 @@ public partial class Alu
         => (A & 0xF) < ((B & 0xF) + C);
     private static bool SignedOverflow(byte A, byte B, byte result)
         => (~(A ^ B) & (A ^ result) & 0x80) != 0;
-    private static bool EvenParity(byte result)
+    public static bool EvenParity(byte result)
         => BitOperations.PopCount(result) % 2 == 0;
 }

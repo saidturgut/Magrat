@@ -17,6 +17,13 @@ public static partial class Microcode
         STATE_COMMIT(State.DECODE),
     ];
     
+    public static Signal[] FETCH_DEF =>
+    [
+        ..READ_IMM,
+        REG_COMMIT(Pointer.MDR, Pointer.IR),
+        STATE_COMMIT(State.DECODE),
+    ];
+    
     public static Signal[] PREFIX =>
     [
         REG_COMMIT(Pointer.IR, Pointer.W),

@@ -8,9 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Bounds\Bounds.csproj" />
-      <ProjectReference Include="..\Devices\Devices.csproj" />
-      <ProjectReference Include="..\Intel8080\Intel8080.csproj" />
-      <ProjectReference Include="..\Mos6502\Mos6502.csproj" />
+      <ProjectReference Include="..\Kernel\Kernel.csproj" />
       <ProjectReference Include="..\ZilogZ80\ZilogZ80.csproj" />
     </ItemGroup>
 

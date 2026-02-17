@@ -1,5 +1,3 @@
-using ZilogZ80.Signaling;
-
 namespace ZilogZ80.Decoding;
 using Kernel;
 
@@ -7,36 +5,36 @@ public partial class Microcode
 {
     public static Signal[][] PageMain(bool dump)
     {
-        SetDefault(); return ParseOpcodeTable("PageMain", MainPage, dump);
+        SetDefault(); return ParseOpcodeTable("Z80_PageMain", MainPage, dump);
     }
     public static Signal[][] PageMisc(bool dump)
     {
-        SetDefault(); return ParseOpcodeTable("PageMisc", MiscPage, dump);
+        SetDefault(); return ParseOpcodeTable("Z80_PageMisc", MiscPage, dump);
     }
     public static Signal[][] PageBit(bool dump)
     {
-        SetDefault(); return ParseOpcodeTable("PageBit", BitPage, dump);
+        SetDefault(); return ParseOpcodeTable("Z80_PageBit", BitPage, dump);
     }
     public static Signal[][] PageIx(bool dump)
     {
-        SetIx(); return ParseOpcodeTable("PageIx", MainPage, dump);
+        SetIx(); return ParseOpcodeTable("Z80_PageIx", MainPage, dump);
     }
     public static Signal[][] PageIy(bool dump)
     {
-        SetIy(); return ParseOpcodeTable("PageIy", MainPage, dump);
+        SetIy(); return ParseOpcodeTable("Z80_PageIy", MainPage, dump);
     }
 
     public static Signal[][] PageIxBit(bool dump)
     {
-        SetIx(); return ParseOpcodeTable("PageIxBit", BitPage, dump);
+        SetIx(); return ParseOpcodeTable("Z80_PageIxBit", BitPage, dump);
     }
 
     public static Signal[][] PageIyBit(bool dump)
     {
-        SetIy(); return ParseOpcodeTable("PageIyBit", BitPage, dump);
+        SetIy(); return ParseOpcodeTable("Z80_PageIyBit", BitPage, dump);
     }
 
-    private static void SetDefault()
+    public static void SetDefault()
     {
         EncodedRegisters[5] = Pointer.L;
         EncodedRegisters[4] = Pointer.H;

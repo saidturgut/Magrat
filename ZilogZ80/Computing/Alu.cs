@@ -18,7 +18,7 @@ public partial class Alu : IAlu
         return output;
     }
     
-    private static readonly Func<AluInput, AluOutput>[] Operations =
+    public static readonly Func<AluInput, AluOutput>[] Operations =
     [
         NONE, ADD, ADC, SUB, SBC, ANA, XRA, ORA, INC, DEC,
         RLC, RRC, RAL, RAR, SLA, SLL, SRA, SRL, BIT, RES, SET,

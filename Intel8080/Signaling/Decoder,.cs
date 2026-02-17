@@ -1,21 +1,20 @@
-namespace Mos6502.Signaling;
+namespace Intel8080.Signaling;
 using Kernel.Devices;
 using Decoding;
 using Kernel;
-
 
 public class Decoder : IDecoder
 {
     private readonly Signal[][] MainPage = Microcode.PageMain(false);
 
     public Signal[] Fetch() => Microcode.FETCH;
-    public Signal[] Interrupt() => [];
-
+    public Signal[] Interrupt() => Microcode.INT_1;
+    
     public Signal[] Decode(byte opcode)
     {
         var output = MainPage[opcode];
         return output.Length != 0 ? output : throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
     }
-
-    public void Clear(){}
+    
+    public void Clear() { }
 }

@@ -5,7 +5,7 @@ using Kernel;
 
 public static partial class Microcode
 {
-    private static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
+    public static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
     {
         ["-"] = () => IDLE, 
 

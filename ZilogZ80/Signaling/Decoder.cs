@@ -1,7 +1,9 @@
 namespace ZilogZ80.Signaling;
-using Microcodes;
+using Kernel.Devices;
+using Decoding;
+using Kernel;
 
-public class Decoder
+public class Decoder : IDecoder
 {
     private readonly Signal[][] MainPage = Microcode.PageMain(false);
     private readonly Signal[][] MiscPage = Microcode.PageMisc(false);
@@ -10,10 +12,11 @@ public class Decoder
     private readonly Signal[][] IyPage = Microcode.PageIy(false);
     private readonly Signal[][] IxBitPage = Microcode.PageIxBit(false);
     private readonly Signal[][] IyBitPage = Microcode.PageIyBit(false);
+
+    public Signal[] Fetch() => Microcode.FETCH;
+    public Signal[] Interrupt() => Microcode.INT_1;
     
-    public readonly Signal[] Fetch = Microcode.FETCH;
     private readonly Signal[] Prefix = Microcode.PREFIX;
-    public readonly Signal[] Int1 = Microcode.INT_1;
     
     private byte pageIndex;
     private bool skipByte;
@@ -25,7 +28,7 @@ public class Decoder
             skipByte = false;
             return Prefix;
         }
-        var output = PrefixCheck(opcode) ? Fetch : IndexPage(opcode);
+        var output = PrefixCheck(opcode) ? Fetch() : IndexPage(opcode);
         return output.Length != 0 ? output : throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
     }
     

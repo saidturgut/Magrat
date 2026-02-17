@@ -1,17 +1,22 @@
 namespace ZilogZ80.Signaling;
+using Kernel.Devices;
+using Decoding;
 
-public class Interrupt
+public class Interrupt : IInterrupt
 {
     private bool iff1;
     private bool iff2;
     private byte mode;
 
     private bool ei;
-    public bool irq;
+    private bool irq;
 
-    public void Execute(State state)
+    public void Receive(bool signal)
+        => irq = signal;
+
+    public void Execute(byte state)
     {
-        switch (state)
+        switch ((State)state)
         {
             case State.INT_E: ei = true; break;
             case State.INT_D: iff1 = false; iff2 = false; break;

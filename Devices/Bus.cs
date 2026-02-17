@@ -48,9 +48,9 @@ public partial class Bus(IEngine Engine) : IBus
 
     public bool Poll()
     {
-        Ioc.Tty.KeyInput(Engine.Poll());
-        Ioc.Clk.Advance();
-        return Ioc.Clk.Sample();
+        Ioc.Terminal.KeyInput(Engine.Poll());
+        Ioc.Timer.Advance();
+        return Ioc.Timer.Sample();
     }
     
     public void Debug(List<string> input)
@@ -71,7 +71,7 @@ public partial class Bus(IEngine Engine) : IBus
 public partial class Bus : ISudo
 {
     public void Insert(byte[] image)
-        => Ioc.Dsk.Insert(image);
+        => Ioc.Disk.Insert(image);
 
     public void Dump(uint start, uint end)
         => Ram.Dump(start, end);

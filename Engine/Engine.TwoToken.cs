@@ -7,7 +7,8 @@ public partial class Engine
     {
         Bus = new Bus(this);
         Cpu = Tables.CpuTable(name, Bus);
-        cpuName = Cpu is not null ? "@" + Cpu!.Init() : "";
+        Cpu.Init();
+        //cpuName = Cpu is not null ? "@" + Cpu!.Init() : "";
     }
     
     private void Disk(string name)

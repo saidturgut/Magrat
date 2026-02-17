@@ -1,40 +1,9 @@
 namespace Mos6502;
-using Bounds;
+using Computing;
 using Signaling;
-using Executing;
+using Bounds;
+using Kernel;
 
-public class Mos6502(IBus Bus) : ICpu
-{
-    private readonly Datapath Datapath = new();
-    private readonly Control Control = new();
-    
-    public string Init()
-    {
-        Datapath.Init();
-        Control.Init();
-        return "6502";
-    }
-    
-    public void Tick()
-    {
-        Datapath.Receive(Control.Emit());
-        
-        Datapath.Execute(Bus);
-
-        Control.Advance(Datapath.Emit());
-
-        if (Control.commit) Commit();
-    }
-
-    private void Commit()
-    {
-        Datapath.Debug();
-        Bus.Poll();
-        Bus.Debug(Datapath.logs);
-        Datapath.Clear();
-        Control.Clear();
-    }
-
-    public bool Halt() 
-        => Control.halt;
-}
+public class Mos6502(IBus Bus) : Cpu(Bus,
+    new Datapath(14, new Alu(), new Fru(), new Logger()),
+    new Control(new Decoder(), new Interrupt())), ICpu;

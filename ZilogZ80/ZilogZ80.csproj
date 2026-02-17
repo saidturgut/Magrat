@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Bounds\Bounds.csproj" />
       <ProjectReference Include="..\External\External.csproj" />
+      <ProjectReference Include="..\Kernel\Kernel.csproj" />
     </ItemGroup>
 
 </Project>

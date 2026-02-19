@@ -24,8 +24,8 @@ public enum Flag
 {
     NONE = 0,
     CARRY = 1 << 0,
-    SUBT = 1 << 1,
-    OVER = 1 << 2,
+    SUBTRACT = 1 << 1,
+    OVERFLOW = 1 << 2,
     BIT3 = 1 << 3,
     HALF = 1 << 4,
     BIT5 = 1 << 5,

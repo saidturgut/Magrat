@@ -2,7 +2,7 @@ namespace ZilogZ80.Computing;
 using Kernel.Devices;
 
 // ARITHMETIC LOGIC UNIT
-public partial class Alu : IAlu
+public partial class Alu : Kernel.Computing.Alu, IAlu
 {
     public AluOutput Compute(AluInput input, byte operation)
     {

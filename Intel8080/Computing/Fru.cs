@@ -9,7 +9,7 @@ public enum Flag
     NONE = 0,
     CARRY = 1 << 0,
     BIT1 = 1 << 1,
-    OVER = 1 << 2,
+    PARITY = 1 << 2,
     BIT3 = 1 << 3,
     HALF = 1 << 4,
     BIT5 = 1 << 5,

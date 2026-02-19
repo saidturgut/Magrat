@@ -86,7 +86,7 @@ public partial class Microcode
         ALU_COMPUTE(Operation.SUB, Pointer.A, Pointer.MDR, FlagMasks[FlagMask.N3H5ZS]),
         inc ? PAIR_INC(HL) : PAIR_DEC(HL),
         PAIR_DEC(BC),
-        ALU_COMPUTE(Operation.BLK, Pointer.B, Pointer.C, Flag.OVER),
+        ALU_COMPUTE(Operation.BLK, Pointer.B, Pointer.C, Flag.OVERFLOW),
         REG_COMMIT(Pointer.FR, Pointer.TMP),
         ..loop ? [COND_COMPUTE(State.DECODE, Condition.ED)] : NONE,
     ];

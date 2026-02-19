@@ -1,5 +1,4 @@
 namespace ZilogZ80.Computing;
-using System.Numerics;
 using Kernel.Devices;
 
 public partial class Alu
@@ -15,7 +14,7 @@ public partial class Alu
             { Result = (byte)result };
 
         if (Carry(result, 8)) output.Flags |= (byte)Flag.CARRY;
-        if (SignedOverflow(input.A, input.B, output.Result)) output.Flags |= (byte)Flag.OVER;
+        if (SignedOverflowAdd(input.A, input.B, output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
         if (HalfCarryAdd(input.A, input.B, input.C)) output.Flags |= (byte)Flag.HALF;
 
         return output;
@@ -28,9 +27,9 @@ public partial class Alu
             { Result = (byte)result };
 
         if (Carry(result, 8)) output.Flags |= (byte)Flag.CARRY;
-        if (SignedOverflow(input.A, (byte)~input.B, output.Result)) output.Flags |= (byte)Flag.OVER;
+        if (SignedOverflowSub(input.A, input.B, output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
         if (HalfCarrySub(input.A, input.B, input.C)) output.Flags |= (byte)Flag.HALF;
-        output.Flags |= (byte)Flag.SUBT;
+        output.Flags |= (byte)Flag.SUBTRACT;
 
         return output;
     }
@@ -48,7 +47,7 @@ public partial class Alu
     {
         AluOutput output = new()
             { Result = (byte)(input.A & input.B), };
-        if (EvenParity(output.Result)) output.Flags |= (byte)Flag.OVER;
+        if (EvenParity(output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
         output.Flags |= (byte)Flag.HALF;
         return output;
     }
@@ -57,7 +56,7 @@ public partial class Alu
     {
         AluOutput output = new()
             { Result = (byte)(input.A ^ input.B), };
-        if (EvenParity(output.Result)) output.Flags |= (byte)Flag.OVER;
+        if (EvenParity(output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
         return output;
     }
 
@@ -65,7 +64,7 @@ public partial class Alu
     {
         AluOutput output = new()
             { Result = (byte)(input.A | input.B), };
-        if (EvenParity(output.Result)) output.Flags |= (byte)Flag.OVER;
+        if (EvenParity(output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
         return output;
     }
 
@@ -79,15 +78,4 @@ public partial class Alu
         input.B = 1; input.C = 0;
         return SBC(input); 
     }
-    
-    private static bool Carry(int source, byte bit)
-        => (byte)((source >> bit) & 1) != 0;
-    private static bool HalfCarryAdd(byte A, byte B, byte C)
-        => (A & 0xF) + (B & 0xF) + C > 0xF;
-    private static bool HalfCarrySub(byte A, byte B, byte C)
-        => (A & 0xF) < ((B & 0xF) + C);
-    private static bool SignedOverflow(byte A, byte B, byte result)
-        => (~(A ^ B) & (A ^ result) & 0x80) != 0;
-    public static bool EvenParity(byte result)
-        => BitOperations.PopCount(result) % 2 == 0;
 }

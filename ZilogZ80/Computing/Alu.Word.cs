@@ -18,7 +18,7 @@ public partial class Alu
     {
         byte result = (byte)((input.A & 0xF0) | (input.B & 0x0F));
         AluOutput output = new() { Result = result };
-        if (EvenParity(result)) output.Flags |= (byte)Flag.OVER;
+        if (EvenParity(result)) output.Flags |= (byte)Flag.OVERFLOW;
         return output;
     }
     private static AluOutput RRH(AluInput input) => new() 
@@ -28,7 +28,7 @@ public partial class Alu
     {
         byte result = (byte)((input.A & 0xF0) | (input.B >> 4));
         AluOutput output = new() { Result = result };
-        if (EvenParity(result)) output.Flags |= (byte)Flag.OVER;
+        if (EvenParity(result)) output.Flags |= (byte)Flag.OVERFLOW;
         return output;
     }
     private static AluOutput RLH(AluInput input) => new() 

@@ -1,5 +1,3 @@
-using ZilogZ80.Signaling;
-
 namespace ZilogZ80.Decoding;
 using Computing;
 using Kernel;
@@ -41,16 +39,16 @@ public static partial class Microcode
     private static readonly Dictionary<FlagMask, Flag> FlagMasks = new()
     {
         { FlagMask.NONE , Flag.NONE },
-        { FlagMask.CNV3H5ZS , Flag.CARRY | Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
-        { FlagMask.CV3H5ZS , Flag.CARRY | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
-        { FlagMask.NV3H5ZS , Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
-        { FlagMask.N3H5ZS , Flag.SUBT  | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
-        { FlagMask.CN3H5 , Flag.CARRY | Flag.SUBT | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
-        { FlagMask.NVHZS , Flag.SUBT | Flag.OVER | Flag.HALF | Flag.ZERO | Flag.SIGN },
-        { FlagMask.NV3H5 , Flag.SUBT | Flag.OVER | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
-        { FlagMask.N3H5 , Flag.SUBT | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
-        { FlagMask.CNH , Flag.CARRY | Flag.SUBT | Flag.HALF },
-        { FlagMask.NZ , Flag.SUBT | Flag.ZERO },
+        { FlagMask.CNV3H5ZS , Flag.CARRY | Flag.SUBTRACT | Flag.OVERFLOW | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
+        { FlagMask.CV3H5ZS , Flag.CARRY | Flag.OVERFLOW | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
+        { FlagMask.NV3H5ZS , Flag.SUBTRACT | Flag.OVERFLOW | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
+        { FlagMask.N3H5ZS , Flag.SUBTRACT  | Flag.BIT3 | Flag.HALF | Flag.BIT5 | Flag.ZERO | Flag.SIGN },
+        { FlagMask.CN3H5 , Flag.CARRY | Flag.SUBTRACT | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
+        { FlagMask.NVHZS , Flag.SUBTRACT | Flag.OVERFLOW | Flag.HALF | Flag.ZERO | Flag.SIGN },
+        { FlagMask.NV3H5 , Flag.SUBTRACT | Flag.OVERFLOW | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
+        { FlagMask.N3H5 , Flag.SUBTRACT | Flag.BIT3 | Flag.HALF | Flag.BIT5 },
+        { FlagMask.CNH , Flag.CARRY | Flag.SUBTRACT | Flag.HALF },
+        { FlagMask.NZ , Flag.SUBTRACT | Flag.ZERO },
     };
 }
 

@@ -6,7 +6,7 @@ public partial class Alu
     private static AluOutput ShiftRotate(byte result, byte carry) => new()
     {
         Result = result,
-        Flags = (byte)(RotateCarry(carry) | (EvenParity(result) ? (byte)Flag.OVER : 0))
+        Flags = (byte)(RotateCarry(carry) | (EvenParity(result) ? (byte)Flag.OVERFLOW : 0))
     };
 
     private static AluOutput RLC(AluInput input) 
@@ -40,7 +40,7 @@ public partial class Alu
         AluOutput output = new() { Custom = true, };
         
         if (!bitSet) output.Flags |= (byte)Flag.ZERO;
-        if (!bitSet) output.Flags |= (byte)Flag.OVER;
+        if (!bitSet) output.Flags |= (byte)Flag.OVERFLOW;
         output.Flags |= (byte)Flag.HALF;
         if (bitIndex == 7 && bitSet) output.Flags |= (byte)Flag.SIGN;
         output.Flags |= (byte)(input.A & ((byte)Flag.BIT3 | (byte)Flag.BIT5));
@@ -73,7 +73,7 @@ public partial class Alu
 
         AluOutput output = new() { Result = a };
         if ((fixer & 0x06) != 0) output.Flags |= (byte)Flag.HALF;
-        if (EvenParity(a)) output.Flags |= (byte)Flag.OVER;
+        if (EvenParity(a)) output.Flags |= (byte)Flag.OVERFLOW;
         if (carry) output.Flags |= (byte)Flag.CARRY;
         return output;
     }

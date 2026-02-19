@@ -11,7 +11,7 @@ public class Alu : ZilogZ80.Computing.Alu, IAlu
         output.Flags &= unchecked((byte)~((1 << 5) | (1 << 3) | (1 << 2)));
         
         output.Flags |= (byte)Flag.BIT1;
-        if (EvenParity(output.Result)) output.Flags |= (byte)Flag.OVER;
+        if (EvenParity(output.Result)) output.Flags |= (byte)Flag.PARITY;
         if ((output.Result & 0x80) != 0) output.Flags |= (byte)Flag.SIGN;
         if (output.Result == 0) output.Flags |= (byte)Flag.ZERO;
 

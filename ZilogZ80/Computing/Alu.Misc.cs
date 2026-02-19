@@ -26,7 +26,7 @@ public partial class Alu
         AluOutput output = new()
             { Result = (byte)~input.A, };
         output.Flags |= (byte)Flag.HALF;
-        output.Flags |= (byte)Flag.SUBT;
+        output.Flags |= (byte)Flag.SUBTRACT;
         return output;
     }
 
@@ -36,9 +36,9 @@ public partial class Alu
     private static AluOutput TOP(AluInput input) => new()
         { Result = 0xFF };
     private static AluOutput IOP(AluInput input) => new()
-        { Flags = (byte)(EvenParity(input.A) ? (byte)Flag.OVER : 0) };
+        { Flags = (byte)(EvenParity(input.A) ? (byte)Flag.OVERFLOW : 0) };
     private static AluOutput BLK(AluInput input) => new()
-        { Flags = (byte)(input.A != 0 || input.B != 0 ? (byte)Flag.OVER : 0) };
+        { Flags = (byte)(input.A != 0 || input.B != 0 ? (byte)Flag.OVERFLOW : 0) };
     private static AluOutput VEC(AluInput input) => new() 
         { Result = 0x38, };
 }

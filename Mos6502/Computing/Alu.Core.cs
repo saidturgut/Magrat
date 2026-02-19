@@ -14,7 +14,7 @@ public partial class Alu
         AluOutput output = new() { Result = (byte)result };
 
         if (Carry(result, 8)) output.Flags |= (byte)Flag.CARRY;
-        if (SignedOverflow(input.A, input.B, output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
+        if (SignedOverflowAdd(input.A, input.B, output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
         
         return output;
     }
@@ -26,7 +26,7 @@ public partial class Alu
         AluOutput output = new() { Result = (byte)result };
         
         if (!Carry(result, 8)) output.Flags |= (byte)Flag.CARRY;
-        if (SignedOverflow(input.A, (byte)~input.B, output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
+        if (SignedOverflowSub(input.A, input.B, output.Result)) output.Flags |= (byte)Flag.OVERFLOW;
         
         return output;
     }
@@ -50,9 +50,4 @@ public partial class Alu
         { Result = (byte)(input.A + 1), };
     private static AluOutput DEC(AluInput input) => new()
         { Result = (byte)(input.A - 1), };
-    
-    private static bool Carry(int source, byte bit)
-        => (byte)((source >> bit) & 1) != 0;
-    private static bool SignedOverflow(byte A, byte B, byte result)
-        => (~(A ^ B) & (A ^ result) & 0x80) != 0;
 }

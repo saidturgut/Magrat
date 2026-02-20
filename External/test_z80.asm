@@ -1,5 +1,6 @@
         org 0000h
-  ld a,$1
-  dec a
- jp z,$1000
+
+ RLC (IY+$23)
+ EI
+  RLC (IY+$23)
  halt

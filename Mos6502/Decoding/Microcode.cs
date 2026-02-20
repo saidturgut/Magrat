@@ -17,7 +17,8 @@ public static partial class Microcode
     
     public static Signal[] FETCH =>
     [
-        ..READ_IMM,
+        MEM_READ(PC),
+        PAIR_INC(PC),
         REG_COMMIT(Pointer.MDR, Pointer.IR),
         STATE_COMMIT(State.DECODE),
     ];

@@ -20,7 +20,7 @@ public class Control(IDecoder Decoder, IInterrupt Interrupt)
 
     public void Advance(ControlSignal signal)
     {
-        if (timeState != decoded.Length - 1 && !signal.Abort)
+        if (timeState != decoded.Length - 1 && !signal.Abort && !halt)
             timeState++;
         else
             Commit(signal);
@@ -33,14 +33,22 @@ public class Control(IDecoder Decoder, IInterrupt Interrupt)
             decoded = Decoder.Interrupt();
             commit = true;
             timeState = 0;
+            halt = false;
             return;
         }
         switch (decoded[timeState].State)
         {
-            case 0: decoded = Decoder.Fetch(); commit = true; break;
+            case 0: decoded = Decoder.Fetch(); Decoder.Clear(); commit = true; break;
             case 1: decoded = Decoder.Decode(signal.Opcode); break;
             case 2: halt = true; decoded = [new Signal()]; break;
-            default: Interrupt.Execute(decoded[timeState].State); decoded = Decoder.Fetch(); commit = true; break;
+            default:
+            {
+                if(!Decoder.Execute(decoded[timeState].State))
+                    Interrupt.Execute(decoded[timeState].State);
+                decoded = Decoder.Fetch(); 
+                commit = true; 
+                break;
+            }
         }
         timeState = 0;
     }
@@ -50,7 +58,6 @@ public class Control(IDecoder Decoder, IInterrupt Interrupt)
 
     public void Clear()
     {
-        Decoder.Clear();
         commit = false;
     }
 }

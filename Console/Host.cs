@@ -20,13 +20,13 @@ public class Host : IHost
     private void Boot()
     {
         Assembler.Run("zz80");
-        Execute("set intel8080");
-        //Execute("load 128 z80.bin");
-        Execute("load 128 boot.bin");
+        Execute("set z80");
+        Execute("load 128 z80.bin");
+        /*Execute("load 128 boot.bin");
         Execute("load 48128 bios.bin");
-        Execute("disk cpm.DSK");
+        Execute("disk cpm.DSK");*/
         Execute("debug");
-        Execute("sleep 5");
+        Execute("sleep 25");
         //Execute("dump 0 1000");
         Execute("run");
     }

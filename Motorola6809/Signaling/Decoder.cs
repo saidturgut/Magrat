@@ -1,30 +1,37 @@
 namespace Motorola6809.Signaling;
+using Kernel.Devices;
 using Decoding;
 using Kernel;
 
-public class Decoder
+public class Decoder : IDecoder
 {
     private readonly Signal[][] MainPage = [];
-    private readonly Signal[][] TwoPage = [];
-    private readonly Signal[][] ThreePage = [];
-    private readonly Signal[][] PostBytes = [];
+    private readonly Signal[][] SecondPage = [];
+    private readonly Signal[][] ThirdPage = [];
+    
+    private readonly Signal[][] IndexedPage = [];
+    private readonly Signal[][] TransferPage = [];
+    private readonly Signal[][] ExchangePage = [];
 
-    public Signal[] Fetch() => Microcode.FETCH;
-    public Signal[] Interrupt() => [];
+    private readonly Signal[] FetchSignals = Microcode.FETCH;
+    private readonly Signal[] InterruptSignals = [];
 
     private byte pageIndex;
     private bool postByte;
     private byte decoderLatch;
     
+    public Signal[] Fetch() => FetchSignals;
+    public Signal[] Interrupt() => InterruptSignals;
+
     public Signal[] Decode(byte opcode)
     {
         Signal[] output;
         if (postByte)
         {
             postByte = false;
-            output = [..PostBytes[opcode], ..IndexPage(decoderLatch)];
+            output = PostPage(decoderLatch, opcode);
         }
-        else if((byte)(opcode & 0xF) is 0x6 or 0xA or 0xE)
+        else if(PostByteUser(opcode))
         {
             postByte = true;
             decoderLatch = opcode;
@@ -32,17 +39,17 @@ public class Decoder
         }
         else
         {
-            output = PrefixCheck(opcode) ? Fetch() : IndexPage(opcode);
+            output = IndexPage(opcode);
         }
         return output.Length != 0 ? output : throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
     }
     
-    private bool PrefixCheck(byte opcode)
+    public bool Execute(byte state)
     {
-        switch (opcode)
+        switch ((State)state)
         {
-            case 0x10: pageIndex = 1; return true;
-            case 0x11: pageIndex = 2; return true;
+            case State.DEC_10: pageIndex = 1; return true;
+            case State.DEC_11: pageIndex = 2; return true;
             default: return false;
         }
     }
@@ -50,10 +57,20 @@ public class Decoder
     private Signal[] IndexPage(byte opcode) => pageIndex switch
     {
         0 => MainPage[opcode],
-        1 => TwoPage[opcode], 
-        2 => ThreePage[opcode],
+        1 => SecondPage[opcode], 
+        2 => ThirdPage[opcode],
         _ => throw new Exception($"INVALID PAGE \"{pageIndex}\""),
     };
+
+    private Signal[] PostPage(byte opcode, byte post) => opcode switch
+    {
+        0x1E => TransferPage[post],
+        0x1F => ExchangePage[post], 
+        _ => [..IndexedPage[post], ..IndexPage(opcode)],
+    };
+
+    private bool PostByteUser(byte opcode)
+        => (byte)(opcode & 0xF) is 0x6 or 0xA or 0xE || opcode is 0x1E or 0x1F;
     
     public void Clear()
     {

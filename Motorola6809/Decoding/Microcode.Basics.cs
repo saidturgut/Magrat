@@ -5,16 +5,20 @@ using Kernel;
 
 public static partial class Microcode
 {
+    private static Signal[] IDLE =>
+        [new ()];
+
     public static Signal[] FETCH =>
     [
-        ..READ_IMM,
+        MEM_READ(PC),
+        PAIR_INC(PC),
         REG_COMMIT(Pointer.MDR, Pointer.IR),
         STATE_COMMIT(State.DECODE),
     ];
     
     private static Signal[] LOAD_BYTE(Pointer destination) =>
     [
-        REG_COMMIT(Pointer.W, destination),
+        REG_COMMIT(Pointer.MDR, destination),
         ALU_COMPUTE(Operation.OR, destination, Pointer.NIL, FlagMasks[FlagMask.VZN]),
     ];
     private static Signal[] LOAD_WORD(Pointer[] destinations) =>
@@ -61,7 +65,7 @@ public static partial class Microcode
     
     private static Signal[] FRU_BYTE(Pointer source, Operation operation, FlagMask mask) =>
     [
-        ALU_COMPUTE(operation, source, Pointer.W, FlagMasks[mask]),
+        ALU_COMPUTE(operation, source, Pointer.MDR, FlagMasks[mask]),
     ];
     private static Signal[] FRU_WORD(Pointer[] sources, Operation[] operations, FlagMask mask) =>
     [

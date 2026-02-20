@@ -15,6 +15,7 @@ public enum Pointer
 public enum State
 {
     FETCH, DECODE, HALT, 
+    DEC_ED, DEC_CB, DEC_DD, DEC_FD, DEC_DDCB, DEC_FDCB,
     INT_E, INT_D, INT_0, INT_1, INT_2, INT_R,
 }
 

@@ -10,7 +10,8 @@ public static partial class Microcode
     
     public static Signal[] FETCH =>
     [
-        ..READ_IMM,
+        MEM_READ(PC),
+        PAIR_INC(PC),
         REG_COMMIT(Pointer.MDR, Pointer.IR),
         ALU_COMPUTE(Operation.RFR, Pointer.R, Pointer.NIL, Flag.NONE),
         REG_COMMIT(Pointer.TMP, Pointer.R),
@@ -19,7 +20,8 @@ public static partial class Microcode
     
     public static Signal[] FETCH_DEF =>
     [
-        ..READ_IMM,
+        MEM_READ(PC),
+        PAIR_INC(PC),
         REG_COMMIT(Pointer.MDR, Pointer.IR),
         STATE_COMMIT(State.DECODE),
     ];

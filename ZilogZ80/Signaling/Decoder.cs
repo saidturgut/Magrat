@@ -13,13 +13,16 @@ public class Decoder : IDecoder
     private readonly Signal[][] IxBitPage = Microcode.PageIxBit(false);
     private readonly Signal[][] IyBitPage = Microcode.PageIyBit(false);
 
-    public Signal[] Fetch() => Microcode.FETCH;
-    public Signal[] Interrupt() => Microcode.INT_1;
+    private readonly Signal[] FetchSignals = Microcode.FETCH;
+    private readonly Signal[] InterruptSignals = Microcode.INT_1;
     
     private readonly Signal[] Prefix = Microcode.PREFIX;
     
     private byte pageIndex;
     private bool skipByte;
+    
+    public Signal[] Fetch() => FetchSignals;
+    public Signal[] Interrupt() => InterruptSignals;
     
     public Signal[] Decode(byte opcode)
     {
@@ -28,38 +31,20 @@ public class Decoder : IDecoder
             skipByte = false;
             return Prefix;
         }
-        var output = PrefixCheck(opcode) ? Fetch() : IndexPage(opcode);
+        var output = IndexPage(opcode);
         return output.Length != 0 ? output : throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
     }
-    
-    private bool PrefixCheck(byte opcode)
+
+    public bool Execute(byte state)
     {
-        switch (opcode)
+        switch ((State)state)
         {
-            case 0xED:
-            {
-                skipByte = false;
-                pageIndex = 1; return true;
-            }
-            case 0xCB:
-            {
-                skipByte = false;
-                if (pageIndex is not (0 or 3 or 4)) return false;
-                if(pageIndex is 3 or 4) skipByte = true;
-                pageIndex += 2; return true;
-            }
-            case 0xDD:
-            {
-                skipByte = false;
-                if (pageIndex is not (0 or 3 or 4)) return false;
-                pageIndex = 3; return true;
-            }
-            case 0xFD:
-            {
-                skipByte = false;
-                if (pageIndex is not (0 or 3 or 4)) return false;
-                pageIndex = 4; return true;
-            }
+            case State.DEC_ED: pageIndex = 1; skipByte = false; return true;
+            case State.DEC_CB: pageIndex = 2; skipByte = false; return true;
+            case State.DEC_DD: pageIndex = 3; skipByte = false; return true;
+            case State.DEC_FD: pageIndex = 4; skipByte = false; return true;
+            case State.DEC_DDCB: pageIndex = 5; skipByte = true; return true;
+            case State.DEC_FDCB: pageIndex = 6; skipByte = true; return true;
             default: return false;
         }
     }
@@ -78,7 +63,7 @@ public class Decoder : IDecoder
     
     public void Clear()
     {
-        skipByte = false;
         pageIndex = 0;
+        skipByte = false;
     }
 }

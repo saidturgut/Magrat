@@ -5,11 +5,10 @@ using Kernel;
 public static partial class Microcode
 {
     private static Signal[] IMPLIED => [];
-    
-    private static Signal[] IMMEDIATE =>
+
+    private static Signal[] IMMEDIATE(Width width) =>
     [
-        ..READ_IMM,
-        REG_COMMIT(Pointer.MDR, Pointer.W),
+        ..width is Width.BYTE ? READ_IMM : LOAD_WZ_IMM,
     ];
     
     private static Signal[] DIRECT_PAGE(Width width) =>
@@ -22,10 +21,7 @@ public static partial class Microcode
     
     private static Signal[] EXTENDED(Width width) =>
     [
-        ..READ_IMM,
-        REG_COMMIT(Pointer.MDR, Pointer.W),
-        ..READ_IMM,
-        REG_COMMIT(Pointer.MDR, Pointer.Z),
+        ..LOAD_WZ_IMM,
         ..DEREFERENCE(width),
     ];
 
@@ -35,6 +31,14 @@ public static partial class Microcode
     [
         MEM_READ(PC),
         PAIR_INC(PC),
+    ];
+
+    private static Signal[] LOAD_WZ_IMM =>
+    [
+        ..READ_IMM,
+        REG_COMMIT(Pointer.MDR, Pointer.Z),
+        ..READ_IMM,
+        REG_COMMIT(Pointer.MDR, Pointer.W),
     ];
     
     private static Signal[] DEREFERENCE(Width width) => width switch
@@ -47,7 +51,6 @@ public static partial class Microcode
     private static Signal[] DEREF_BYTE =>
     [
         MEM_READ(WZ),
-        REG_COMMIT(Pointer.MDR, Pointer.W),
     ];
     
     private static Signal[] DEREF_WORD =>
@@ -71,6 +74,6 @@ public enum Width
 // #?? ----> 8 BIT IMMEDIATE
 // #???? ----> 16 BIT IMMEDIATE
 // <?? ----> DIRECT PAGE
-// ???? ----> ABSOLUTE
+// ???? ----> EXTENDED
 // ?? ----> 8 BIT RELATIVE
 // ???? ----> 16 BIT RELATIVE

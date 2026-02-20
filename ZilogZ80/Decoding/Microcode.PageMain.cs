@@ -13,6 +13,8 @@ public static partial class Microcode
 
         // STATE OPS
         ["NOP"] = () => IDLE, ["HALT"] = () => [STATE_COMMIT(State.HALT)],
+        ["PFX_ED"] = () => [STATE_COMMIT(State.DEC_ED)], ["PFX_CB"] = () => [STATE_COMMIT(State.DEC_CB)],
+        ["PFX_DD"] = () => [STATE_COMMIT(State.DEC_DD)], ["PFX_FD"] = () => [STATE_COMMIT(State.DEC_FD)],
         ["INT_ON"] = () => INT_CONTROL(State.INT_E, false), ["INT_OFF"] = () => INT_CONTROL(State.INT_D, false),
         ["INPUT"] = () => INPUT_OUTPUT(true), ["OUTPUT"] = () => INPUT_OUTPUT(false),
 
@@ -72,6 +74,8 @@ public static partial class Microcode
         
         // ------------------------- IDX MAIN PAGE ------------------------- //
         
+        ["PFX_DDCB"] = () => [STATE_COMMIT(State.DEC_DDCB)], ["PFX_FDCB"] = () => [STATE_COMMIT(State.DEC_FDCB)],
+
         ["REG_TO_MEM_D"] = () => [..IDX, ..REG_TO_MEM(false)],
         ["MEM_TO_REG_D"] = () => [..IDX, ..MEM_TO_REG(false)],
         ["IMM_TO_MEM_D"] = () => [..IDX, ..REG_TO_MEM(true)],

@@ -8,6 +8,9 @@ public static partial class Microcode
     {
         ["-"] = () => [],
 
+        ["NOP"] = () => IDLE, ["SYNC"] = () => [STATE_COMMIT(State.HALT)],
+        ["PFX_10"] = () => [STATE_COMMIT(State.DEC_10)], ["PFX_11"] = () => [STATE_COMMIT(State.DEC_11)],
+        
         // ---------------------------------------- LOAD & STORE ---------------------------------------- //
         
         // LOAD

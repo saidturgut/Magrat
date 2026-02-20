@@ -15,6 +15,9 @@ public class Decoder : IDecoder
         var output = MainPage[opcode];
         return output.Length != 0 ? output : throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
     }
-    
+
+    public bool Execute(byte state)
+        => false;
+
     public void Clear() { }
 }

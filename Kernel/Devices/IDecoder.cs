@@ -8,5 +8,7 @@ public interface IDecoder
     
     public Signal[] Decode(byte opcode);
     
+    public bool Execute(byte state);
+    
     public void Clear();
 }

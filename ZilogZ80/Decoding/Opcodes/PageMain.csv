@@ -213,8 +213,8 @@ ADD A,??","RST
 RST 0x00","RET_CN
 RET Z","RET
 RET","JMP_CN
-JP Z,????","-
-CB","CALL_CN
+JP Z,????","PFX_CB
+PREFIX CB","CALL_CN
 CALL Z,????","CALL
 CALL ????","ALU_IMM
 ADC A,??","RST
@@ -232,8 +232,8 @@ RET C","SWAP_ALL
 EXX","JMP_CN
 JP C,????","INPUT
 IN A,(??)","CALL_CN
-CALL C,????","-
-DD","ALU_IMM
+CALL C,????","PFX_DD
+PREFIX DD","ALU_IMM
 SBC A,??","RST
 RST 0x18"
 "RET_CN
@@ -249,8 +249,8 @@ RET PE","JMP_HL
 JP (HL)","JMP_CN
 JP PE,????","SWAP_XCHG
 EX DE,HL","CALL_CN
-CALL PE,????","-
-ED","ALU_IMM
+CALL PE,????","PFX_ED
+PREFIX ED","ALU_IMM
 XOR ??","RST
 RST 0x28"
 "RET_CN
@@ -266,7 +266,7 @@ RET M","HL_TO_SP
 LD SP,HL","JMP_CN
 JP M,????","INT_ON
 EI","CALL_CN
-CALL M,????","-
-FD","CMP_IMM
+CALL M,????","PFX_FD
+PREFIX FD","CMP_IMM
 CP ??","RST
 RST 0x38"

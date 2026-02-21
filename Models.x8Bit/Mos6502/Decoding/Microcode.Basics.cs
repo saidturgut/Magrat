@@ -1,0 +1,67 @@
+namespace Models.x8Bit.Mos6502.Decoding;
+using Signaling;
+using Computing;
+using x8Bit.Engine;
+
+public static partial class Microcode
+{
+    // ------------------------- MOVE OPERATIONS ------------------------- //
+
+    private static Signal[] LOAD(Pointer destination) =>
+    [
+        MEM_READ(WZ),
+        REG_COMMIT(Pointer.MDR, destination),
+        ALU_COMPUTE(Operation.NONE, destination, Pointer.NIL, FlagMasks[FlagMask.ZN]),
+    ];
+    
+    private static Signal[] STORE(Pointer source) =>
+    [
+        REG_COMMIT(source, Pointer.MDR),
+        MEM_WRITE(WZ),
+    ];
+
+    private static Signal[] TRANSFER(Pointer source, Pointer destination, bool flags) =>
+    [
+        ALU_COMPUTE(Operation.NONE, source, Pointer.NIL, flags ? FlagMasks[FlagMask.ZN] : Flag.NONE),
+        REG_COMMIT(source, destination),
+    ];
+
+    // ------------------------- ALU OPERATIONS ------------------------- //
+    
+    private static Signal[] ALU(Operation operation, Pointer source, FlagMask mask, bool write) =>
+    [
+        MEM_READ(WZ),
+        ALU_COMPUTE(operation, source, Pointer.MDR, FlagMasks[mask]),
+        ..write ? [REG_COMMIT(Pointer.TMP, source)] : NONE,
+    ];
+    
+    private static Signal[] ALU_MEM(Operation operation, FlagMask mask) =>
+    [
+        MEM_READ(WZ),
+        MEM_WRITE(WZ),
+        ALU_COMPUTE(operation, Pointer.MDR, Pointer.NIL, FlagMasks[mask]),
+        REG_COMMIT(Pointer.TMP, Pointer.MDR),
+        MEM_WRITE(WZ),
+    ];
+    
+    private static Signal[] ALU_REG(Operation operation, Pointer source, FlagMask mask) =>
+    [
+        ALU_COMPUTE(operation, source, Pointer.NIL, FlagMasks[mask]),
+        REG_COMMIT(Pointer.TMP, source),
+    ];
+    
+    private static Signal[] FLAG(bool clr, Flag flag) =>
+    [
+        ALU_COMPUTE(clr ? Operation.CLR : Operation.SET, Pointer.NIL, Pointer.NIL, flag),
+    ];
+    
+    private static Signal[] BRANCH(Condition condition) =>
+    [
+        REG_COMMIT(Pointer.FR, Pointer.TMP),
+        COND_COMPUTE(State.FETCH, condition),
+        MEM_READ(WZ),
+        ..COMMIT_INDEX(Operation.IDX, Pointer.PCL, Pointer.PCL, Pointer.MDR),
+        ALU_COMPUTE(Operation.SXT, Pointer.PCH, Pointer.MDR, Flag.NONE),
+        REG_COMMIT(Pointer.TMP, Pointer.PCH),
+    ];
+}

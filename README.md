@@ -2,6 +2,8 @@
 
 **magrat** is a machine monitor that can simulate all kinds of computers. it currently uses cli as view
 
+> it's only a portfolio project for me, so it's not a product.
+
 #
 
 **x8bit :** this machine hosts the 8 bit microchip cpus from the 70s
@@ -13,5 +15,3 @@
 
 **pdp11 :** (planned)
 
-#
-> magrat is only a portfolio project for me and so it's not a product.

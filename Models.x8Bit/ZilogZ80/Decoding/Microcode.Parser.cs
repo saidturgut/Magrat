@@ -1,7 +1,6 @@
 namespace Models.x8Bit.ZilogZ80.Decoding;
 using Microsoft.VisualBasic.FileIO;
-using Signaling;
-using Models.x8Bit.Engine;
+using Engine;
 
 public partial class Microcode
 {

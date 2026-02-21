@@ -5,13 +5,13 @@ using Engine;
 
 public class Decoder : IDecoder
 {
-    private readonly Signal[][] MainPage = [];
-    private readonly Signal[][] SecondPage = [];
-    private readonly Signal[][] ThirdPage = [];
+    private readonly Signal[][] MainPage = Microcode.PageMain(false);
+    private readonly Signal[][] SecondPage = Microcode.PageSecond(false);
+    private readonly Signal[][] ThirdPage = Microcode.PageThird(false);
     
     private readonly Signal[][] IndexedPage = [];
-    private readonly Signal[][] TransferPage = [];
-    private readonly Signal[][] ExchangePage = [];
+    private readonly Signal[][] TransferPage = Microcode.PageTfr(false);
+    private readonly Signal[][] ExchangePage = Microcode.PageExg(false);
 
     private readonly Signal[] FetchSignals = Microcode.FETCH;
     private readonly Signal[] InterruptSignals = [];

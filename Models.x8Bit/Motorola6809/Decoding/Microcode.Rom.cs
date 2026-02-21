@@ -1,79 +1,59 @@
 namespace Models.x8Bit.Motorola6809.Decoding;
 using Computing;
-using Models.x8Bit.Engine;
+using Engine;
 
 public static partial class Microcode
 {
-    private static readonly Dictionary<string, Func<Signal[]>> MainPage = new()
-    {
-        ["-"] = () => [],
+    private static readonly Signal[] NONE = Array.Empty<Signal>();
+    
+    private static readonly Pointer[] PC = [Pointer.PCL, Pointer.PCH];
+    private static readonly Pointer[] WZ = [Pointer.W, Pointer.Z];
+    private static readonly Pointer[] MDR = [Pointer.MDR, Pointer.NIL];
+    private static readonly Pointer[] TMP = [Pointer.TMP, Pointer.NIL];
+    private static readonly Pointer[] IX = [Pointer.IXL, Pointer.IXH];
+    private static readonly Pointer[] IY = [Pointer.IYL, Pointer.IYH];
+    private static readonly Pointer[] UP = [Pointer.UPL, Pointer.UPH];
+    private static readonly Pointer[] SP = [Pointer.SPL, Pointer.SPH];
+    private static readonly Pointer[] DD = [Pointer.B, Pointer.A];
+    private static readonly Pointer[] DP = [Pointer.MDR, Pointer.DP];
+    
+    private static readonly Operation[] ADD16 = [Operation.ADD, Operation.ADC];
+    private static readonly Operation[] SUB16 = [Operation.SUB, Operation.SBC];
+    
+    private static Signal STATE_COMMIT(State state) => new()
+        { Cycle = Cycle.STATE_COMMIT, State = (byte)state, };
+    
+    private static Signal REG_COMMIT(Pointer source, Pointer destination) => new()
+        { Cycle = Cycle.REG_COMMIT, First = (byte)source, Second = (byte)destination };
 
-        ["NOP"] = () => IDLE, ["SYNC"] = () => [STATE_COMMIT(State.HALT)],
-        ["PFX_10"] = () => [STATE_COMMIT(State.DEC_10)], ["PFX_11"] = () => [STATE_COMMIT(State.DEC_11)],
-        
-        // ---------------------------------------- LOAD & STORE ---------------------------------------- //
-        
-        // LOAD
-        ["LDD"] = () => LOAD_WORD(DD!),
-        ["LDA"] = () => LOAD_BYTE(Pointer.A), ["LDB"] = () => LOAD_BYTE(Pointer.B),
-        ["LDX"] = () => LOAD_WORD(IX!), ["LDY"] = () => LOAD_WORD(IY!), 
-        ["LDS"] = () => LOAD_WORD(SP!), ["LDU"] = () => LOAD_WORD(UP!),
-        // STORE
-        ["STD"] = () => STORE_WORD(DD!),
-        ["STA"] = () => STORE_BYTE(Pointer.A), ["STB"] = () => STORE_BYTE(Pointer.B),
-        ["STX"] = () => STORE_WORD(IX!), ["STY"] = () => STORE_WORD(IY!), 
-        ["STS"] = () => STORE_WORD(SP!), ["STU"] = () => STORE_WORD(UP!),
-        
-        // ---------------------------------------- CORE ALU ---------------------------------------- //
-        
-        // ADD
-        ["ADDD"] = () => ALU_WORD(DD!, ADD16!, FlagMask.CVZN),
-        ["ADDA"] = () => ALU_BYTE(Pointer.A, Operation.ADD, FlagMask.CVZNH), ["ADDB"] = () => ALU_BYTE(Pointer.B, Operation.ADD, FlagMask.CVZNH),
-        ["ADCA"] = () => ALU_BYTE(Pointer.A, Operation.ADC, FlagMask.CVZNH), ["ADCB"] = () => ALU_BYTE(Pointer.B, Operation.ADC, FlagMask.CVZNH),
-        // SUBTRACT
-        ["SUBD"] = () => ALU_WORD(DD!, SUB16!, FlagMask.CVZN),
-        ["SUBA"] = () => ALU_BYTE(Pointer.A, Operation.SUB, FlagMask.CVZNH), ["SUBB"] = () => ALU_BYTE(Pointer.B, Operation.SUB, FlagMask.CVZNH),
-        ["SBCA"] = () => ALU_BYTE(Pointer.A, Operation.SBC, FlagMask.CVZNH), ["SBCB"] = () => ALU_BYTE(Pointer.B, Operation.SBC, FlagMask.CVZNH),
-        // COMPARE
-        ["CMPD"] = () => FRU_WORD(DD!, SUB16!, FlagMask.CVZN),
-        ["CMPA"] = () => FRU_BYTE(Pointer.A, Operation.SUB, FlagMask.CVZNH), ["CMPB"] = () => FRU_BYTE(Pointer.B, Operation.SUB, FlagMask.CVZNH),
-        ["CMPX"] = () => FRU_WORD(IX!, SUB16!, FlagMask.CVZN), ["CMPY"] = () => FRU_WORD(IY!, SUB16!, FlagMask.CVZN),
-        // LOGIC
-        ["ANDA"] = () => ALU_BYTE(Pointer.A, Operation.AND, FlagMask.VZN), ["ANDB"] = () => ALU_BYTE(Pointer.B, Operation.AND, FlagMask.VZN),
-        ["ORA"] = () => ALU_BYTE(Pointer.A, Operation.OR, FlagMask.VZN), ["ORB"] = () => ALU_BYTE(Pointer.B, Operation.OR, FlagMask.VZN),
-        ["EORA"] = () => ALU_BYTE(Pointer.A, Operation.EOR, FlagMask.VZN), ["EORB"] = () => ALU_BYTE(Pointer.B, Operation.EOR, FlagMask.VZN),
-        ["BITA"] = () => FRU_BYTE(Pointer.A, Operation.AND, FlagMask.VZN), ["BITB"] = () => FRU_BYTE(Pointer.B, Operation.AND, FlagMask.VZN),
-        
-        // ---------------------------------------- BITWISE ALU ---------------------------------------- //
-        
-        // SHIFT
-        ["LSRA"] = () => ALU_BYTE(Pointer.A, Operation.LSR, FlagMask.CVZN), ["LSRB"] = () => ALU_BYTE(Pointer.B, Operation.LSR, FlagMask.CVZN), 
-        ["LSR"] = () => ALU_MEM(Operation.LSR, FlagMask.CVZN),
-        ["LSLA"] = () => ALU_BYTE(Pointer.A, Operation.LSL, FlagMask.CVZN), ["LSLB"] = () => ALU_BYTE(Pointer.B, Operation.LSL, FlagMask.CVZN), 
-        ["LSL"] = () => ALU_MEM(Operation.LSL, FlagMask.CVZN),
-        ["ASRA"] = () => ALU_BYTE(Pointer.A, Operation.ASR, FlagMask.CVZN), ["ASRB"] = () => ALU_BYTE(Pointer.B, Operation.ASR, FlagMask.CVZN), 
-        ["ASR"] = () => ALU_MEM(Operation.ASR, FlagMask.CVZN),
-        // ROTATE
-        ["RORA"] = () => ALU_BYTE(Pointer.A, Operation.ROR, FlagMask.CVZN), ["RORB"] = () => ALU_BYTE(Pointer.B, Operation.ROR, FlagMask.CVZN), 
-        ["ROR"] = () => ALU_MEM(Operation.ROR, FlagMask.CVZN),
-        ["ROLA"] = () => ALU_BYTE(Pointer.A, Operation.ROL, FlagMask.CVZN), ["ROLB"] = () => ALU_BYTE(Pointer.B, Operation.ROL, FlagMask.CVZN), 
-        ["ROL"] = () => ALU_MEM(Operation.ROL, FlagMask.CVZN),
-        // PRIME
-        ["NEGA"] = () => ALU_BYTE(Pointer.A, Operation.NEG, FlagMask.CVZN), ["NEGB"] = () => ALU_BYTE(Pointer.B, Operation.NEG, FlagMask.CVZN), 
-        ["NEG"] = () => ALU_MEM(Operation.NEG, FlagMask.CVZN),
-        ["COMA"] = () => ALU_BYTE(Pointer.A, Operation.COM, FlagMask.CVZN), ["COMB"] = () => ALU_BYTE(Pointer.B, Operation.COM, FlagMask.CVZN),
-        ["COM"] = () => ALU_MEM(Operation.COM, FlagMask.CVZN),
-        // TEST
-        ["TSTA"] = () => FRU_BYTE(Pointer.A, Operation.OR, FlagMask.VZN), ["TSTB"] = () => FRU_BYTE(Pointer.B, Operation.OR, FlagMask.VZN), 
-        ["TST"] = () => FRU_MEM(Operation.OR, FlagMask.VZN),
-        // CLEAR
-        ["CLRA"] = () => ALU_BYTE(Pointer.A, Operation.NONE, FlagMask.CVZN), ["CLRB"] = () => ALU_BYTE(Pointer.B, Operation.NONE, FlagMask.CVZN), 
-        ["CLR"] = () => ALU_MEM(Operation.NONE, FlagMask.CVZN),
-        // INC 
-        ["INCA"] = () => ALU_BYTE(Pointer.A, Operation.INC, FlagMask.VZN), ["INCB"] = () => ALU_BYTE(Pointer.B, Operation.INC, FlagMask.VZN), 
-        ["INC"] = () => ALU_MEM(Operation.INC, FlagMask.VZN),
-        // DEC
-        ["DECA"] = () => ALU_BYTE(Pointer.A, Operation.DEC, FlagMask.VZN), ["DECB"] = () => ALU_BYTE(Pointer.B, Operation.DEC, FlagMask.VZN), 
-        ["DEC"] = () => ALU_MEM(Operation.DEC, FlagMask.VZN),
+    private static Signal MEM_READ(Pointer[] address) => new()
+        { Cycle = Cycle.MEM_READ, First = (byte)address[0], Second = (byte)address[1] };
+    private static Signal MEM_WRITE(Pointer[] address) => new()
+        { Cycle = Cycle.MEM_WRITE, First = (byte)address[0], Second = (byte)address[1] };
+
+    private static Signal ALU_COMPUTE(Operation operation, Pointer source, Pointer operand, Flag mask) => new()
+        { Cycle = Cycle.ALU_COMPUTE, Operation = (byte)operation, First = (byte)source, Second = (byte)operand, Mask =  (byte)mask };
+/*    private static Signal COND_COMPUTE(State state, Condition condition) => new()
+        { Cycle = Cycle.COND_COMPUTE, State = (byte)state, Condition = (byte)condition };
+*/
+    private static Signal PAIR_INC(Pointer[] pair) => new()
+        { Cycle = Cycle.PAIR_INC, First = (byte)pair[0], Second = (byte)pair[1] };
+    private static Signal PAIR_DEC(Pointer[] pair) => new()
+        { Cycle = Cycle.PAIR_DEC, First = (byte)pair[0], Second = (byte)pair[1] };
+
+    private static readonly Dictionary<FlagMask, Flag> FlagMasks = new()
+    {
+        { FlagMask.NONE, Flag.NONE },
+        { FlagMask.CVZNIHFE, Flag.CARRY | Flag.OVERFLOW | Flag.ZERO | Flag.NEGATIVE | Flag.IRQ | Flag.HALF | Flag.FIRQ | Flag.ENTIRE },
+        { FlagMask.CVZNH, Flag.CARRY | Flag.OVERFLOW | Flag.ZERO | Flag.NEGATIVE | Flag.HALF },
+        { FlagMask.CVZN, Flag.CARRY | Flag.OVERFLOW | Flag.ZERO | Flag.NEGATIVE },
+        { FlagMask.VZN, Flag.OVERFLOW | Flag.ZERO | Flag.NEGATIVE },
+        { FlagMask.ZN, Flag.ZERO | Flag.NEGATIVE },
     };
+}
+
+public enum FlagMask
+{
+    NONE,
+    CVZNIHFE, CVZNH, CVZN, VZN, ZN,
 }

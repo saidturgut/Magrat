@@ -1,3 +1,5 @@
+using Controller.External;
+
 namespace Views.Console;
 using Controller;
 using Contracts;
@@ -18,15 +20,12 @@ public class Host : IHost
 
     private void Boot()
     {
-        //Assembler.Run("zz80");
-        Execute("set 6502");
-        Execute("load 0 6502.bin");
-        /*Execute("load 128 boot.bin");
-        Execute("load 48128 bios.bin");
-        Execute("disk cpm.DSK");*/
-        //Execute("debug");
-        //Execute("sleep 25");
-        //Execute("dump 0 1000");
+        Assembler.Run("pdp11");
+        Execute("set pdp11");
+        Execute("load 0 pdp11.bin");
+        Execute("debug");
+        Execute("sleep 25");
+        //Execute("dump 0 0");
         Execute("run");
     }
 

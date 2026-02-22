@@ -2,9 +2,9 @@ namespace Models.x8Bit;
 using Contracts;
 using Devices;
 
-public class Machine
+public static class Cpus
 {
-    public ICpu? CpuTable(string name, IMonitor monitor) => name switch
+    public static IMachine? Table(string name, IMonitor monitor) => name switch
     {
         "none" => null,
         "mos6502" or "m6502" or "6502" => new Mos6502.Mos6502(new Bus(monitor)),

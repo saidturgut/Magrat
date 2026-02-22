@@ -14,15 +14,7 @@ public partial class Monitor
     
     private void Run()
     {
-        while (!Cpu!.Halt() || !debug)
-        {
-            Cpu.Tick();
-
-            if (sleep != 0)
-            {
-                Thread.Sleep(sleep);
-            }
-        }
+        Machine!.Power(sleep);
         Reset();
     }
 }

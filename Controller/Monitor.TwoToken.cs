@@ -1,19 +1,16 @@
 namespace Controller;
-using Models.x8Bit.Devices;
 
 public partial class Monitor
 {
     private void Set(string name)
     {
-        Cpu = x8Bit.CpuTable(name, this);
-        Cpu!.Init();
-        Bus = Cpu.Bus();
-        //cpuName = Cpu is not null ? "@" + Cpu!.Init() : "";
+        Machine = Machines[name];
+        Machine.Init();
     }
     
     private void Disk(string name)
     {
-        Bus!.Insert(File.ReadAllBytes(name));
+        Machine!.Insert(File.ReadAllBytes(name));
     }
 
     private void Sleep(string dat)
@@ -26,7 +23,7 @@ public partial class Monitor
         step = Convert.ToByte(dat);
         while (step > 0)
         {
-            Cpu!.Tick();
+            Machine!.Tick();
         }
     }
 }

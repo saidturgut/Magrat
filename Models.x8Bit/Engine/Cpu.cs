@@ -1,12 +1,23 @@
 namespace Models.x8Bit.Engine;
+using Contracts;
 using Units;
 
-public class Cpu(IBus Bus, Datapath Datapath, Control Control)
+public class Cpu(IBus Bus, Datapath Datapath, Control Control) : IMachine
 {
     public void Init()
     {
         Datapath.Init();
         Control.Init();
+    }
+
+    public void Power(byte sleep)
+    {
+        while (!Control.halt)
+        {
+            Tick();
+            
+            if (sleep != 0) Thread.Sleep(sleep);
+        }
     }
     
     public void Tick()
@@ -28,7 +39,16 @@ public class Cpu(IBus Bus, Datapath Datapath, Control Control)
         Datapath.Clear();
         Control.Clear();
     }
+    
+    public void Load(uint address, byte data)
+    {
+    }
 
-    public bool Halt() 
-        => Control.halt;
+    public void Insert(byte[] image)
+    {
+    }
+    
+    public void Dump()
+    {
+    }
 }

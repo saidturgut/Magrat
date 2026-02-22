@@ -6,7 +6,7 @@ public partial class Monitor
     {
         uint address = Convert.ToUInt32(addr);
         byte data = Convert.ToByte(dat);
-        Bus!.Load(address, data);
+        Machine!.Load(address, data);
     }
 
     private void Load(string addr, string name)
@@ -15,7 +15,7 @@ public partial class Monitor
         byte[] image = File.ReadAllBytes(name);
         for (int i = 0; i < image.Length; i++)
         {
-            Bus!.Load((uint)(address + i), image[i]);
+            Machine!.Load((uint)(address + i), image[i]);
         }
     }
     
@@ -24,6 +24,6 @@ public partial class Monitor
         
     private void Dump(string start, string end)
     {
-        Bus!.Dump(Convert.ToUInt32(start), Convert.ToUInt32(end));
+        Machine!.Dump();
     }
 }

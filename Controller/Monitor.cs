@@ -8,13 +8,11 @@ public partial class Monitor(IHost Host)
     public Dictionary<string, Action>? OneToken;
     public Dictionary<string, Action<string>>? TwoToken;
     public Dictionary<string, Action<string, string>>? ThreeToken;
-
-    private readonly Models.x8Bit.Machine x8Bit = new ();
-    private readonly Models.Pdp1170.Pdp1170 Pdp1170 = new ();
     
-    private ICpu? Cpu;
-    private ISudo? Bus;
-
+    private Dictionary<string, IMachine> Machines;
+    
+    private IMachine? Machine = null;
+    
     private byte step;
     private byte sleep;
     public bool exit;
@@ -34,12 +32,17 @@ public partial class Monitor(IHost Host)
         {
             ["load"] = Load, ["mem"] = Mem, ["reg"] = Reg, ["dump"] = Dump,
         };
+        
+        Machines = new Dictionary<string, IMachine>
+        {
+            {"pdp11", new Models.Pdp1170.Pdp1170() },
+            {"x8bit", Models.x8Bit.Cpus.Table("z80", this)! },
+        };
     }
-
+    
     private void Reset()
     {
-        Cpu = null;
-        Bus = null;
+        Machine = null;
         cpuName = "";
     }
 }

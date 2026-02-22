@@ -6,12 +6,13 @@
 
 #
 
+**pdp1170 :** (in progress)
+- pdp-11/70
+
 **x8bit :** this machine hosts the 8 bit microchip cpus from the 70s
 
 - mos 6502
 - intel 8080
 - zilog z80
-- motorola 6809 (in progress)
-
-**pdp11 :** (planned)
+- motorola 6809
 

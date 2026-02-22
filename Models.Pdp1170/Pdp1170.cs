@@ -1,8 +1,9 @@
 namespace Models.Pdp1170;
+using Contracts;
 using Bus;
 using Cpu;
 
-public class Pdp1170
+public class Pdp1170 : IMachine
 {
     private readonly Unibus Unibus = new();
     private readonly Kb11c Kb11c = new();
@@ -13,7 +14,7 @@ public class Pdp1170
         Kb11c.Init();
     }
     
-    public void Clock(byte sleep)
+    public void Power(byte sleep)
     {
         while (!Kb11c.Halt())
         {
@@ -23,8 +24,14 @@ public class Pdp1170
         }
     }
     
-    private void Tick()
+    public void Tick()
     {
         Kb11c.Tick(Unibus);
     }
+
+    public void Load(uint address, byte data) { Unibus.Load(address, data); }
+
+    public void Insert(byte[] image) { throw new Exception("NOT IMPLEMENTED"); }
+
+    public void Dump() { Unibus.Dump(); }
 }

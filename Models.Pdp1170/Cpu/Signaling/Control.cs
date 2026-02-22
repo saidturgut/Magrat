@@ -11,11 +11,16 @@ public class Control
     public bool commit;
 
     public bool halt;
-    
-    public void Init() {}
+
+    public void Init()
+    {
+        decoded = Decoder.Fetch;
+    }
 
     public Signal Emit()
-        => decoded[timeState];
+    {
+        return decoded[timeState];
+    }
 
     public void Advance(ControlSignal signal)
     {
@@ -36,5 +41,10 @@ public class Control
             case State.HALT: halt = true; decoded = [new Signal()]; break;
         }
         timeState = 0;
+    }
+
+    public void Clear()
+    {
+        commit = false;
     }
 }

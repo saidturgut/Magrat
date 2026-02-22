@@ -15,7 +15,7 @@ public class Register
         => value = input;
 
     public ushort Get()
-        => commit;
+        => value;
 
     public void Commit()
     {

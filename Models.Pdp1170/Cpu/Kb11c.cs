@@ -27,9 +27,13 @@ public class Kb11c
 
     private void Commit()
     {
-        
+        foreach (var log in Datapath.Debug())
+        {
+            Console.WriteLine(log);
+        }
+        Control.Clear();
     }
-    
+
     public bool Halt() 
         => Control.halt;
 }

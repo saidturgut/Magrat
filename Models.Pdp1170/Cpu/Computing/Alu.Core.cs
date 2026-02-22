@@ -3,9 +3,9 @@ namespace Models.Pdp1170.Cpu.Computing;
 public partial class Alu
 {
     private static AluOutput ICC(AluInput input)
-        => new() { Result = (ushort)(input.A + (input.ByteMode ? 1 : 2)) };
+        => new() { Result = (ushort)(input.A + (input.ByteMode ? 1 : 2)), SkipMask = true };
     private static AluOutput DCC(AluInput input)
-        => new() { Result = (ushort)(input.A - (input.ByteMode ? 1 : 2)) };
+        => new() { Result = (ushort)(input.A - (input.ByteMode ? 1 : 2)), SkipMask = true };
 
     private static bool Carry(AluInput input, uint sum) 
         => (sum & input.x10000) != 0;

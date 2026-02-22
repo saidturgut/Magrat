@@ -2,7 +2,8 @@ namespace Models.Pdp1170.Cpu.Computing;
 
 public partial class Alu
 {
-    private static AluOutput PASS() => new();
+    private static AluOutput PASS(AluInput input) 
+        => new() { Result = input.B };
     
     private static AluOutput ADD(AluInput input)
     {

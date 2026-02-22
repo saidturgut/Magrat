@@ -6,7 +6,7 @@ public partial class Alu
     {
         AluOutput output = SelectOperation(input, operation);
         
-        if (input.ByteMode) output.Result &= 0xFF;
+        if (input.ByteMode && !output.SkipMask) output.Result &= 0xFF;
         if((output.Result & input.x8000) != 0) output.Flags |= (ushort)Flag.NEGATIVE;
         if(output.Result == 0) output.Flags |= (ushort)Flag.ZERO;
         return output;
@@ -14,7 +14,7 @@ public partial class Alu
 
     private AluOutput SelectOperation(AluInput input, Operation operation) => operation switch
     {
-        Operation.PASS => PASS(), Operation.ICC => ICC(input), Operation.DCC => DCC(input),
+        Operation.PASS => PASS(input), Operation.ICC => ICC(input), Operation.DCC => DCC(input),
         Operation.ADD => ADD(input), Operation.SUB => SUB(input),
         Operation.BIT => BIT(input), Operation.BIC => BIC(input), Operation.BIS => BIS(input)
     };
@@ -34,4 +34,5 @@ public struct AluOutput
 {
     public ushort Result;
     public ushort Flags;
+    public bool SkipMask;
 }

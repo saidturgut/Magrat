@@ -30,12 +30,14 @@ public enum Pointer
     MDR, TMP, SRC, DST, // TEMPORARY LATCHES
     R0, R1, R2, R3, R4, R5, SP, // GENERAL REGISTERS
 }
-    
 
 public enum Operation
 {
+    NONE,
     PASS, ICC, DCC, // CORE
     ADD, SUB, BIT, BIC, BIS, // TWO OPERAND
+    ZERO, COM, INC, DEC, NEG, ADC, SBC, 
+    SWAB, ROR, ROL, ASR, ASL, SXT
 }
 
 [Flags]
@@ -62,8 +64,8 @@ public enum Width
 
 public struct ControlSignal(ushort opcode, bool stall)
 {
-    public ushort Opcode = opcode;
-    public bool Stall = stall;
+    public readonly ushort Opcode = opcode;
+    public readonly bool Stall = stall;
 }
 
 

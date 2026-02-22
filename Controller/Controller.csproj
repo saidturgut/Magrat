@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\Models.Pdp1170\Models.Pdp1170.csproj" />
       <ProjectReference Include="..\Models.x8Bit\Models.x8Bit.csproj" />
     </ItemGroup>
 

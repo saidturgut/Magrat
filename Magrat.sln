@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Views.Console", "Views.Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models.x8Bit", "Models.x8Bit\Models.x8Bit.csproj", "{B04E0BB5-610A-47FC-B655-D9E78A397783}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models.Pdp1170", "Models.Pdp1170\Models.Pdp1170.csproj", "{77F6E7D1-84F3-459B-8D8E-906983CDE5D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{B04E0BB5-610A-47FC-B655-D9E78A397783}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B04E0BB5-610A-47FC-B655-D9E78A397783}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B04E0BB5-610A-47FC-B655-D9E78A397783}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77F6E7D1-84F3-459B-8D8E-906983CDE5D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F6E7D1-84F3-459B-8D8E-906983CDE5D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F6E7D1-84F3-459B-8D8E-906983CDE5D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F6E7D1-84F3-459B-8D8E-906983CDE5D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -10,6 +10,7 @@ public partial class Monitor(IHost Host)
     public Dictionary<string, Action<string, string>>? ThreeToken;
 
     private readonly Models.x8Bit.Machine x8Bit = new ();
+    private readonly Models.Pdp1170.Pdp1170 Pdp1170 = new ();
     
     private ICpu? Cpu;
     private ISudo? Bus;

@@ -4,7 +4,7 @@ using Bus;
 
 public partial class Datapath
 {
-    private readonly Register[] CoreRegisters =  new Register[8];
+    private readonly Register[] CoreRegisters =  new Register[9];
     private readonly Register[] GeneralRegisters =  new Register[12];
     private readonly Register[] StackRegisters =  new Register[4];
     
@@ -40,7 +40,7 @@ public partial class Datapath
         Protocol();
         switch (signal.Cycle)
         {
-            case Cycle.REG_WRITE: RegisterWrite(); break;
+            case Cycle.REG_MOVE: RegisterMove(); break;
             case Cycle.MEM_READ: MemoryRead(unibus); break;
             case Cycle.MEM_WRITE: MemoryWrite(unibus); break;
             case Cycle.ALU_COMPUTE: AluCompute(); break;

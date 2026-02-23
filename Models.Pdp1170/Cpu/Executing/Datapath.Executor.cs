@@ -15,14 +15,8 @@ public partial class Datapath
     
     private const byte priority = 0;
 
-    private void RegisterWrite()
-    {
-        switch (signal.Width)
-        {
-            case Width.WORD: Point(signal.Second).Set(Point(signal.First).Get()); break;
-            case Width.BYTE: Point(signal.Second).Set((ushort)((Point(signal.Second).Get() & 0xFF00) | (Point(signal.First).Get() & 0xFF))); break;
-        }
-    }
+    private void RegisterMove()
+        => Point(signal.Second).Set(Point(signal.First).Get());
 
     private void MemoryRead(Unibus unibus)
     {
@@ -56,7 +50,7 @@ public partial class Datapath
     private void AluCompute()
     {
         ushort psw = Point(Pointer.PSW).Get();
-        Flags flags = new Flags(psw);
+        //Flags flags = new Flags(psw);
         AluOutput output = Alu.Compute(new AluInput(
                 Point(signal.First).Get(),
                 Point(signal.Second).Get(),

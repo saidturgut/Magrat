@@ -3,7 +3,7 @@ namespace Models.Pdp1170.Cpu.Computing;
 public partial class Alu
 {
     private static AluOutput PASS(AluInput input) 
-        => new() { Result = input.B };
+        => new() { Result = input.B, ByteMask = ByteMask.EXT_SIGN };
     
     private static AluOutput ADD(AluInput input)
     {
@@ -25,9 +25,9 @@ public partial class Alu
     }
     
     private static AluOutput BIT(AluInput input) => new() 
-        { Result = (ushort)(input.A & input.B) };
+        { Result = (ushort)(input.A & input.B), ByteMask = ByteMask.MASK_HIGH };
     private static AluOutput BIC(AluInput input) => new() 
-        { Result = (ushort)(input.A & ~input.B) };
+        { Result = (ushort)(input.A & ~input.B), ByteMask = ByteMask.MASK_HIGH };
     private static AluOutput BIS(AluInput input) => new() 
-        { Result = (ushort)(input.A | input.B) };
+        { Result = (ushort)(input.A | input.B), ByteMask = ByteMask.MASK_HIGH };
 }

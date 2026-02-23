@@ -24,5 +24,5 @@ public partial class Datapath
     }
     
     private static string Octal(uint input)         
-        => $"0{Convert.ToString(input, 8).ToUpper()}";
+        => $"{Convert.ToString(input, 10).ToUpper()}";
 }

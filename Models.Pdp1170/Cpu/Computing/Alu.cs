@@ -6,17 +6,27 @@ public partial class Alu
     {
         AluOutput output = SelectOperation(input, operation);
         
-        if (input.ByteMode && !output.SkipMask) output.Result &= 0xFF;
-        if((output.Result & input.x8000) != 0) output.Flags |= (ushort)Flag.NEGATIVE;
-        if(output.Result == 0) output.Flags |= (ushort)Flag.ZERO;
+        ushort result = (ushort)(output.Result & input.xFFFF);
+        if((result & input.x8000) != 0) output.Flags |= (ushort)Flag.NEGATIVE;
+        if(result == 0) output.Flags |= (ushort)Flag.ZERO;
+
+        if (input.ByteMode)
+            output.Result = output.ByteMask switch
+            {
+                ByteMask.NONE => output.Result,
+                ByteMask.MASK_HIGH => (ushort)((input.A & 0xFF00) | result),
+                ByteMask.EXT_SIGN => output.Result = (ushort)((sbyte)result)
+            };
         return output;
     }
 
     private AluOutput SelectOperation(AluInput input, Operation operation) => operation switch
     {
-        Operation.PASS => PASS(input), Operation.ICC => ICC(input), Operation.DCC => DCC(input),
-        Operation.ADD => ADD(input), Operation.SUB => SUB(input),
-        Operation.BIT => BIT(input), Operation.BIC => BIC(input), Operation.BIS => BIS(input)
+        Operation.NONE => new AluOutput(),
+        Operation.ICC => ICC(input), Operation.DCC => DCC(input), Operation.IDX => IDX(input),
+        Operation.PASS => PASS(input), Operation.ADD => ADD(input), Operation.SUB => SUB(input),
+        Operation.BIT => BIT(input), Operation.BIC => BIC(input), Operation.BIS => BIS(input),
+        _=> new AluOutput(),
     };
 }
 
@@ -34,5 +44,10 @@ public struct AluOutput
 {
     public ushort Result;
     public ushort Flags;
-    public bool SkipMask;
+    public ByteMask ByteMask;
+}
+
+public enum ByteMask
+{
+    NONE, EXT_SIGN, MASK_HIGH
 }

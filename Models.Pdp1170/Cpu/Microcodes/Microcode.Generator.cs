@@ -3,87 +3,67 @@ namespace Models.Pdp1170.Cpu.Microcodes;
 public partial class Microcode
 {
     private static ushort opcode;
-    private static byte fzzz;
-    private static byte zfzz;
-
-    private const ushort colCount = 4096;
+    private static string cell;
+    private static string name;
     
     public static Signal[][] Generate()
     {
         Signal[][] table = new Signal[256*256][];
-        table[0] = [new Signal()];
-        byte[] twoOprRows = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14];
-        foreach (byte row in twoOprRows)
+
+        string[] lines = File.ReadAllLines("Pdp11Matrix.csv");
+
+        for (byte row = 0; row < 16*4; row++)
         {
-            for (ushort col = 0; col < colCount; col++)
+            string[] cells = lines[row].Split(',').Select(x => x.Trim()).ToArray();   
+            
+            for (byte col = 0; col < 16; col++)
             {
-                opcode = (ushort)((row << 12) | col);
-                fzzz = (byte)(opcode >> 12);
-                table[opcode] = TwoOperand();
-                table[opcode][0].Name
-                    = $"{TwoOperandNames[fzzz]} {AddressingModeNames(ooxxoo())},{AddressingModeNames(ooooxx())}";
-            };
+                cell = cells[col];
+                for (byte frag = 0; frag < 64; frag++)
+                {
+                    opcode = (ushort)(row << 10 | col << 4 | frag);
+                    table[opcode] = BlockCellTable[cell]();
+                    table[opcode][0].Name = name;
+                }
+            }
         }
+        
         return table;
     }
-
-    // OP SRC,DST
     
-    private static Signal[] TwoOperand() => TWO_OPERAND(new Descriptor
+    private static readonly Dictionary<string, Func<Signal[]>> BlockCellTable = new()
     {
-        Modes = [ooxooo(), ooooxo()],
-        Regs = [EncodedRegisters[oooxoo()], EncodedRegisters[ooooox()]],
-        Operation = TwoOperandTable[fzzz],
-        Mask = fzzz is not (0x0 or 0x9) ? FlagMasks[FlagMask.CVZN] : FlagMasks[FlagMask.VZN],
-        Writeback = fzzz is not (0x2 or 0x3 or 0xA or 0xB),
-        Width = fzzz is >= 0xA and <= 0xD ? Width.BYTE : Width.WORD,
-    });
+        ["MOV"] = () => TWO_OPERAND(Operation.PASS, true, Width.WORD),
+        ["CMP"] = () => TWO_OPERAND(Operation.SUB, false, Width.WORD),
+        ["BIT"] = () => TWO_OPERAND(Operation.BIT, false, Width.WORD),
+        ["BIC"] = () => TWO_OPERAND(Operation.BIC, true, Width.WORD),
+        ["BIS"] = () => TWO_OPERAND(Operation.BIS, true, Width.WORD),
+        ["ADD"] = () => TWO_OPERAND(Operation.ADD, true, Width.WORD),
+        ["MOVB"] = () => TWO_OPERAND(Operation.PASS, true, Width.BYTE),
+        ["CMPB"] = () => TWO_OPERAND(Operation.SUB, false, Width.BYTE),
+        ["BITB"] = () => TWO_OPERAND(Operation.BIT, false, Width.BYTE),
+        ["BICB"] = () => TWO_OPERAND(Operation.BIC, true, Width.BYTE),
+        ["BISB"] = () => TWO_OPERAND(Operation.BIS, true, Width.BYTE),
+        ["SUB"] = () => TWO_OPERAND(Operation.SUB, true, Width.WORD),
+        
+        ["CLR"] = () => ONE_OPERAND(Operation.CLR, Width.WORD),["CLRB"] = () => ONE_OPERAND(Operation.CLR, Width.BYTE),
+        ["COM"] = () => ONE_OPERAND(Operation.COM, Width.WORD),["COMB"] = () => ONE_OPERAND(Operation.COM, Width.BYTE),
+        ["INC"] = () => ONE_OPERAND(Operation.INC, Width.WORD),["INCB"] = () => ONE_OPERAND(Operation.INC, Width.BYTE),
+        ["DEC"] = () => ONE_OPERAND(Operation.DEC, Width.WORD),["DECB"] = () => ONE_OPERAND(Operation.DEC, Width.BYTE),
+        ["NEG"] = () => ONE_OPERAND(Operation.NEG, Width.WORD),["NEGB"] = () => ONE_OPERAND(Operation.NEG, Width.BYTE),
+        ["ADC"] = () => ONE_OPERAND(Operation.ADC, Width.WORD),["ADCB"] = () => ONE_OPERAND(Operation.ADC, Width.BYTE),
+        ["SBC"] = () => ONE_OPERAND(Operation.SBC, Width.WORD),["SBCB"] = () => ONE_OPERAND(Operation.SBC, Width.BYTE),
+        ["TST"] = () => ONE_OPERAND(Operation.TST, Width.WORD),["TSTB"] = () => ONE_OPERAND(Operation.TST, Width.BYTE),
+        ["ROR"] = () => ONE_OPERAND(Operation.ROR, Width.WORD),["RORB"] = () => ONE_OPERAND(Operation.ROR, Width.BYTE),
+        ["ROL"] = () => ONE_OPERAND(Operation.ROL, Width.WORD),["ROLB"] = () => ONE_OPERAND(Operation.ROL, Width.BYTE),
+        ["ASR"] = () => ONE_OPERAND(Operation.ASR, Width.WORD),["ASRB"] = () => ONE_OPERAND(Operation.ASR, Width.BYTE),
+        ["ASL"] = () => ONE_OPERAND(Operation.ASL, Width.WORD),["ASLB"] = () => ONE_OPERAND(Operation.ASL, Width.BYTE),
+        ["SXT"] = () => ONE_OPERAND(Operation.SXT, Width.WORD), ["SWAB"] = () => ONE_OPERAND(Operation.SWAB, Width.WORD),
+        
+        ["BRANCH"] = BRANCH,
+    };
     
-    private static Signal[] OneOperand()
-    {
-        Descriptor descriptor = new()
-        {
-            Modes = [ooooxo()],
-            Regs = [EncodedRegisters[ooooox()]],
-            
-            Operation = ((opcode >> 6) & 0x3F)  switch
-            {
-                0x3 => Operation.SWAB,
-                0x30 => Operation.ROR,
-                0x31 => Operation.ROL,
-                0x32 => Operation.ASR,
-                0x33 => Operation.ASL,
-                0x37 => Operation.SXT,
-                _ => SingleOperandTable[(opcode >> 6) & 0x7],
-            },
-        };
-
-        descriptor.Mask = descriptor.Operation switch
-        {
-            Operation.INC or Operation.DEC => FlagMasks[FlagMask.VZN],
-            Operation.PASS or Operation.SWAB => FlagMasks[FlagMask.ZN],
-            Operation.SXT => Flag.ZERO,
-            _ => FlagMasks[FlagMask.CVZN],
-        };
-
-        return [];
-    }
-    
-    private static readonly Operation[] TwoOperandTable =
-    [
-        Operation.NONE, Operation.PASS, Operation.SUB, Operation.BIT, Operation.BIC,
-        Operation.BIS, Operation.ADD, Operation.NONE, 
-        Operation.NONE, Operation.PASS, Operation.SUB,
-        Operation.BIT, Operation.BIC, Operation.BIS, Operation.SUB
-    ];
-
-    private static readonly string[] TwoOperandNames =
-    [
-        "", "MOV", "CMP", "BIT", "BIC", "BIS", "ADD",
-        "", "", "MOVB", "CMPB", "BITB", "BICB", "BISB", "SUB",
-    ];
-
-    private static string AddressingModeNames(byte nibble)
+    private static string AddressingModeName(byte nibble)
     {
         string register = EncodedRegisters[nibble & 0x7].ToString();
         return (byte)(nibble >> 3) switch
@@ -94,12 +74,6 @@ public partial class Microcode
             6 => $"X({register})", 7 => $"@X({register})",
         };
     }
-    
-    private static readonly Operation[] SingleOperandTable =
-    [
-        Operation.ZERO, Operation.COM, Operation.INC, Operation.DEC,
-        Operation.NEG, Operation.ADC, Operation.SBC, Operation.PASS,
-    ];
     
     public struct Descriptor()
     {
@@ -119,8 +93,8 @@ public partial class Microcode
         => (byte)((opcode >> 3) & 7);
     private static byte ooooox()
         => (byte)(opcode & 7);
-    private static byte ooooxx()
-        => (byte)(opcode & 0x3F);
     private static byte ooxxoo()
         => (byte)((opcode >> 6) & 0x3F);
+    private static byte ooooxx()
+        => (byte)(opcode & 0x3F);
 }

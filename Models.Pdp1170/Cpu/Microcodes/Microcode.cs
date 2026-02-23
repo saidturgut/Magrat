@@ -10,7 +10,7 @@ public static partial class Microcode
     public static Signal[] FETCH =>
     [
         ..READ_IMM,
-        REG_WRITE(Pointer.MDR, Pointer.IR),
+        REG_MOVE(Pointer.MDR, Pointer.IR),
         STATE_COMMIT(State.DECODE),
     ];
 }

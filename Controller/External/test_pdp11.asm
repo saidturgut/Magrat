@@ -1,1 +1,13 @@
-   MOV #1234, R0
+    .ORG 0
+        CLR R0
+        COM R0
+        INC R0
+        DEC R0
+        NEG R0
+        ADC R0
+        SBC R0
+        TST R0
+        ROR R0
+        ROL R0
+        ASR R0
+        ASL R0

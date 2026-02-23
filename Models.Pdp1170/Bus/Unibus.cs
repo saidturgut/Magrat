@@ -32,6 +32,7 @@ public class Unibus
     }
     public void WriteWord(uint address, ushort value)
     {
+        Console.WriteLine($"MEMORY[{address}]: {value}");
         Ram.Write(address, (byte)(value & 0xFF));
         Ram.Write(address + 1, (byte)(value >> 8));
     }

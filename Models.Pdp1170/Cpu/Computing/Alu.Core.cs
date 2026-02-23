@@ -3,10 +3,12 @@ namespace Models.Pdp1170.Cpu.Computing;
 public partial class Alu
 {
     private static AluOutput ICC(AluInput input)
-        => new() { Result = (ushort)(input.A + (input.ByteMode ? 1 : 2)), SkipMask = true };
+        => new() { Result = (ushort)(input.A + (input.ByteMode ? 1 : 2)) };
     private static AluOutput DCC(AluInput input)
-        => new() { Result = (ushort)(input.A - (input.ByteMode ? 1 : 2)), SkipMask = true };
-
+        => new() { Result = (ushort)(input.A - (input.ByteMode ? 1 : 2)) };
+    private static AluOutput IDX(AluInput input)
+        => new() { Result = (ushort)(input.A + (short)input.B) };
+    
     private static bool Carry(AluInput input, uint sum) 
         => (sum & input.x10000) != 0;
     private static bool OverflowAdd(AluInput input, ushort result)

@@ -10,13 +10,14 @@ public struct Signal()
     public Operation Operation = Operation.PASS;
     public Flag Mask = Flag.NONE;
     public Width Width = Width.WORD;
+    public Condition Condition = Condition.R;
 }
 
 public enum Cycle
 {
     IDLE, STATE_COMMIT,
-    REG_WRITE, MEM_READ, MEM_WRITE,
-    ALU_COMPUTE,
+    REG_MOVE, MEM_READ, MEM_WRITE,
+    ALU_COMPUTE, COND_COMPUTE
 }
 
 public enum State
@@ -27,17 +28,23 @@ public enum State
 public enum Pointer
 {
     NIL, IR, PSW, PC, // CORE REGISTERS
-    MDR, TMP, SRC, DST, // TEMPORARY LATCHES
+    MDR, TMP, EA, SRC, DST, // TEMPORARY LATCHES
     R0, R1, R2, R3, R4, R5, SP, // GENERAL REGISTERS
 }
 
 public enum Operation
 {
     NONE,
-    PASS, ICC, DCC, // CORE
+    PASS, ICC, DCC, IDX, // CORE
     ADD, SUB, BIT, BIC, BIS, // TWO OPERAND
-    ZERO, COM, INC, DEC, NEG, ADC, SBC, 
-    SWAB, ROR, ROL, ASR, ASL, SXT
+    CLR, COM, INC, DEC, 
+    NEG, ADC, SBC, TST,
+    ROR, ROL, ASR, ASL, SXT, SWAB,
+}
+
+public enum Condition
+{
+    R, NE, EQ, GE, LT, GT, LE, PL, MI, HI, LOS, VC, VS, CC, CS 
 }
 
 [Flags]

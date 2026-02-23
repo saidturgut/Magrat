@@ -2,61 +2,61 @@ namespace Models.Pdp1170.Cpu.Microcodes;
 
 public partial class Microcode
 {
-    private static Signal[] DEREFERENCE(Pointer source, Pointer destination) =>
+    private static Signal[] REGISTER(Pointer encoded, Pointer temp, Width width) => 
     [
-        MEM_READ(source),
-        REG_WRITE(Pointer.MDR, destination),
+        REG_MOVE(encoded, temp),
+    ];
+    private static Signal[] REGISTER_DEFERRED(Pointer encoded, Pointer temp, Width width) =>
+    [
+        REG_MOVE(encoded, Pointer.EA),
+        ..DEREFERENCE_EA(temp, width),
     ];
     
-    private static Signal[] REGISTER(Pointer encoded, Pointer temp, bool byteMode) => 
+    private static Signal[] AUTO_INC(Pointer encoded, Pointer temp, Width width) =>
     [
-        REG_WRITE(encoded, temp),
+        REG_MOVE(encoded, Pointer.EA),
+        ..DEREFERENCE_EA(temp, width),
+        ..INCREMENT(encoded, StepSize(encoded, width)),
     ];
-    private static Signal[] REGISTER_DEFERRED(Pointer encoded, Pointer temp, bool byteMode) =>
+    private static Signal[] AUTO_INC_DEFERRED(Pointer encoded, Pointer temp, Width width) =>
     [
         MEM_READ(encoded),
-        REG_WRITE(Pointer.MDR, temp),
-    ];
-    
-    private static Signal[] AUTO_INC(Pointer encoded, Pointer temp, bool byteMode) =>
-    [
-        ..DEREFERENCE(encoded, temp),
-        ..INCREMENT(encoded, StepSize(encoded, byteMode)),
-    ];
-    private static Signal[] AUTO_INC_DEFERRED(Pointer encoded, Pointer temp, bool byteMode) =>
-    [
-        MEM_READ(encoded),
-        ..DEREFERENCE(Pointer.MDR, temp),
+        REG_MOVE(Pointer.MDR, Pointer.EA),
+        ..DEREFERENCE_EA(temp, width),
         ..INCREMENT(encoded, Width.WORD),
     ];
     
-    private static Signal[] AUTO_DEC(Pointer encoded, Pointer temp, bool byteMode) =>
+    private static Signal[] AUTO_DEC(Pointer encoded, Pointer temp, Width width) =>
     [
-        ..DECREMENT(encoded, StepSize(encoded, byteMode)),
-        ..DEREFERENCE(encoded, temp),
+        ..DECREMENT(encoded, StepSize(encoded, width)),
+        REG_MOVE(encoded, Pointer.EA),
+        ..DEREFERENCE_EA(temp, width),
     ];
-    private static Signal[] AUTO_DEC_DEFERRED(Pointer encoded, Pointer temp, bool byteMode) =>
+    private static Signal[] AUTO_DEC_DEFERRED(Pointer encoded, Pointer temp, Width width) =>
     [
         ..DECREMENT(encoded, Width.WORD),
         MEM_READ(encoded),
-        ..DEREFERENCE(Pointer.MDR, temp),
+        REG_MOVE(Pointer.MDR, Pointer.EA),
+        ..DEREFERENCE_EA(temp, width),
     ];
     
-    private static Signal[] INDEX(Pointer encoded, Pointer temp, bool byteMode) =>
+    private static Signal[] INDEX(Pointer encoded, Pointer temp, Width width) =>
     [
         ..READ_IMM,
-        ALU_COMPUTE(Operation.ADD, encoded, Pointer.MDR, Flag.NONE),
-        ..DEREFERENCE(Pointer.TMP, temp),
+        ALU_COMPUTE(Operation.IDX, encoded, Pointer.MDR, Flag.NONE),
+        REG_MOVE(Pointer.TMP, Pointer.EA),
+        ..DEREFERENCE_EA(temp, width),
     ];
-    private static Signal[] INDEX_DEFERRED(Pointer encoded, Pointer temp, bool byteMode) =>
+    private static Signal[] INDEX_DEFERRED(Pointer encoded, Pointer temp, Width width) =>
     [
         ..READ_IMM,
-        ALU_COMPUTE(Operation.ADD, encoded, Pointer.MDR, Flag.NONE),
+        ALU_COMPUTE(Operation.IDX, encoded, Pointer.MDR, Flag.NONE),
         MEM_READ(Pointer.TMP),
-        ..DEREFERENCE(Pointer.MDR, temp),
+        REG_MOVE(Pointer.MDR, Pointer.EA),
+        ..DEREFERENCE_EA(temp, width),
     ];
     
-    private static readonly Func<Pointer, Pointer, bool, Signal[]>[] ADDRESS =
+    private static readonly Func<Pointer, Pointer, Width, Signal[]>[] ADDRESS =
     [
         REGISTER, REGISTER_DEFERRED, 
         AUTO_INC, AUTO_INC_DEFERRED, AUTO_DEC, AUTO_DEC_DEFERRED, 
@@ -71,9 +71,9 @@ public partial class Microcode
     private static Signal[] WRITEBACK(Descriptor input) =>
     [
         ..input.Writeback
-            ? input.Modes[1] != 0
-                ? (Signal[])[REG_WRITE(Pointer.TMP, Pointer.MDR), MEM_WRITE(Pointer.DST, input.Width)]
-                : [REG_WRITE(Pointer.TMP, input.Regs[1], input.Width)]
+            ? input.Modes[0] != 0
+                ? (Signal[])[REG_MOVE(Pointer.TMP, Pointer.MDR), MEM_WRITE(Pointer.EA, input.Width)]
+                : [REG_MOVE(Pointer.TMP, input.Regs[0])]
             : NONE,
     ];
 }

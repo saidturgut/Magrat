@@ -13,26 +13,26 @@ public struct Signal()
     public Condition Condition = Condition.R;
 }
 
-public enum Cycle
+public enum Cycle : byte
 {
     IDLE, STATE_COMMIT,
     REG_MOVE, MEM_READ, MEM_WRITE,
     ALU_COMPUTE, COND_COMPUTE
 }
 
-public enum State
+public enum State : byte
 {
     FETCH, DECODE, HALT,
 }
 
-public enum Pointer
+public enum Pointer : byte
 {
     NIL, IR, PSW, PC, // CORE REGISTERS
     MDR, TMP, EA, SRC, DST, // TEMPORARY LATCHES
     R0, R1, R2, R3, R4, R5, SP, // GENERAL REGISTERS
 }
 
-public enum Operation
+public enum Operation : byte
 {
     NONE,
     PASS, ICC, DCC, IDX, // CORE
@@ -42,13 +42,13 @@ public enum Operation
     ROR, ROL, ASR, ASL, SXT, SWAB,
 }
 
-public enum Condition
+public enum Condition : byte
 {
     R, NE, EQ, GE, LT, GT, LE, PL, MI, HI, LOS, VC, VS, CC, CS 
 }
 
 [Flags]
-public enum Flag
+public enum Flag : ushort
 {
     NONE = 0,
     CARRY = 1 << 0,
@@ -64,7 +64,7 @@ public enum Flag
     CM0 = 1 << 14, CM1 = 1 << 15,
 }
 
-public enum Width
+public enum Width : byte
 {
     BYTE, WORD,
 }

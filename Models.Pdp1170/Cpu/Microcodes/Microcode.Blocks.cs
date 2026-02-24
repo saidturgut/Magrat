@@ -2,6 +2,8 @@ namespace Models.Pdp1170.Cpu.Microcodes;
 
 public partial class Microcode
 {
+    private static ushort high10;
+    
     private static Signal[] TWO_OPERAND(Operation operation, bool writeback, Width width)
     {
         Descriptor info = new()
@@ -13,6 +15,7 @@ public partial class Microcode
             Writeback = writeback, Width = width,
         };
         name = $"{cell} {AddressingModeName(ooxxoo())},{AddressingModeName(ooooxx())}";
+        if (cell is "MOV") Console.WriteLine($"OPCODE: {opcode} -> {name}");
         return
         [
             ..ADDRESS[info.Modes[1]](info.Regs[1], Pointer.SRC, info.Width),
@@ -38,12 +41,23 @@ public partial class Microcode
             Writeback = operation is not Operation.TST, Width = width,
         };
         name = $"{cell} {AddressingModeName(ooooxx())}";
+        //Console.WriteLine($"OPCODE: 0{Convert.ToString(opcode, 8)} -> {name}");
         return
         [
             ..ADDRESS[info.Modes[0]](info.Regs[0], Pointer.DST, info.Width),
             ..EXECUTE(info),
             ..WRITEBACK(info),
         ];
+    }
+
+    private static Signal[] JUMP()
+    {
+        name = $"JMP {AddressingModeName(ooooxx())}";
+        return ooooxo() != 0 ?
+        [
+            ..ADDRESS[ooooxo()](EncodedRegisters[ooooox()], Pointer.DST, Width.WORD),
+            REG_MOVE(Pointer.EA, Pointer.PC),
+        ] : NONE;
     }
 
     private static Signal[] BRANCH()
@@ -56,5 +70,4 @@ public partial class Microcode
             // BRANCH IF CONDITION TRUE
         ];
     }
-    
 }

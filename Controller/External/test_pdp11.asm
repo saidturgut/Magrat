@@ -7,7 +7,7 @@
         ADC R0
         SBC R0
         TST R0
-        ROR R0
+        ROR (R0)+
         ROL R0
         ASR R0
         ASL R0

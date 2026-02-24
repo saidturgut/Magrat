@@ -8,5 +8,5 @@ public class Decoder
     public readonly Signal[] Fetch = Microcode.FETCH;
     
     public Signal[] Decode(ushort opcode)
-        => Opcodes[opcode];
+        => Opcodes[opcode] is not [] ? Opcodes[opcode] : throw new Exception($"ILLEGAL OPCODE -> \"0{Convert.ToString(opcode, 8)}\"");
 }

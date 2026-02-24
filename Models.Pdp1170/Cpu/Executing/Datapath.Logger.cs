@@ -8,13 +8,13 @@ public partial class Datapath
         return [
             $"-> {debugName}",
 
-            $"IR: {Octal(Point(Pointer.IR).Get())}",
-            $"PC: {Octal(Point(Pointer.PC).Get())}",
-            $"SP: {Octal(Point(Pointer.SP).Get())}",
+            $"IR: {Tools.Octal(Point(Pointer.IR).Get())}",
+            $"PC: {Tools.Octal(Point(Pointer.PC).Get())}",
+            $"SP: {Tools.Octal(Point(Pointer.SP).Get())}",
             
-            $"R0: {Octal(Point(Pointer.R0).Get())}   R1: {Octal(Point(Pointer.R1).Get())}",
-            $"R2: {Octal(Point(Pointer.R2).Get())}   R3: {Octal(Point(Pointer.R3).Get())}",
-            $"R4: {Octal(Point(Pointer.R4).Get())}   R5: {Octal(Point(Pointer.R5).Get())}",
+            $"R0: {Tools.Octal(Point(Pointer.R0).Get())}   R1: {Tools.Octal(Point(Pointer.R1).Get())}",
+            $"R2: {Tools.Octal(Point(Pointer.R2).Get())}   R3: {Tools.Octal(Point(Pointer.R3).Get())}",
+            $"R4: {Tools.Octal(Point(Pointer.R4).Get())}   R5: {Tools.Octal(Point(Pointer.R5).Get())}",
             //$"SRC: {Octal(Point(Pointer.SRC).Get())}   DST: {Octal(Point(Pointer.DST).Get())}",
             
             "CVZN",
@@ -22,7 +22,4 @@ public partial class Datapath
             "---------------------"        
         ];
     }
-    
-    private static string Octal(uint input)         
-        => $"{Convert.ToString(input, 10).ToUpper()}";
 }

@@ -12,6 +12,7 @@ public partial class Datapath
     private StatusWord statusWord;
 
     private bool stall;
+    private bool abort;
     
     private string debugName = "";
 
@@ -44,6 +45,7 @@ public partial class Datapath
             case Cycle.MEM_READ: MemoryRead(unibus); break;
             case Cycle.MEM_WRITE: MemoryWrite(unibus); break;
             case Cycle.ALU_COMPUTE: AluCompute(); break;
+            case Cycle.COND_COMPUTE: CondCompute(); break;
         }
     }
     
@@ -56,5 +58,5 @@ public partial class Datapath
     };
 
     public ControlSignal Emit()
-        => new (Point(Pointer.IR).Get(), stall);
+        => new (Point(Pointer.IR).Get(), stall, abort);
 }

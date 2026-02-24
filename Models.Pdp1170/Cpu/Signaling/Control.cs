@@ -26,7 +26,7 @@ public class Control
     {
         if(signal.Stall) return;
         
-        if (timeState != decoded.Length - 1 && !halt)
+        if (timeState != decoded.Length - 1 && !signal.Abort && !halt)
             timeState++;
         else
             Commit(signal);

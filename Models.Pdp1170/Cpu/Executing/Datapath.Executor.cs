@@ -11,7 +11,6 @@ public partial class Datapath
     private readonly Psw Psw = new Psw();
 
     private uint addressLatch;
-    private ushort flagLatch;
     
     private const byte priority = 0;
 
@@ -50,16 +49,14 @@ public partial class Datapath
     private void AluCompute()
     {
         ushort psw = Point(Pointer.PSW).Get();
-        //Flags flags = new Flags(psw);
-        AluOutput output = Alu.Compute(new AluInput(
-                Point(signal.First).Get(),
-                Point(signal.Second).Get(),
-                signal.Width is Width.BYTE),
-            signal.Operation);
-
-        flagLatch = output.Flags;
-        
+        AluOutput output =
+            Alu.Compute(
+                new AluInput(Point(signal.First).Get(), Point(signal.Second).Get(), psw, signal.Width is Width.BYTE),
+                signal.Operation);
         Point(Pointer.TMP).Set(output.Result);
-        Point(Pointer.PSW).Set((byte)((psw & (byte)~signal.Mask) | (flagLatch & (ushort)signal.Mask)));
+        Point(Pointer.PSW).Set((byte)((psw & (byte)~signal.Mask) | (output.Flags & (ushort)signal.Mask)));
     }
+
+    private void CondCompute()
+        => abort = !Psw.CheckCondition(signal.Condition, new Flags(Point(Pointer.TMP).Get()));
 }

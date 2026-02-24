@@ -2,8 +2,6 @@ namespace Models.Pdp1170.Cpu.Microcodes;
 
 public partial class Microcode
 {
-    private static ushort high10;
-    
     private static Signal[] TWO_OPERAND(Operation operation, bool writeback, Width width)
     {
         Descriptor info = new()
@@ -14,10 +12,9 @@ public partial class Microcode
             Mask = FlagMasks[operation is not Operation.PASS ? FlagMask.CVZN : FlagMask.VZN],
             Writeback = writeback, Width = width,
         };
-        name = $"{cell} {AddressingModeName(ooxxoo())},{AddressingModeName(ooooxx())}";
-        if (cell is "MOV") Console.WriteLine($"OPCODE: {opcode} -> {name}");
         return
         [
+            ..SET_NAME($"{cell} {AddressingModeName(ooxxoo())},{AddressingModeName(ooooxx())}"),
             ..ADDRESS[info.Modes[1]](info.Regs[1], Pointer.SRC, info.Width),
             ..ADDRESS[info.Modes[0]](info.Regs[0], Pointer.DST, info.Width),
             ..EXECUTE(info),
@@ -40,34 +37,28 @@ public partial class Microcode
             },
             Writeback = operation is not Operation.TST, Width = width,
         };
-        name = $"{cell} {AddressingModeName(ooooxx())}";
-        //Console.WriteLine($"OPCODE: 0{Convert.ToString(opcode, 8)} -> {name}");
         return
         [
+            ..SET_NAME($"{cell} {AddressingModeName(ooooxx())}"),
             ..ADDRESS[info.Modes[0]](info.Regs[0], Pointer.DST, info.Width),
             ..EXECUTE(info),
             ..WRITEBACK(info),
         ];
     }
 
-    private static Signal[] JUMP()
-    {
-        name = $"JMP {AddressingModeName(ooooxx())}";
-        return ooooxo() != 0 ?
+    private static Signal[] JUMP() => ooooxo() != 0 ?
         [
+            ..SET_NAME($"JMP {AddressingModeName(ooooxx())}"),
             ..ADDRESS[ooooxo()](EncodedRegisters[ooooox()], Pointer.DST, Width.WORD),
             REG_MOVE(Pointer.EA, Pointer.PC),
         ] : NONE;
-    }
 
-    private static Signal[] BRANCH()
-    {
-        Condition condition = (Condition)((opcode >> 8) & 0xF);
-        name = $"B{condition} {(sbyte)(opcode & 0xFF)}";
-        return
-        [
-            COND_COMPUTE(condition, State.FETCH),
-            // BRANCH IF CONDITION TRUE
-        ];
-    }
+    private static Signal[] BRANCH(Condition condition) =>
+    [
+        ..SET_NAME($"B{condition} {(sbyte)(opcode & 0xFF)}"),
+        REG_MOVE(Pointer.PSW, Pointer.TMP),
+        COND_COMPUTE(condition, State.FETCH),
+        ALU_COMPUTE(Operation.BRC, Pointer.PC, Pointer.IR, Flag.NONE),
+        REG_MOVE(Pointer.TMP, Pointer.PC),
+    ];
 }

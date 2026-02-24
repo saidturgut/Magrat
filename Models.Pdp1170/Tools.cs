@@ -1,8 +1,8 @@
-namespace Models.Pdp1170.Bus;
+namespace Models.Pdp1170;
 
-public static class Hex
+public static class Tools
 {
-    public static void Run(byte[] Memory)
+    public static void Dump(byte[] Memory)
     {
         const int bytesPerLine = 16;
 
@@ -29,4 +29,9 @@ public static class Hex
         
         Environment.Exit(08);
     }
+
+    public static string Octal(uint input)         
+        => $"0{Convert.ToString(input, 8).ToUpper()}";
+    public static string Hex(uint input)         
+        => $"0x{Convert.ToString(input, 16).ToUpper()}";
 }

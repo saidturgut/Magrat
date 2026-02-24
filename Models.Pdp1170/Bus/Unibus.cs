@@ -28,11 +28,13 @@ public class Unibus
 
     public void WriteByte(uint address, byte value)
     {
+        Console.WriteLine($"MEMORY[{Tools.Octal(address)}]: {Tools.Octal(value)}");
         Ram.Write(address, value);
     }
     public void WriteWord(uint address, ushort value)
     {
-        Console.WriteLine($"MEMORY[{address}]: {value}");
+        Console.WriteLine($"MEMORY[{Tools.Octal(address)}]: {Tools.Octal((byte)(value & 0xFF))}");
+        Console.WriteLine($"MEMORY[{Tools.Octal(address + 1)}]: {Tools.Octal((byte)(value >> 8))}");
         Ram.Write(address, (byte)(value & 0xFF));
         Ram.Write(address + 1, (byte)(value >> 8));
     }

@@ -34,12 +34,12 @@ public enum Pointer : byte
 
 public enum Operation : byte
 {
-    NONE,
-    PASS, ICC, DCC, IDX, // CORE
-    ADD, SUB, BIT, BIC, BIS, // TWO OPERAND
-    CLR, COM, INC, DEC, 
-    NEG, ADC, SBC, TST,
-    ROR, ROL, ASR, ASL, SXT, SWAB,
+    ZRO, SET, ICC, DCC, IDX, // CORE OPS
+    PASS, ADD, SUB, BIT, BIC, BIS, // TWO OPR
+    CLR, COM, NEG, TST, // ONE OPR 1
+    INC, DEC, ADC, SBC, // ONE OPR 2
+    ROR, ROL, ASR, ASL, SXT, SWAB, // ONE OPR 3
+    BRC, // MISC
 }
 
 public enum Condition : byte
@@ -69,10 +69,11 @@ public enum Width : byte
     BYTE, WORD,
 }
 
-public struct ControlSignal(ushort opcode, bool stall)
+public struct ControlSignal(ushort opcode, bool stall, bool abort)
 {
     public readonly ushort Opcode = opcode;
     public readonly bool Stall = stall;
+    public readonly bool Abort = abort;
 }
 
 

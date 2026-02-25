@@ -31,7 +31,7 @@ public static class Tools
     }
 
     public static string Octal(uint input)         
-        => $"0{Convert.ToString(input, 8).ToUpper()}";
+        => $"0x{Convert.ToString(input, 16).ToUpper()}";
     public static string Hex(uint input)         
         => $"0x{Convert.ToString(input, 16).ToUpper()}";
 }

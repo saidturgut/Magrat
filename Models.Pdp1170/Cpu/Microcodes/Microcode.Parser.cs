@@ -23,9 +23,12 @@ public partial class Microcode
                 table[opcode] = decoded;
             }
         }
-        
+
         foreach (ushort fixedOpcode in FixedOpcodeTable.Keys)
+        {
             table[fixedOpcode] = FixedOpcodeTable[fixedOpcode]();
+            table[fixedOpcode][0].Name = name;
+        }
         
         return table;
     }

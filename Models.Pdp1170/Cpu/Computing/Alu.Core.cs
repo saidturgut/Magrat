@@ -23,8 +23,6 @@ public partial class Alu
     private static byte CarryIn(Flags flags)
         => (byte)(flags.Carry ? 1 : 0);
     
-    private static bool Carry(uint sum) 
-        => (sum & x10000) != 0;
     private static bool OverflowAdd(ushort a, ushort b, ushort result)
         => (~(a ^ b) & (a ^ result) & x8000) != 0;
     private static bool OverflowSub(ushort a, ushort b, ushort result)

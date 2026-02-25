@@ -19,7 +19,7 @@ public partial class Microcode
         ["NEG"] = () => ONE_OPERAND(Operation.NEG, Width.WORD), ["NEGB"] = () => ONE_OPERAND(Operation.NEG, Width.BYTE),
         ["ADC"] = () => ONE_OPERAND(Operation.ADC, Width.WORD), ["ADCB"] = () => ONE_OPERAND(Operation.ADC, Width.BYTE),
         ["SBC"] = () => ONE_OPERAND(Operation.SBC, Width.WORD), ["SBCB"] = () => ONE_OPERAND(Operation.SBC, Width.BYTE),
-        ["TST"] = () => ONE_OPERAND(Operation.TST, Width.WORD), ["TSTB"] = () => ONE_OPERAND(Operation.ZRO, Width.BYTE),
+        ["TST"] = () => ONE_OPERAND(Operation.TST, Width.WORD), ["TSTB"] = () => ONE_OPERAND(Operation.TST, Width.BYTE),
         ["ROR"] = () => ONE_OPERAND(Operation.ROR, Width.WORD), ["RORB"] = () => ONE_OPERAND(Operation.ROR, Width.BYTE),
         ["ROL"] = () => ONE_OPERAND(Operation.ROL, Width.WORD), ["ROLB"] = () => ONE_OPERAND(Operation.ROL, Width.BYTE),
         ["ASR"] = () => ONE_OPERAND(Operation.ASR, Width.WORD), ["ASRB"] = () => ONE_OPERAND(Operation.ASR, Width.BYTE),

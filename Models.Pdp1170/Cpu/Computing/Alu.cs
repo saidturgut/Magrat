@@ -14,19 +14,18 @@ public partial class Alu
         
         AluOutput output = SelectOperation(input, operation);
 
-        ushort result = (ushort)(output.Result & xFFFF);
         if (!output.Custom)
         {
-            if((result & x8000) != 0) output.Flags |= (ushort)Flag.NEGATIVE;
-            if(result == 0) output.Flags |= (ushort)Flag.ZERO;
+            if((output.Result & x8000) != 0) output.Flags |= (ushort)Flag.NEGATIVE;
+            if(output.Result == 0) output.Flags |= (ushort)Flag.ZERO;
         }
 
         if (input.ByteMode)
             output.Result = output.ByteMask switch
             {
                 ByteMask.NONE => output.Result,
-                ByteMask.PRES_HIGH => (ushort)((input.A & 0xFF00) | result),
-                ByteMask.EXT_SIGN => output.Result = (ushort)((sbyte)result)
+                ByteMask.PRES_HIGH => (ushort)((input.A & 0xFF00) | output.Result),
+                ByteMask.EXT_SIGN => (ushort)((sbyte)output.Result)
             };
         return output;
     }
@@ -48,8 +47,8 @@ public partial class Alu
 
 public struct AluInput(ushort a, ushort b, ushort psw, bool byteMode)
 {
-    public readonly ushort A = a;
-    public readonly ushort B = b;
+    public ushort A = a;
+    public ushort B = b;
     public readonly ushort Psw = psw;
     public readonly bool ByteMode = byteMode;
 }

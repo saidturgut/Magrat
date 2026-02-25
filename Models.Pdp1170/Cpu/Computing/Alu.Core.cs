@@ -3,9 +3,9 @@ namespace Models.Pdp1170.Cpu.Computing;
 public partial class Alu
 {
     private static AluOutput ZRO(AluInput input) => new()
-        { Result = 0x0000, Flags = 0x0000 };
+        { Result = 0x0000, Flags = 0x0000, Custom = true };
     private static AluOutput SET(AluInput input) => new() 
-        { Result = 0xFFFF, Flags = 0xFFFF };
+        { Result = 0xFFFF, Flags = 0xFFFF, Custom = true };
     
     private static AluOutput ICC(AluInput input)
         => new() { Result = (ushort)(input.A + (input.ByteMode ? 1 : 2)) };

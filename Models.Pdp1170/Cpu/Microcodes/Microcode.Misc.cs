@@ -8,13 +8,16 @@ public partial class Microcode
         STATE_COMMIT(state)
     ];
 
+    // ------------------------------- PSW OPS ------------------------------- //
+    
     private static Signal[] SET_PRIORITY(byte bit2, byte bit1, byte bit0) =>
     [
         ..SET_NAME($"SPL {bit2 << 2 | bit1 << 1 | bit0}"),
-        ALU_COMPUTE(Operation.ZRO, Flag.PR0 | Flag.PR1 | Flag.PR2),
+        ALU_COMPUTE(Operation.ZRO, Flag.IP0 | Flag.IP1 | Flag.IP2),
         ALU_COMPUTE(Operation.SET,
-            (bit0 != 0 ? Flag.PR0 : Flag.NONE) | (bit1 != 0 ? Flag.PR1 : Flag.NONE) |
-            (bit2 != 0 ? Flag.PR2 : Flag.NONE))
+            (bit0 != 0 ? Flag.IP0 : Flag.NONE) | 
+            (bit1 != 0 ? Flag.IP1 : Flag.NONE) |
+            (bit2 != 0 ? Flag.IP2 : Flag.NONE))
     ];
     
     private static Signal[] PSW_WRITE(Flag flag, bool set, string nam) =>

@@ -31,10 +31,17 @@ public partial class Microcode
         REG_MOVE(Pointer.MDR, destination),
     ];
     
-    private static readonly Pointer[] EncodedRegisters =
+    private static Signal[] PUSH(Pointer source) =>
     [
-        Pointer.R0, Pointer.R1, Pointer.R2, 
-        Pointer.R3, Pointer.R4, Pointer.R5, 
-        Pointer.SP, Pointer.PC,
+        ..DECREMENT(Pointer.SP, Width.WORD),
+        REG_MOVE(source, Pointer.MDR),
+        MEM_WRITE(Pointer.SP),
+    ];
+    
+    private static Signal[] POP(Pointer destination) =>
+    [
+        MEM_READ(Pointer.SP),
+        REG_MOVE(Pointer.MDR, destination),
+        ..INCREMENT(Pointer.SP, Width.WORD),
     ];
 }

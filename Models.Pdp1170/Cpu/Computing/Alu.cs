@@ -14,19 +14,20 @@ public partial class Alu
         
         AluOutput output = SelectOperation(input, operation);
 
-        if (!output.Custom)
-        {
-            if((output.Result & x8000) != 0) output.Flags |= (ushort)Flag.NEGATIVE;
-            if(output.Result == 0) output.Flags |= (ushort)Flag.ZERO;
-        }
+        if (output.Custom) return output;
+        
+        if((output.Result & x8000) != 0) output.Flags |= (ushort)Flag.NEGATIVE;
+        if(output.Result == 0) output.Flags |= (ushort)Flag.ZERO;
 
         if (input.ByteMode)
+        {
             output.Result = output.ByteMask switch
             {
                 ByteMask.NONE => output.Result,
                 ByteMask.PRES_HIGH => (ushort)((input.A & 0xFF00) | output.Result),
                 ByteMask.EXT_SIGN => (ushort)((sbyte)output.Result)
             };
+        }
         return output;
     }
 
@@ -41,7 +42,6 @@ public partial class Alu
         Operation.ROR => ROR(input), Operation.ROL => ROL(input), Operation.ASR => ASR(input), Operation.ASL => ASL(input),
         Operation.SXT => SXT(input), Operation.SWAB => SWAB(input), 
         Operation.BRC => BRC(input),
-        _=> new AluOutput(),
     };
 }
 

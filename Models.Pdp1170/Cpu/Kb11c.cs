@@ -13,6 +13,12 @@ public class Kb11c
         Datapath.Init();
         Control.Init();
     }
+
+    public void Restore()
+    {
+        Datapath.Restore();
+        Control.Restore();
+    }
     
     public void Tick(Unibus unibus)
     {

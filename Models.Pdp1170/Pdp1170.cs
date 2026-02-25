@@ -16,6 +16,9 @@ public class Pdp1170 : IMachine
     
     public void Power(byte sleep)
     {
+        Unibus.Restore();
+        Kb11c.Restore();
+        
         while (!Kb11c.Halt())
         {
             Tick();

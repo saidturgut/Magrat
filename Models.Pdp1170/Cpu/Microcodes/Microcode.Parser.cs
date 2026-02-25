@@ -26,6 +26,7 @@ public partial class Microcode
 
         foreach (ushort fixedOpcode in FixedOpcodeTable.Keys)
         {
+            opcode = fixedOpcode;
             table[fixedOpcode] = FixedOpcodeTable[fixedOpcode]();
             table[fixedOpcode][0].Name = name;
         }

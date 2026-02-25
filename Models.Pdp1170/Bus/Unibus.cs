@@ -5,9 +5,8 @@ public class Unibus
 {
     private readonly Ram Ram = new();
     
-    public void Init()
-    {
-    }
+    public void Init() { }
+    public void Restore() { }
 
     public void Load(uint address, byte data)
         => Ram.Write(address, data);

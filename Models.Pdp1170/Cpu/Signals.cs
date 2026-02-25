@@ -15,14 +15,15 @@ public struct Signal()
 
 public enum Cycle : byte
 {
-    IDLE, STATE_COMMIT,
-    REG_MOVE, MEM_READ, MEM_WRITE,
+    IDLE, STATE_COMMIT, REG_MOVE, 
+    MEM_FETCH, MEM_READ, MEM_WRITE,
     ALU_COMPUTE, COND_COMPUTE
 }
 
 public enum State : byte
 {
-    FETCH, DECODE, HALT,
+    FETCH, DECODE, WAIT, HALT,
+    INHIBIT,
 }
 
 public enum Pointer : byte
@@ -44,7 +45,8 @@ public enum Operation : byte
 
 public enum Condition : byte
 {
-    R, NE, EQ, GE, LT, GT, LE, PL, MI, HI, LOS, VC, VS, CC, CS 
+    R, NE, EQ, GE, LT, GT, LE, EMT,
+    PL, MI, HI, LOS, VC, VS, CC, CS
 }
 
 [Flags]
@@ -56,9 +58,8 @@ public enum Flag : ushort
     ZERO = 1 << 2,
     NEGATIVE = 1 << 3,
     TRACE = 1 << 4,
-    RES5 = 1 << 5, RES6 = 1 << 6,
-    PR0 = 1 << 7, PR1 = 1 << 8, PR2 = 1 << 9,
-    RES10 = 1 << 10,
+    IP0 = 1 << 5, IP1 = 1 << 6, IP2 = 1 << 7,
+    RES8 = 1 << 8, RES9 = 1 << 9, RES10 = 1 << 10,
     RS = 1 << 11,
     PM0 = 1 << 12, PM1 = 1 << 13,
     CM0 = 1 << 14, CM1 = 1 << 15,

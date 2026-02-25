@@ -6,7 +6,8 @@ public static partial class Microcode
     
     public static Signal[] FETCH =>
     [
-        ..READ_IMM,
+        MEM_FETCH(Pointer.PC),
+        ..INCREMENT(Pointer.PC, Width.WORD),
         REG_MOVE(Pointer.MDR, Pointer.IR),
         STATE_COMMIT(State.DECODE),
     ];
@@ -23,6 +24,9 @@ public static partial class Microcode
     private static Signal REG_MOVE(Pointer source, Pointer destination) => new()
         { Cycle = Cycle.REG_MOVE, First = source, Second = destination };
 
+    private static Signal MEM_FETCH(Pointer address) => new()
+        { Cycle = Cycle.MEM_FETCH, First = address, Width = Width.WORD };
+    
     private static Signal MEM_READ(Pointer address) => new()
         { Cycle = Cycle.MEM_READ, First = address, Width = Width.WORD };
     private static Signal MEM_READ(Pointer address, Width width) => new()

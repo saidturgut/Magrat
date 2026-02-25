@@ -1,3 +1,5 @@
+using Models.Pdp1170.Cpu.Translating;
+
 namespace Models.Pdp1170.Cpu.Executing;
 using Computing;
 using Bus;
@@ -26,6 +28,15 @@ public partial class Datapath
             StackRegisters[i] =  new Register();
     }
     
+    public void Restore()
+    {
+        signal = new Signal();
+        statusWord = new StatusWord(0);
+        stall = false;
+        abort = false;
+        debugName = "";
+    }
+    
     public void Receive(Signal input)
         => signal = input;
 
@@ -42,7 +53,8 @@ public partial class Datapath
         switch (signal.Cycle)
         {
             case Cycle.REG_MOVE: RegisterMove(); break;
-            case Cycle.MEM_READ: MemoryRead(unibus); break;
+            case Cycle.MEM_FETCH: MemoryRead(unibus, Space.Instruction); break;
+            case Cycle.MEM_READ: MemoryRead(unibus, Space.Data); break;
             case Cycle.MEM_WRITE: MemoryWrite(unibus); break;
             case Cycle.ALU_COMPUTE: AluCompute(); break;
             case Cycle.COND_COMPUTE: CondCompute(); break;

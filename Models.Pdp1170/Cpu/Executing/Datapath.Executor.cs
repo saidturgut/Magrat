@@ -17,9 +17,9 @@ public partial class Datapath
     private void RegisterMove()
         => Point(signal.Second).Set(Point(signal.First).Get());
 
-    private void MemoryRead(Unibus unibus)
+    private void MemoryRead(Unibus unibus, Space space)
     {
-        if(!MemoryProtocol(unibus)) return;
+        if(!MemoryProtocol(unibus, space)) return;
         switch (signal.Width)
         {
             case Width.WORD: Point(Pointer.MDR).Set(unibus.ReadWord(addressLatch)); break;
@@ -29,7 +29,7 @@ public partial class Datapath
 
     private void MemoryWrite(Unibus unibus)
     {
-        if(!MemoryProtocol(unibus)) return;
+        if(!MemoryProtocol(unibus, Space.Data)) return;
         switch (signal.Width)
         {
             case Width.WORD: unibus.WriteWord(addressLatch, Point(Pointer.MDR).Get()); break;
@@ -37,9 +37,9 @@ public partial class Datapath
         }
     }
 
-    private bool MemoryProtocol(Unibus unibus)
+    private bool MemoryProtocol(Unibus unibus, Space space)
     {
-        if(!stall) addressLatch = Mmu.Translate(Point(signal.First).Get());
+        if(!stall) addressLatch = Mmu.Translate(Point(signal.First).Get(), space);
 
         bool granted = unibus.Request(priority);
         stall = !granted;
@@ -54,7 +54,7 @@ public partial class Datapath
                 new AluInput(Point(signal.First).Get(), Point(signal.Second).Get(), psw, signal.Width is Width.BYTE),
                 signal.Operation);
         Point(Pointer.TMP).Set(output.Result);
-        Point(Pointer.PSW).Set((byte)((psw & (byte)~signal.Mask) | (output.Flags & (ushort)signal.Mask)));
+        Point(Pointer.PSW).Set((ushort)((psw & (ushort)~signal.Mask) | (output.Flags & (ushort)signal.Mask)));
     }
 
     private void CondCompute()

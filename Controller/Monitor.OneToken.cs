@@ -15,6 +15,5 @@ public partial class Monitor
     private void Run()
     {
         Machine!.Power(sleep);
-        Reset();
     }
 }

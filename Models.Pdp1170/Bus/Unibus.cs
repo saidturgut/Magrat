@@ -1,42 +1,44 @@
 namespace Models.Pdp1170.Bus;
-using Cpu;
 
-public class Unibus
+public partial class Unibus
 {
     private readonly Ram Ram = new();
     
-    public void Init() { }
-    public void Restore() { }
+    private readonly bool[] Requests = new bool[6];
 
-    public void Load(uint address, byte data)
-        => Ram.Write(address, data);
-
-    public bool Request(byte priority)
-    {
-        return true;
-    }
+    private byte currentMaster = 0xFF;
     
-    public byte ReadByte(uint address)
+    public void Init() { }
+    
+    public void Restore() { }
+    
+    public bool Request(byte level)
     {
-        return Ram.Read(address);
-    }
-    public ushort ReadWord(uint address)
-    {
-        return (ushort)(Ram.Read(address) | (Ram.Read(address + 1) << 8));
+        if (currentMaster == level)
+            return true;
+
+        Requests[level] = true;
+        
+        return false;
     }
 
-    public void WriteByte(uint address, byte value)
+    public void Arbitrate()
     {
-        Console.WriteLine($"MEMORY[{Tools.Octal(address)}]: {Tools.Octal(value)}");
-        Ram.Write(address, value);
-    }
-    public void WriteWord(uint address, ushort value)
-    {
-        Console.WriteLine($"MEMORY[{Tools.Octal(address)}]: {Tools.Octal((byte)(value & 0xFF))}");
-        Console.WriteLine($"MEMORY[{Tools.Octal(address + 1)}]: {Tools.Octal((byte)(value >> 8))}");
-        Ram.Write(address, (byte)(value & 0xFF));
-        Ram.Write(address + 1, (byte)(value >> 8));
+        if(currentMaster != 0) return;
+        
+        for (byte level = 5; level > 0; level--)
+        {
+            if (Requests[level])
+            {
+                currentMaster = level;
+                break;
+            }
+        }
     }
 
-    public void Dump() => Ram.Dump();
+    public void Release()
+    {
+        Requests[currentMaster] = false;
+        currentMaster = 0;
+    }
 }

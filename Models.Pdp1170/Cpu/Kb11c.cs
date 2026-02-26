@@ -8,9 +8,9 @@ public class Kb11c
     private readonly Datapath Datapath = new();
     private readonly Control Control = new();
     
-    public void Init()
+    public void Init(Unibus unibus)
     {
-        Datapath.Init();
+        Datapath.Init(unibus);
         Control.Init();
     }
 
@@ -20,11 +20,11 @@ public class Kb11c
         Control.Restore();
     }
     
-    public void Tick(Unibus unibus)
+    public void Tick()
     {
         Datapath.Receive(Control.Emit());
         
-        Datapath.Execute(unibus);
+        Datapath.Execute();
 
         Control.Advance(Datapath.Emit());
 

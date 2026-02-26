@@ -11,7 +11,7 @@ public class Pdp1170 : IMachine
     public void Init()
     {
         Unibus.Init();
-        Kb11c.Init();
+        Kb11c.Init(Unibus);
     }
     
     public void Power(byte sleep)
@@ -29,7 +29,9 @@ public class Pdp1170 : IMachine
     
     public void Tick()
     {
-        Kb11c.Tick(Unibus);
+        Kb11c.Tick();
+        
+        Unibus.Arbitrate();
     }
 
     public void Load(uint address, byte data) { Unibus.Load(address, data); }

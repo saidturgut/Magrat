@@ -1,6 +1,5 @@
-using Models.Pdp1170.Cpu.Translating;
-
 namespace Models.Pdp1170.Cpu.Executing;
+using Addressing;
 using Computing;
 using Bus;
 
@@ -18,7 +17,7 @@ public partial class Datapath
     
     private string debugName = "";
 
-    public void Init()
+    public void Init(Unibus unibus)
     {
         for (byte i = 0; i < CoreRegisters.Length; i++)
             CoreRegisters[i] =  new Register();
@@ -26,6 +25,7 @@ public partial class Datapath
             GeneralRegisters[i] =  new Register();
         for (byte i = 0; i < StackRegisters.Length; i++)
             StackRegisters[i] =  new Register();
+        Biu.Init(unibus);
     }
     
     public void Restore()
@@ -47,15 +47,15 @@ public partial class Datapath
         Point(Pointer.NIL).Set(0);
     }
     
-    public void Execute(Unibus unibus)
+    public void Execute()
     {
         Protocol();
         switch (signal.Cycle)
         {
             case Cycle.REG_MOVE: RegisterMove(); break;
-            case Cycle.MEM_FETCH: MemoryRead(unibus, Space.Instruction); break;
-            case Cycle.MEM_READ: MemoryRead(unibus, Space.Data); break;
-            case Cycle.MEM_WRITE: MemoryWrite(unibus); break;
+            case Cycle.MEM_FETCH: MemoryRead(Space.Instruction); break;
+            case Cycle.MEM_READ: MemoryRead(Space.Data); break;
+            case Cycle.MEM_WRITE: MemoryWrite(Space.Data); break;
             case Cycle.ALU_COMPUTE: AluCompute(); break;
             case Cycle.COND_COMPUTE: CondCompute(); break;
         }

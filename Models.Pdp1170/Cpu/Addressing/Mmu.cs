@@ -1,4 +1,4 @@
-namespace Models.Pdp1170.Cpu.Translating;
+namespace Models.Pdp1170.Cpu.Addressing;
 
 public class Mmu
 {

@@ -6,7 +6,7 @@ public partial class Unibus
     
     private readonly bool[] Requests = new bool[6];
 
-    private byte currentMaster = 0xFF;
+    private byte currentMaster;
     
     public void Init() { }
     
@@ -16,7 +16,7 @@ public partial class Unibus
     {
         if (currentMaster == level)
             return true;
-
+        
         Requests[level] = true;
         
         return false;

@@ -8,30 +8,34 @@ public partial class Datapath
     
     private uint addressLatch;
     
-    private bool MemoryReady(Space space, bool read)
+    private bool MemoryReady(Space space)
     {
-        if (!stall) addressLatch = Mmu.Translate(Point(signal.First).Get(), space);
+        if (!stall)
+        {
+            addressLatch = Mmu.Translate(Point(signal.First).Get(), space);
+            Biu.Restore(addressLatch);
+        }
         
-        bool granted = Biu.Ready(addressLatch);
+        bool granted = Biu.Ready();
         stall = !granted;
         return granted;
     }
     
     private void MemoryFetch()
     {
-        if(!MemoryReady(Space.Instruction, true)) return;
+        if(!MemoryReady(Space.Instruction)) return;
         Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width));
     }
     
     private void MemoryRead()
     {
-        if(!MemoryReady(Space.Data, true)) return;
+        if(!MemoryReady(Space.Data)) return;
         Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width));
     }
     
     private void MemoryWrite()
     {
-        if(!MemoryReady(Space.Data, false)) return;
+        if(!MemoryReady(Space.Data)) return;
         Biu.Write(addressLatch, Point(Pointer.MDR).Get(), signal.Width);
     }
 }

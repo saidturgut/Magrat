@@ -10,15 +10,13 @@ public partial class Cache
     private ushort index;
     private byte offset;
     private ushort tag;
+    private uint newBase;
     
     private ushort entry;
     private bool valid;
     private bool dirty;
     private ushort oldTag;
-    private uint oldBase;
-
-    private uint blockBase;
-
+    
     private bool highWord;
     private bool highByte;
     
@@ -31,33 +29,41 @@ public partial class Cache
         index = (ushort)((address >> 2) & 0x1FF);
         offset = (byte)(address & 0b11);
         tag = (ushort)(address >> 11);
-        
+        newBase = address & 0xFFFFFFFCu;
+
         entry = Tags[index];
         valid = (entry & validBit) != 0;
         dirty = (entry & dirtyBit) != 0;
         oldTag = (ushort)(entry >> tagShift);
-        oldBase = (uint)((oldTag << 11) | (index << 2));
         
-        blockBase = address & 0xFFFFFFFCu;
-
         highWord = (offset & 0b10) != 0;
-        highByte = (offset & 0b01) == 0;
+        highByte = (offset & 0b01) != 0;
     }
-    
+
     public bool Hit()
-        => valid && oldTag == tag;
+    {
+        bool output = valid && oldTag == tag;
+        if(output) Console.WriteLine($"CACHE[{Tools.Octal(index)}]: HIT");
+        return output;
+    }
     
     public void Miss(Unibus unibus)
     {
+        Console.WriteLine($"CACHE[{Tools.Octal(index)}]: MISS");
+        
+        uint oldBase = (uint)((oldTag << 11) | (index << 2));
+
         if (valid && dirty)
         {
             unibus.WriteWord(oldBase, DataLow[index]);
             unibus.WriteWord(oldBase + 2, DataHigh[index]);
         }
         
-        DataLow[index]  = unibus.ReadWord(blockBase);
-        DataHigh[index] = unibus.ReadWord(blockBase + 2);
+        DataLow[index]  = unibus.ReadWord(newBase);
+        DataHigh[index] = unibus.ReadWord(newBase + 2);
         
         Tags[index] = (ushort)((tag << tagShift) | validBit);
+        
+        unibus.Release();
     }
 }

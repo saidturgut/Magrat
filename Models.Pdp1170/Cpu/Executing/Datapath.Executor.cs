@@ -23,5 +23,5 @@ public partial class Datapath
     }
 
     private void CondCompute()
-        => abort = !Psw.CheckCondition(signal.Condition, new Flags(Point(Pointer.TMP).Get()));
+        => skip = !Psw.CheckCondition(signal.Condition, new Flags(Point(Pointer.TMP).Get()));
 }

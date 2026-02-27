@@ -13,7 +13,7 @@ public partial class Datapath
         if (!stall)
         {
             addressLatch = Mmu.Translate(Point(signal.First).Get(), space);
-            Biu.Restore(addressLatch);
+            Biu.Prepare(addressLatch);
         }
         
         bool granted = Biu.Ready();

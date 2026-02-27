@@ -6,9 +6,7 @@ public class Control
     private readonly Trapper Trapper = new();
 
     private Signal[] decoded = [];
-    
     private byte timeState;
-
     public bool commit;
 
     private bool wait;
@@ -36,8 +34,10 @@ public class Control
     public void Advance(ControlSignal signal)
     {
         if(signal.Stall) return;
+
+        bool permit = !signal.Skip && !Trapper.abort && !wait && !halt;
         
-        if (timeState != decoded.Length - 1 && !signal.Abort && !wait && !halt)
+        if (timeState != decoded.Length - 1 && permit)
             timeState++;
         else
             Commit(signal);
@@ -56,6 +56,17 @@ public class Control
         timeState = 0;
     }
 
+    public TrapInfo Resolve()
+    {
+        TrapInfo info = Trapper.Arbitrate();
+        if (info.Trap is not Trap.NONE)
+        {
+            decoded = Decoder.Trap;
+            return info;
+        }
+        return new TrapInfo();
+    }
+    
     private void Fetch()
     {
         decoded = Decoder.Fetch; 

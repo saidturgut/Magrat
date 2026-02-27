@@ -1,19 +1,20 @@
 namespace Models.Pdp1170.Cpu.Executing;
-using Addressing;
+using Signaling;
 using Computing;
 using Bus;
 
 public partial class Datapath
 {
-    private readonly Register[] CoreRegisters =  new Register[9];
+    private readonly Register[] CoreRegisters =  new Register[4];
+    private readonly Register[] TemporaryLatches =  new Register[6];
     private readonly Register[] GeneralRegisters =  new Register[12];
-    private readonly Register[] StackRegisters =  new Register[4];
+    private readonly Register[] StackPointers =  new Register[4];
     
     private Signal signal;
     private StatusWord statusWord;
 
     private bool stall;
-    private bool abort;
+    private bool skip;
     
     private string debugName = "";
 
@@ -21,10 +22,12 @@ public partial class Datapath
     {
         for (byte i = 0; i < CoreRegisters.Length; i++)
             CoreRegisters[i] =  new Register();
+        for (byte i = 0; i < TemporaryLatches.Length; i++)
+            TemporaryLatches[i] =  new Register();
         for (byte i = 0; i < GeneralRegisters.Length; i++)
             GeneralRegisters[i] =  new Register();
-        for (byte i = 0; i < StackRegisters.Length; i++)
-            StackRegisters[i] =  new Register();
+        for (byte i = 0; i < StackPointers.Length; i++)
+            StackPointers[i] =  new Register();
         Biu.Init(unibus);
     }
     
@@ -33,7 +36,7 @@ public partial class Datapath
         signal = new Signal();
         statusWord = new StatusWord(0);
         stall = false;
-        abort = false;
+        skip = false;
         debugName = "";
     }
     
@@ -65,10 +68,25 @@ public partial class Datapath
     {
         Pointer.R0 or Pointer.R1 or Pointer.R2 or Pointer.R3 or Pointer.R4 or Pointer.R5 
             => GeneralRegisters[(byte)pointer - CoreRegisters.Length + (statusWord.RegisterSet * 6)],
-        Pointer.SP => StackRegisters[(byte)statusWord.CurrentMode],
-        _ => CoreRegisters[(byte)pointer]
+        Pointer.SP => StackPointers[(byte)statusWord.CurrentMode],
+        Pointer.NIL or Pointer.IR or Pointer.PSW or Pointer.PC => CoreRegisters[(byte)pointer],
+        _ => TemporaryLatches[(byte)pointer]
     };
 
     public ControlSignal Emit()
-        => new (Point(Pointer.IR).Get(), stall, abort);
+        => new (Point(Pointer.IR).Get(), stall, skip);
+
+    public void Commit(TrapInfo info)
+    {
+        foreach (Register reg in CoreRegisters)
+            reg.Commit(info.Abort);
+        foreach (Register reg in TemporaryLatches)
+            reg.Commit(true);
+        foreach (Register reg in GeneralRegisters)
+            reg.Commit(info.Abort);
+        foreach (Register reg in StackPointers)
+            reg.Commit(info.Abort);
+        
+        Point(Pointer.VEC).Set(info.Vector);
+    }
 }

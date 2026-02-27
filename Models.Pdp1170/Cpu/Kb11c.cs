@@ -23,9 +23,7 @@ public class Kb11c
     public void Tick()
     {
         Datapath.Receive(Control.Emit());
-        
         Datapath.Execute();
-
         Control.Advance(Datapath.Emit());
 
         if (Control.commit) Commit();
@@ -33,10 +31,9 @@ public class Kb11c
 
     private void Commit()
     {
+        Datapath.Commit(Control.Resolve());
         foreach (var log in Datapath.Debug())
-        {
             Console.WriteLine(log);
-        }
         Control.Clear();
     }
 

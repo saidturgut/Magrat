@@ -8,7 +8,7 @@ public class Register
     public void Init(ushort input)
     {
         Set(input);
-        Commit();
+        Commit(false);
     }
     
     public void Set(ushort input)
@@ -17,13 +17,9 @@ public class Register
     public ushort Get()
         => value;
 
-    public void Commit()
+    public void Commit(bool abort)
     {
-        commit = value;
-    }
-
-    public void Restore()
-    {
-        value = commit;
+        if(!abort) commit = value;
+        else value = commit;
     }
 }

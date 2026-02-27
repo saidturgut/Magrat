@@ -23,13 +23,13 @@ public enum Cycle : byte
 public enum State : byte
 {
     FETCH, DECODE, WAIT, HALT,
-    INHIBIT,
+    INHIBIT, 
 }
 
 public enum Pointer : byte
 {
     NIL, IR, PSW, PC, // CORE REGISTERS
-    MDR, TMP, EA, SRC, DST, // TEMPORARY LATCHES
+    MDR, TMP, EA, VEC, SRC, DST, // TEMPORARY LATCHES
     R0, R1, R2, R3, R4, R5, SP, // GENERAL REGISTERS
 }
 
@@ -40,7 +40,7 @@ public enum Operation : byte
     CLR, COM, NEG, TST, // ONE OPR 1
     INC, DEC, ADC, SBC, // ONE OPR 2
     ROR, ROL, ASR, ASL, SXT, SWAB, // ONE OPR 3
-    BRC, // MISC
+    BRC // MISC
 }
 
 public enum Condition : byte
@@ -70,11 +70,11 @@ public enum Width : byte
     BYTE, WORD,
 }
 
-public struct ControlSignal(ushort opcode, bool stall, bool abort)
+public struct ControlSignal(ushort opcode, bool stall, bool skip)
 {
     public readonly ushort Opcode = opcode;
     public readonly bool Stall = stall;
-    public readonly bool Abort = abort;
+    public readonly bool Skip = skip;
 }
 
 

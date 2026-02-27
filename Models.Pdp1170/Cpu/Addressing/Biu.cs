@@ -16,7 +16,7 @@ public class Biu
         Unibus = unibus;
     }
 
-    public void Restore(uint address)
+    public void Prepare(uint address)
     {
         cacheable = Unibus.Cacheable(address);
         if(cacheable) Cache.Extract(address);

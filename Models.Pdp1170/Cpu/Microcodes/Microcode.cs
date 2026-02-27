@@ -3,6 +3,8 @@ namespace Models.Pdp1170.Cpu.Microcodes;
 public static partial class Microcode
 {
     private static readonly Signal[] NONE = Array.Empty<Signal>();
+
+    public static Signal[] NOP => [new ()];
     
     public static Signal[] FETCH =>
     [
@@ -10,6 +12,17 @@ public static partial class Microcode
         ..INCREMENT(Pointer.PC, Width.WORD),
         REG_MOVE(Pointer.MDR, Pointer.IR),
         STATE_COMMIT(State.DECODE),
+    ];
+    
+    public static Signal[] TRAP =>
+    [
+        ..PUSH(Pointer.PSW),
+        ..PUSH(Pointer.PC),
+        MEM_READ(Pointer.VEC),
+        REG_MOVE(Pointer.MDR, Pointer.PC),
+        ..INCREMENT(Pointer.VEC, Width.WORD),
+        MEM_READ(Pointer.VEC),
+        REG_MOVE(Pointer.MDR, Pointer.PSW),
     ];
     
     private static Signal[] SET_NAME(string nam)

@@ -7,34 +7,31 @@ public partial class Datapath
     private readonly Biu Biu = new();
     
     private uint addressLatch;
-    private const byte priority = 0;
     
-    private bool RequestMemory(Space space)
+    private bool MemoryReady(Space space, bool read)
     {
         if (!stall) addressLatch = Mmu.Translate(Point(signal.First).Get(), space);
         
-        bool granted = Biu.Request(addressLatch, priority);
+        bool granted = Biu.Ready(addressLatch);
         stall = !granted;
         return granted;
     }
     
-    private void MemoryRead(Space space)
+    private void MemoryFetch()
     {
-        if(!RequestMemory(space)) return;
-        switch (signal.Width)
-        {
-            case Width.WORD: Point(Pointer.MDR).Set(Biu.ReadWord(addressLatch)); break;
-            case Width.BYTE: Point(Pointer.MDR).Set(Biu.ReadByte(addressLatch)); break;
-        }
+        if(!MemoryReady(Space.Instruction, true)) return;
+        Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width));
     }
     
-    private void MemoryWrite(Space space)
+    private void MemoryRead()
     {
-        if(!RequestMemory(space)) return;
-        switch (signal.Width)
-        {
-            case Width.WORD: Biu.WriteWord(addressLatch, Point(Pointer.MDR).Get()); break;
-            case Width.BYTE: Biu.WriteByte(addressLatch, (byte)Point(Pointer.MDR).Get()); break;
-        }
+        if(!MemoryReady(Space.Data, true)) return;
+        Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width));
+    }
+    
+    private void MemoryWrite()
+    {
+        if(!MemoryReady(Space.Data, false)) return;
+        Biu.Write(addressLatch, Point(Pointer.MDR).Get(), signal.Width);
     }
 }

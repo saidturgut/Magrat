@@ -53,9 +53,9 @@ public partial class Datapath
         switch (signal.Cycle)
         {
             case Cycle.REG_MOVE: RegisterMove(); break;
-            case Cycle.MEM_FETCH: MemoryRead(Space.Instruction); break;
-            case Cycle.MEM_READ: MemoryRead(Space.Data); break;
-            case Cycle.MEM_WRITE: MemoryWrite(Space.Data); break;
+            case Cycle.MEM_FETCH: MemoryFetch(); break;
+            case Cycle.MEM_READ: MemoryRead(); break;
+            case Cycle.MEM_WRITE: MemoryWrite(); break;
             case Cycle.ALU_COMPUTE: AluCompute(); break;
             case Cycle.COND_COMPUTE: CondCompute(); break;
         }

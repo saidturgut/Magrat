@@ -1,4 +1,4 @@
-namespace Models.Pdp1170;
+namespace Models.Pdp1170.Cpu.Executing;
 
 public class Register
 {
@@ -22,7 +22,7 @@ public class Register
         commit = value;
     }
 
-    public void Update()
+    public void Restore()
     {
         value = commit;
     }

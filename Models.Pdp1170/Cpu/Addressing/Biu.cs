@@ -7,33 +7,40 @@ public class Biu
     
     private readonly Cache Cache = new ();
 
+    private const byte priority = 4;
+    
     public void Init(Unibus unibus)
     {
         Unibus = unibus;
     }
     
-    public bool Request(uint address, byte level)
+    public bool Ready(uint address)
     {
-        if (Unibus.Cacheable(address) && Cache.Check(address))
-            return true;
+        if (!Unibus.Cacheable(address)) 
+            return Unibus.Request(priority);
         
-        if(Unibus.Request(level))
+        Cache.Extract(address);
+        
+        if (Cache.Hit())
             return true;
 
-        return false;
-    }
-    
-    public byte ReadByte(uint address)
-    {
-    }
-    public ushort ReadWord(uint address)
-    {
+        if (!Unibus.Request(priority)) 
+            return false;
+
+        Cache.Miss(Unibus);
+        
+        Unibus.Release();
+        
+        return true;
     }
 
-    public void WriteByte(uint address, byte value)
+    public ushort Read(uint address, Width width)
     {
+        return Cache.Read(width);
     }
-    public void WriteWord(uint address, ushort value)
+
+    public void Write(uint address, ushort value, Width width)
     {
+        Cache.Write(value, width);
     }
 }

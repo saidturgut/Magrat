@@ -5,13 +5,14 @@ public partial class Trapper
     private readonly Trap[] TrapRequests = new Trap[7];
 
     public bool abort;
+    public bool suppress;
     
     public void Execute(Signal signal)
     {
         switch (signal.State)
         {
             case State.TRAP: RequestPostTrap(signal.Trap); break;
-            case State.INHIBIT: break;
+            case State.SUPPRESS: suppress = true; break;
         }
     }
 
@@ -25,6 +26,12 @@ public partial class Trapper
     {
         TrapRequests[TrapsTable[(byte)trap].Priority] = trap;
         Console.WriteLine($"POST TRAP REQUESTED: {trap}");
+    }
+    public void RequestTraceTrap()
+    {
+        if (suppress) return;
+        TrapRequests[TrapsTable[(byte)Trap.TRACE].Priority] = Trap.TRACE;
+        Console.WriteLine($"POST TRAP REQUESTED: TRACE");
     }
     public void RequestInterrupt(ushort vector)
     {

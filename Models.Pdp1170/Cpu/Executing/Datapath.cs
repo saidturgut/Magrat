@@ -8,7 +8,7 @@ public partial class Datapath
     private Signal signal;
     private StatusWord statusWord;
 
-    private Trapper Trapper;
+    private Trapper Trapper = null!;
 
     private bool stall;
     private bool skip;
@@ -27,6 +27,9 @@ public partial class Datapath
             StackPointers[i] =  new Register();
         Biu.Init(unibus);
         Trapper = trapper;
+        
+        StackPointers[0].Init(0xCCCC);
+        PointCore(Pointer.PC).Init(0x1000);
     }
     
     public void Restore()
@@ -43,9 +46,9 @@ public partial class Datapath
 
     private void Protocol()
     {
-        statusWord = new StatusWord(CoreRegisters[(byte)Pointer.PSW].Get());
+        statusWord = new StatusWord(PointCore(Pointer.PSW).Get());
         if (signal.Name != "") debugName = signal.Name;
-        Point(Pointer.NIL).Set(0);
+        PointCore(Pointer.NIL).Set(0);
     }
     
     public void Execute()
@@ -63,19 +66,19 @@ public partial class Datapath
     }
     
     public ControlSignal Emit()
-        => new (Point(Pointer.IR).Get(), stall, skip);
+        => new (PointCore(Pointer.IR).Get(), stall, skip);
+
+    public void Resolve()
+    {
+        if(statusWord.Trace) Trapper.RequestTraceTrap();
+    }
 
     public void Commit(TrapInfo info)
     {
-        foreach (Register reg in CoreRegisters)
-            reg.Commit(info.Abort);
-        foreach (Register reg in TemporaryLatches)
-            reg.Commit(true);
-        foreach (Register reg in GeneralRegisters)
-            reg.Commit(info.Abort);
-        foreach (Register reg in StackPointers)
-            reg.Commit(info.Abort);
-        
-        Point(Pointer.VEC).Set(info.Vector);
+        foreach (Register reg in CoreRegisters) reg.Commit(info.Abort);
+        foreach (Register reg in TemporaryLatches) reg.Commit(true);
+        foreach (Register reg in GeneralRegisters) reg.Commit(info.Abort);
+        foreach (Register reg in StackPointers) reg.Commit(info.Abort);
+        PointLatch(Pointer.VEC).Set(info.Vector);
     }
 }

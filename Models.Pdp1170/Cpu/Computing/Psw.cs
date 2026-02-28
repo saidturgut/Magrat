@@ -29,11 +29,11 @@ public struct Flags(ushort psw)
     public readonly bool Overflow = (psw & (ushort)Flag.OVERFLOW) != 0;
     public readonly bool Zero = (psw & (ushort)Flag.ZERO) != 0;
     public readonly bool Negative = (psw & (ushort)Flag.NEGATIVE) != 0;
-    public readonly bool Trace = (psw & (ushort)Flag.TRACE) != 0;
 }
 
 public struct StatusWord(ushort psw)
 {
+    public readonly bool Trace = (psw & (ushort)Flag.TRACE) != 0;
     public readonly byte Priority = (byte)((psw >> 5) & 0b111);
     public readonly byte RegisterSet = (byte)((psw & (ushort)Flag.RS) != 0 ? 1 : 0);
     public readonly Mode PreviousMode = CheckMode((byte)((psw >> 12) & 0b11));

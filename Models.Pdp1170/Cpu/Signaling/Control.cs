@@ -45,6 +45,7 @@ public class Control
 
     private void Commit(ControlSignal signal)
     {
+        Trapper.suppress = false;
         switch (decoded[timeState].State)
         {
             case State.FETCH: Fetch(); break;
@@ -59,12 +60,9 @@ public class Control
     public TrapInfo Resolve()
     {
         TrapInfo info = Trapper.Arbitrate();
-        if (info.Trap is not Trap.NONE)
-        {
-            decoded = Decoder.Trap;
-            return info;
-        }
-        return new TrapInfo();
+        if (info.Trap is Trap.NONE) return new TrapInfo();
+        decoded = Decoder.Trap;
+        return info;
     }
     
     private void Fetch()

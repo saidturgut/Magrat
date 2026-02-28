@@ -3,10 +3,10 @@ namespace Models.Pdp1170.Bus;
 public partial class Unibus
 {
     public static bool Validate(uint address)
-        => address is > 0 and <= 0x10000;
+        => address <= 0x10000;
     
     public static bool Cacheable(uint address) 
-        => true;
+        => address is < 0x7FE000 or > 0x7FFFFF;
 
     public void Load(uint address, byte data)
         => Ram.Write(address, data);

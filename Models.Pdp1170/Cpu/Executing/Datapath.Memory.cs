@@ -53,8 +53,8 @@ public partial class Datapath
     {
         switch (ResolveAddress(Space.Instruction))
         {
-            case MemoryOperation.UNIBUS: Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width)); break;
-            case MemoryOperation.REGISTER: Point(Pointer.MDR).Set(ReadRegister()); break;
+            case MemoryOperation.UNIBUS: PointLatch(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width)); break;
+            case MemoryOperation.REGISTER: PointLatch(Pointer.MDR).Set(ReadRegister()); break;
         }
     }
     
@@ -62,8 +62,8 @@ public partial class Datapath
     {
         switch (ResolveAddress(Space.Data))
         {
-            case MemoryOperation.UNIBUS: Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width)); break;
-            case MemoryOperation.REGISTER: Point(Pointer.MDR).Set(ReadRegister()); break;
+            case MemoryOperation.UNIBUS: PointLatch(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width)); break;
+            case MemoryOperation.REGISTER: PointLatch(Pointer.MDR).Set(ReadRegister()); break;
         }
     }
     
@@ -71,8 +71,8 @@ public partial class Datapath
     {
         switch (ResolveAddress(Space.Data))
         {
-            case MemoryOperation.UNIBUS: Biu.Write(addressLatch, Point(Pointer.MDR).Get(), signal.Width); break;
-            case MemoryOperation.REGISTER: WriteRegister(Point(Pointer.MDR).Get()); break;
+            case MemoryOperation.UNIBUS: Biu.Write(addressLatch, PointLatch(Pointer.MDR).Get(), signal.Width); break;
+            case MemoryOperation.REGISTER: WriteRegister(PointLatch(Pointer.MDR).Get()); break;
         }
     }
 }

@@ -7,7 +7,7 @@ public struct Signal()
     public State State = State.FETCH;
     public Pointer First = Pointer.NIL;
     public Pointer Second = Pointer.NIL;
-    public Operation Operation = Operation.PASS;
+    public Operation Operation = Operation.ZRO;
     public Flag Mask = Flag.NONE;
     public Width Width = Width.WORD;
     public Condition Condition = Condition.R;
@@ -24,7 +24,7 @@ public enum Cycle : byte
 public enum State : byte
 {
     FETCH, DECODE, WAIT, HALT,
-    TRAP, INHIBIT
+    TRAP, SUPPRESS
 }
 
 public enum Pointer : byte

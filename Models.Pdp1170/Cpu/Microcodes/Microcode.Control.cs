@@ -9,7 +9,7 @@ public partial class Microcode
         ..SET_NAME($"JMP {AddressingModeName(ooooxx())}"),
         ..ADDRESS[ooooxo()](EncodedRegisters[ooooox()], Pointer.DST, Width.WORD),
         REG_MOVE(Pointer.EA, Pointer.PC),
-    ] : NONE;
+    ] : ILLEGAL;
 
     private static Signal[] JUMP_SR(Pointer register) =>
     [
@@ -29,16 +29,17 @@ public partial class Microcode
         ..POP(EncodedRegisters[ooooox()]),
     ];
 
-    private static Signal[] RET_INT() =>
+    private static Signal[] RET_INT(string name) =>
     [
+        ..SET_NAME(name),
         ..POP(Pointer.PC),
         ..POP(Pointer.PSW),
     ];
 
     private static Signal[] RET_TRC() =>
     [
-        ..RET_INT(),
-        STATE_COMMIT(State.INHIBIT)
+        ..RET_INT("RTT"),
+        STATE_COMMIT(State.SUPPRESS)
     ];
 
     // ------------------------------- BRANCHES ------------------------------- //

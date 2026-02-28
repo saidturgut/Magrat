@@ -13,15 +13,15 @@ public partial class Datapath
     
     private void AluCompute()
     {
-        ushort psw = Point(Pointer.PSW).Get();
+        ushort psw = PointCore(Pointer.PSW).Get();
         AluOutput output =
             Alu.Compute(
                 new AluInput(Point(signal.First).Get(), Point(signal.Second).Get(), psw, signal.Width is Width.BYTE),
                 signal.Operation);
-        Point(Pointer.TMP).Set(output.Result);
-        Point(Pointer.PSW).Set((ushort)((psw & (ushort)~signal.Mask) | (output.Flags & (ushort)signal.Mask)));
+        PointLatch(Pointer.TMP).Set(output.Result);
+        PointCore(Pointer.PSW).Set((ushort)((psw & (ushort)~signal.Mask) | (output.Flags & (ushort)signal.Mask)));
     }
 
     private void CondCompute()
-        => skip = !Psw.CheckCondition(signal.Condition, new Flags(Point(Pointer.TMP).Get()));
+        => skip = !Psw.CheckCondition(signal.Condition, new Flags(PointLatch(Pointer.TMP).Get()));
 }

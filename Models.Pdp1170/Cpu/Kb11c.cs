@@ -31,6 +31,7 @@ public class Kb11c
 
     private void Commit()
     {
+        Datapath.Resolve();
         Datapath.Commit(Control.Resolve());
         foreach (var log in Datapath.Debug())
             Console.WriteLine(log);

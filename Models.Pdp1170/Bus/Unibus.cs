@@ -7,8 +7,10 @@ public partial class Unibus
     private readonly bool[] Requests = new bool[6];
 
     private byte currentMaster;
-    
-    public void Init() { }
+
+    public void Init()
+    {
+    }
     
     public void Restore() { }
     

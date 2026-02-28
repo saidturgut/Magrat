@@ -19,6 +19,7 @@ public static partial class Microcode
     
     public static Signal[] TRAP =>
     [
+        ..SET_NAME("TRAP ENTRY"),
         ..PUSH(Pointer.PSW),
         ..PUSH(Pointer.PC),
         MEM_READ(Pointer.VEC),
@@ -37,7 +38,7 @@ public static partial class Microcode
     private static Signal STATE_COMMIT(State state) => new()
         { Cycle = Cycle.IDLE, State = state, };
     private static Signal TRAP_REQUEST(Trap trap) => new()
-        { Cycle = Cycle.IDLE, Trap = trap, };
+        { Cycle = Cycle.IDLE, State = State.TRAP, Trap = trap, };
     
     private static Signal REG_MOVE(Pointer source, Pointer destination) => new()
         { Cycle = Cycle.REG_MOVE, First = source, Second = destination };

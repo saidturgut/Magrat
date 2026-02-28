@@ -26,15 +26,15 @@ public partial class Microcode
         ["ASL"] = () => ONE_OPR(Operation.ASL, Width.WORD), ["ASLB"] = () => ONE_OPR(Operation.ASL, Width.BYTE),
         ["SXT"] = () => ONE_OPR(Operation.SXT, Width.WORD), ["SWAB"] = () => ONE_OPR(Operation.SWAB, Width.WORD),
 
-        ["BRC"] = () => BRANCH((Condition)((opcode >> 8) > 7 ? (((opcode >> 8) & 0xF) + 8) : (((opcode >> 8) & 0xF) - 1))), ["JMP"] = JUMP,
-        ["JSR"] = () => JUMP_SR(EncodedRegisters![oooxoo()]),
-        ["MFPI"] = () => NONE, ["MTPI"] = () => NONE,
-        ["MFPD"] = () => NONE, ["MTPD"] = () => NONE,
-        ["MUL"] = () => NONE, ["DIV"] = () => NONE,
-        ["ASH"] = () => NONE, ["ASHC"] = () => NONE,
-        ["XOR"] = () => NONE, ["SOB"] = () => NONE,
+        ["BRC"] = () => BRANCH((Condition)((opcode >> 8) > 7 ? (((opcode >> 8) & 0xF) + 8) : (((opcode >> 8) & 0xF) - 1))), 
+        ["JMP"] = JUMP, ["JSR"] = () => JUMP_SR(EncodedRegisters![oooxoo()]),
+        ["MFPI"] = () => ILLEGAL, ["MTPI"] = () => ILLEGAL,
+        ["MFPD"] = () => ILLEGAL, ["MTPD"] = () => ILLEGAL,
+        ["MUL"] = () => ILLEGAL, ["DIV"] = () => ILLEGAL,
+        ["ASH"] = () => ILLEGAL, ["ASHC"] = () => ILLEGAL,
+        ["XOR"] = () => ILLEGAL, ["SOB"] = () => ILLEGAL,
         ["TRAP"] = () => TRAP_REQUEST(Trap.TRAP, "TRAP"), ["EMT"] = () => TRAP_REQUEST(Trap.EMT, "EMT"), 
-        ["MARK"] = () => NONE,
+        ["MARK"] = () => ILLEGAL,
     };
     
     private static readonly Dictionary<ushort, Func<Signal[]>> FixedOpcodeTable = new()
@@ -45,7 +45,7 @@ public partial class Microcode
 
         [0x0003] = () => TRAP_REQUEST(Trap.BPT, "BPT"), [0x0004] = () => TRAP_REQUEST(Trap.IOT, "IOT"),
         
-        [0x0002] = RET_INT, [0x0006] = RET_TRC,
+        [0x0002] = () => RET_INT("RTI"), [0x0006] = RET_TRC,
         
         [0x0080] = RET_SR, [0x0081] = RET_SR, [0x0082] = RET_SR, [0x0083] = RET_SR,
         [0x0084] = RET_SR, [0x0085] = RET_SR, [0x0086] = RET_SR, [0x0087] = RET_SR,

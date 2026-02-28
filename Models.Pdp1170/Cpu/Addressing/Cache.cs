@@ -43,13 +43,13 @@ public partial class Cache
     public bool Hit()
     {
         bool output = valid && oldTag == tag;
-        if(output) Console.WriteLine($"CACHE[{Tools.Octal(index)}]: HIT");
+        //if(output) Console.WriteLine($"CACHE[{Tools.Octal(index)}]: HIT");
         return output;
     }
     
     public void Miss(Unibus unibus)
     {
-        Console.WriteLine($"CACHE[{Tools.Octal(index)}]: MISS");
+        //Console.WriteLine($"CACHE[{Tools.Octal(index)}]: MISS");
         
         uint oldBase = (uint)((oldTag << 11) | (index << 2));
 

@@ -4,7 +4,7 @@ public partial class Microcode
 {
         private static readonly Dictionary<string, Func<Signal[]>> BlockCellTable = new()
     {
-        ["-"] = () => NONE!,
+        ["-"] = () => ILLEGAL,
         ["MOV"] = () => TWO_OPR(Operation.PASS, true, Width.WORD), ["MOVB"] = () => TWO_OPR(Operation.PASS, true, Width.BYTE),
         ["CMP"] = () => TWO_OPR(Operation.SUB, false, Width.WORD), ["CMPB"] = () => TWO_OPR(Operation.SUB, false, Width.BYTE),
         ["BIT"] = () => TWO_OPR(Operation.BIT, false, Width.WORD), ["BITB"] = () => TWO_OPR(Operation.BIT, false, Width.BYTE),
@@ -33,7 +33,8 @@ public partial class Microcode
         ["MUL"] = () => NONE, ["DIV"] = () => NONE,
         ["ASH"] = () => NONE, ["ASHC"] = () => NONE,
         ["XOR"] = () => NONE, ["SOB"] = () => NONE,
-        ["EMT"] = () => NONE, ["TRAP"] = () => NONE, ["MARK"] = () => NONE,
+        ["TRAP"] = () => TRAP_REQUEST(Trap.TRAP, "TRAP"), ["EMT"] = () => TRAP_REQUEST(Trap.EMT, "EMT"), 
+        ["MARK"] = () => NONE,
     };
     
     private static readonly Dictionary<ushort, Func<Signal[]>> FixedOpcodeTable = new()
@@ -42,6 +43,8 @@ public partial class Microcode
         [0x0001] = () => STATE_CHANGE(State.WAIT, "WAIT"), // HALT
         [0x00A0] = () => STATE_CHANGE(State.FETCH, "NOP"), // NOP
 
+        [0x0003] = () => TRAP_REQUEST(Trap.BPT, "BPT"), [0x0004] = () => TRAP_REQUEST(Trap.IOT, "IOT"),
+        
         [0x0002] = RET_INT, [0x0006] = RET_TRC,
         
         [0x0080] = RET_SR, [0x0081] = RET_SR, [0x0082] = RET_SR, [0x0083] = RET_SR,

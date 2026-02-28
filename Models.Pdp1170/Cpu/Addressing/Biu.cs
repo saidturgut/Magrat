@@ -16,11 +16,16 @@ public class Biu
         Unibus = unibus;
     }
 
-    public void Prepare(uint address)
+    public bool Validate(uint address)
     {
+        if (!Unibus.Validate(address)) return false;
         cacheable = Unibus.Cacheable(address);
         if(cacheable) Cache.Extract(address);
+        return true;
     }
+
+    public static bool CheckIoPage(uint address)
+        => address is ((>= 0x7FFF80 and <= 0x7FFFFE) or (>= 0x7FF480 and <= 0x7FF4FE));
     
     public bool Ready()
     {

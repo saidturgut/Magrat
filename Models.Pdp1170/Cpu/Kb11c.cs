@@ -10,7 +10,7 @@ public class Kb11c
     
     public void Init(Unibus unibus)
     {
-        Datapath.Init(unibus);
+        Datapath.Init(unibus, Control.Trapper);
         Control.Init();
     }
 

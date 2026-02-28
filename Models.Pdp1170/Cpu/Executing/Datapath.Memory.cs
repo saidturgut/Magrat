@@ -8,34 +8,76 @@ public partial class Datapath
     
     private uint addressLatch;
     
-    private bool MemoryReady(Space space)
+    private MemoryOperation ResolveAddress(Space space)
     {
         if (!stall)
         {
-            addressLatch = Mmu.Translate(Point(signal.First).Get(), space);
-            Biu.Prepare(addressLatch);
+            // CHECK IF IT IS ODD ADDRESS
+            ushort virtualAddress = Point(signal.First).Get();
+            if (signal.Width is Width.WORD && virtualAddress % 2 != 0)
+            {
+                Trapper.RequestAbortTrap(Trap.BUS_ABORT);
+                return MemoryOperation.FAULT;
+            }
+            
+            // CHECK IF VIRTUAL ADDRESS IS VALID
+            MmuOutput translated = Mmu.Translate(virtualAddress, space);
+            switch (translated.Trap)
+            {
+                case Trap.MMU_ABORT: Trapper.RequestAbortTrap(Trap.MMU_ABORT); return MemoryOperation.FAULT;
+                case Trap.PDR_ERROR: Trapper.RequestPostTrap(Trap.PDR_ERROR); break;
+            }
+            addressLatch = translated.Address;
+
+            // CHECK IF PHYSICAL ADDRESS IS VALID
+            if (!Biu.Validate(addressLatch))
+            {
+                Trapper.RequestAbortTrap(Trap.BUS_ABORT);
+                return MemoryOperation.FAULT;
+            }
+            
+            // CHECK IF PHYSICAL ADDRESS ON CPU/MMU IO PAGE
+            if (Biu.CheckIoPage(addressLatch))
+            {
+                stall = false;
+                return MemoryOperation.REGISTER;
+            }
         }
         
         bool granted = Biu.Ready();
         stall = !granted;
-        return granted;
+        return granted ? MemoryOperation.UNIBUS : MemoryOperation.FAULT;
     }
     
     private void MemoryFetch()
     {
-        if(!MemoryReady(Space.Instruction)) return;
-        Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width));
+        switch (ResolveAddress(Space.Instruction))
+        {
+            case MemoryOperation.UNIBUS: Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width)); break;
+            case MemoryOperation.REGISTER: Point(Pointer.MDR).Set(ReadRegister()); break;
+        }
     }
     
     private void MemoryRead()
     {
-        if(!MemoryReady(Space.Data)) return;
-        Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width));
+        switch (ResolveAddress(Space.Data))
+        {
+            case MemoryOperation.UNIBUS: Point(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width)); break;
+            case MemoryOperation.REGISTER: Point(Pointer.MDR).Set(ReadRegister()); break;
+        }
     }
     
     private void MemoryWrite()
     {
-        if(!MemoryReady(Space.Data)) return;
-        Biu.Write(addressLatch, Point(Pointer.MDR).Get(), signal.Width);
+        switch (ResolveAddress(Space.Data))
+        {
+            case MemoryOperation.UNIBUS: Biu.Write(addressLatch, Point(Pointer.MDR).Get(), signal.Width); break;
+            case MemoryOperation.REGISTER: WriteRegister(Point(Pointer.MDR).Get()); break;
+        }
     }
+}
+
+public enum MemoryOperation
+{
+    FAULT, UNIBUS, REGISTER
 }

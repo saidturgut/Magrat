@@ -6,6 +6,9 @@ public static partial class Microcode
 
     public static Signal[] NOP => [new ()];
     
+    private static Signal[] ILLEGAL 
+        => TRAP_REQUEST(Trap.ILLEGAL, "ILLEGAL");
+    
     public static Signal[] FETCH =>
     [
         MEM_FETCH(Pointer.PC),
@@ -32,7 +35,9 @@ public static partial class Microcode
     }
     
     private static Signal STATE_COMMIT(State state) => new()
-        { Cycle = Cycle.STATE_COMMIT, State = state, };
+        { Cycle = Cycle.IDLE, State = state, };
+    private static Signal TRAP_REQUEST(Trap trap) => new()
+        { Cycle = Cycle.IDLE, Trap = trap, };
     
     private static Signal REG_MOVE(Pointer source, Pointer destination) => new()
         { Cycle = Cycle.REG_MOVE, First = source, Second = destination };

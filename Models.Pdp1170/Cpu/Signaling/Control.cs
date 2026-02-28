@@ -3,7 +3,7 @@ namespace Models.Pdp1170.Cpu.Signaling;
 public class Control
 {
     private readonly Decoder Decoder = new();
-    private readonly Trapper Trapper = new();
+    public readonly Trapper Trapper = new();
 
     private Signal[] decoded = [];
     private byte timeState;
@@ -51,7 +51,7 @@ public class Control
             case State.DECODE: decoded = Decoder.Decode(signal.Opcode); break;
             case State.WAIT: wait = true; decoded = Decoder.Nop; break;
             case State.HALT: halt = true; decoded = Decoder.Nop; break;
-            default: Trapper.Execute(decoded[timeState].State); Fetch(); break;
+            default: Trapper.Execute(decoded[timeState]); Fetch(); break;
         }
         timeState = 0;
     }

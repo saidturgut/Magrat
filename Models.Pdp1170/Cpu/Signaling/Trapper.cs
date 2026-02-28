@@ -6,9 +6,13 @@ public partial class Trapper
 
     public bool abort;
     
-    public void Execute(State state)
+    public void Execute(Signal signal)
     {
-        
+        switch (signal.State)
+        {
+            case State.TRAP: RequestPostTrap(signal.Trap); break;
+            case State.INHIBIT: break;
+        }
     }
 
     public void RequestAbortTrap(Trap trap)
@@ -26,7 +30,7 @@ public partial class Trapper
     {
         TrapsTable[(byte)Trap.INTERRUPT].Vector = vector;
         TrapRequests[TrapsTable[(byte)Trap.INTERRUPT].Priority] = Trap.INTERRUPT;
-        Console.WriteLine($"INTERRUPT REQUESTED: 0x{vector}");
+        Console.WriteLine($"INTERRUPT REQUESTED: {Tools.Octal(vector)}");
     }
 
     public TrapInfo Arbitrate()
@@ -40,7 +44,7 @@ public partial class Trapper
                 arbitrated.Abort = abort;
                 abort = false;
                 
-                for (byte index = 0; index < 7; index++)
+                for (byte index = 0; index < 5; index++)
                     TrapRequests[index] = Trap.NONE;
                 
                 return arbitrated;

@@ -7,6 +7,12 @@ public partial class Microcode
         ..SET_NAME(nam),
         STATE_COMMIT(state)
     ];
+    
+    private static Signal[] TRAP_REQUEST(Trap trap, string nam) =>
+    [
+        ..SET_NAME(nam),
+        TRAP_REQUEST(trap)
+    ];
 
     // ------------------------------- PSW OPS ------------------------------- //
     

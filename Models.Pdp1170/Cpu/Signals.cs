@@ -11,11 +11,12 @@ public struct Signal()
     public Flag Mask = Flag.NONE;
     public Width Width = Width.WORD;
     public Condition Condition = Condition.R;
+    public Trap Trap = Trap.NONE;
 }
 
 public enum Cycle : byte
 {
-    IDLE, STATE_COMMIT, REG_MOVE, 
+    IDLE, REG_MOVE, 
     MEM_FETCH, MEM_READ, MEM_WRITE,
     ALU_COMPUTE, COND_COMPUTE
 }
@@ -23,7 +24,7 @@ public enum Cycle : byte
 public enum State : byte
 {
     FETCH, DECODE, WAIT, HALT,
-    INHIBIT, 
+    TRAP, INHIBIT
 }
 
 public enum Pointer : byte
@@ -68,6 +69,17 @@ public enum Flag : ushort
 public enum Width : byte
 {
     BYTE, WORD,
+}
+
+public enum Trap : byte
+{
+    NONE, 
+    MMU_ABORT, PARITY_ABORT, 
+    BUS_ABORT, STACK_OVERFLOW,
+    ILLEGAL, BPT, IOT, EMT, TRAP, 
+    PDR_ERROR, FP_ERROR, TRACE,
+    POWER_FAIL, PIRQ,
+    INTERRUPT,
 }
 
 public struct ControlSignal(ushort opcode, bool stall, bool skip)

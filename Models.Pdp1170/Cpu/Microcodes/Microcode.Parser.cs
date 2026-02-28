@@ -18,7 +18,6 @@ public partial class Microcode
                 cell = cells[col / 64];
                 opcode = (ushort)((row << 12) | col);
                 Signal[] decoded = BlockCellTable[cell]();
-                if(decoded.Length == 0) continue;
                 decoded[0].Name = name;
                 table[opcode] = decoded;
             }

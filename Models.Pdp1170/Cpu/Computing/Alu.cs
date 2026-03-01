@@ -12,7 +12,7 @@ public partial class Alu
         x8000 = (ushort)(!input.ByteMode ? 0x8000 : 0x80);
         x10000 = (uint)(!input.ByteMode ? 0x10000 : 0x100);
         
-        AluOutput output = SelectOperation(input, operation);
+        var output = SelectOperation(input, operation);
 
         if (output.Custom) return output;
         

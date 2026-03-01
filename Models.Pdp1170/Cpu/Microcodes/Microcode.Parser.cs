@@ -5,10 +5,12 @@ public partial class Microcode
     private static ushort opcode;
     private static string name = "";
     private static string cell = "";
+
+    public static readonly string[] LoggerNames = new string[256 * 256];
     
     public static Signal[][] GenerateTable()
     {
-        Signal[][] table = new Signal[256*256][];
+        Signal[][] table = new Signal[256 * 256][];
         string[] lines = File.ReadAllLines("Pdp11Matrix.csv");
         for (int row = 0; row < 16; row++)
         {
@@ -17,8 +19,8 @@ public partial class Microcode
             {
                 cell = cells[col / 64];
                 opcode = (ushort)((row << 12) | col);
-                Signal[] decoded = BlockCellTable[cell]();
-                decoded[0].Name = name;
+                var decoded = BlockCellTable[cell]();
+                LoggerNames[opcode] = name;
                 table[opcode] = decoded;
             }
         }
@@ -27,8 +29,10 @@ public partial class Microcode
         {
             opcode = fixedOpcode;
             table[fixedOpcode] = FixedOpcodeTable[fixedOpcode]();
-            table[fixedOpcode][0].Name = name;
+            LoggerNames[fixedOpcode] = name;
         }
+        
+        //Console.WriteLine(GC.GetTotalMemory(false));
         
         return table;
     }
@@ -45,7 +49,7 @@ public partial class Microcode
         };
     }
     
-    public struct Descriptor()
+    public struct Descriptor
     {
         public byte[] Modes;
         public Pointer[] Regs;

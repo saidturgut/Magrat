@@ -36,7 +36,7 @@ public class Pdp1170 : IMachine
 
     public void Load(uint address, byte data) { Unibus.Load(address, data); }
 
-    public void Insert(byte[] image) { throw new Exception("NOT IMPLEMENTED"); }
+    public void Insert(byte[] image) { }
 
     public void Dump() { Unibus.Dump(); }
 }

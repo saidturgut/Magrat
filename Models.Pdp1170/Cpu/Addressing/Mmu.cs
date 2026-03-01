@@ -4,10 +4,10 @@ public class Mmu
 {
     public MmuOutput Translate(ushort virtualAddr, Space space)
     {
-        return new MmuOutput()
+        return new MmuOutput
         {
             Address = virtualAddr,
-            Trap = Trap.NONE,
+            Vector = Vector.NONE,
         };
     }
 }
@@ -15,7 +15,7 @@ public class Mmu
 public struct MmuOutput
 {
     public uint Address;
-    public Trap Trap;
+    public Vector Vector;
 }
 
 public enum Space

@@ -2,7 +2,6 @@
 
 public struct Signal()
 {
-    public string Name = "";
     public Cycle Cycle = Cycle.IDLE;
     public State State = State.FETCH;
     public Pointer First = Pointer.NIL;
@@ -11,7 +10,7 @@ public struct Signal()
     public Flag Mask = Flag.NONE;
     public Width Width = Width.WORD;
     public Condition Condition = Condition.R;
-    public Trap Trap = Trap.NONE;
+    public Vector Vector = Vector.NONE;
 }
 
 public enum Cycle : byte
@@ -24,7 +23,7 @@ public enum Cycle : byte
 public enum State : byte
 {
     FETCH, DECODE, WAIT, HALT,
-    TRAP, SUPPRESS
+    TRAP, REQUEST, SUPPRESS
 }
 
 public enum Pointer : byte
@@ -71,11 +70,11 @@ public enum Width : byte
     BYTE, WORD,
 }
 
-public enum Trap : byte
+public enum Vector : byte
 {
     NONE, 
     MMU_ABORT, PARITY_ABORT, 
-    BUS_ABORT, STACK_OVERFLOW,
+    BUS_ABORT, ODD_ADDRESS, STACK_OVERFLOW,
     ILLEGAL, BPT, IOT, EMT, TRAP, 
     PDR_ERROR, FP_ERROR, TRACE,
     POWER_FAIL, PIRQ,

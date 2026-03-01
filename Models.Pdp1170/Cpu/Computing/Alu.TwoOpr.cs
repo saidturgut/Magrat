@@ -8,7 +8,7 @@ public partial class Alu
     private static AluOutput ADD(AluInput input)
     {
         uint sum = (uint)(input.A + input.B);
-        AluOutput output = new() { Result = (ushort)sum };
+        var output = new AluOutput { Result = (ushort)sum };
         if ((sum & x10000) != 0) output.Flags |= (ushort)Flag.CARRY;
         if (OverflowAdd(input.A, input.B, output.Result)) output.Flags |= (ushort)Flag.OVERFLOW;
         return output;
@@ -17,7 +17,7 @@ public partial class Alu
     {
         input.A = MaskHigh(input.A);
         input.B = MaskHigh(input.B);
-        AluOutput output = new() { Result = MaskHigh((ushort)(input.A - input.B)) };
+        var output = new AluOutput { Result = MaskHigh((ushort)(input.A - input.B)) };
         if (input.A < input.B) output.Flags |= (ushort)Flag.CARRY;
         if (OverflowSub(input.A, input.B, output.Result)) output.Flags |= (ushort)Flag.OVERFLOW;
         return output;

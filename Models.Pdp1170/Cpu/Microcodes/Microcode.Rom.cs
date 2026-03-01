@@ -33,7 +33,7 @@ public partial class Microcode
         ["MUL"] = () => ILLEGAL, ["DIV"] = () => ILLEGAL,
         ["ASH"] = () => ILLEGAL, ["ASHC"] = () => ILLEGAL,
         ["XOR"] = () => ILLEGAL, ["SOB"] = () => ILLEGAL,
-        ["TRAP"] = () => TRAP_REQUEST(Trap.TRAP, "TRAP"), ["EMT"] = () => TRAP_REQUEST(Trap.EMT, "EMT"), 
+        ["TRAP"] = () => TRAP_REQUEST(Vector.TRAP, "TRAP"), ["EMT"] = () => TRAP_REQUEST(Vector.EMT, "EMT"), 
         ["MARK"] = () => ILLEGAL,
     };
     
@@ -43,7 +43,7 @@ public partial class Microcode
         [0x0001] = () => STATE_CHANGE(State.WAIT, "WAIT"), // HALT
         [0x00A0] = () => STATE_CHANGE(State.FETCH, "NOP"), // NOP
 
-        [0x0003] = () => TRAP_REQUEST(Trap.BPT, "BPT"), [0x0004] = () => TRAP_REQUEST(Trap.IOT, "IOT"),
+        [0x0003] = () => TRAP_REQUEST(Vector.BPT, "BPT"), [0x0004] = () => TRAP_REQUEST(Vector.IOT, "IOT"),
         
         [0x0002] = () => RET_INT("RTI"), [0x0006] = RET_TRC,
         

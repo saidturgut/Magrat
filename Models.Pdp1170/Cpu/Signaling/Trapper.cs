@@ -2,57 +2,62 @@ namespace Models.Pdp1170.Cpu.Signaling;
 
 public partial class Trapper
 {
-    private readonly Trap[] TrapRequests = new Trap[7];
+    private readonly Vector[] TrapRequests = new Vector[6];
 
     public bool abort;
-    public bool suppress;
+    private bool suppress;
     
     public void Execute(Signal signal)
     {
         switch (signal.State)
         {
-            case State.TRAP: RequestPostTrap(signal.Trap); break;
+            case State.REQUEST: RequestPostTrap(signal.Vector); break;
             case State.SUPPRESS: suppress = true; break;
         }
     }
-
-    public void RequestAbortTrap(Trap trap)
+    
+    public void RequestAbortTrap(Vector vector)
     {
-        TrapRequests[TrapsTable[(byte)trap].Priority] = trap;
-        Console.WriteLine($"ABORT TRAP REQUESTED: {trap}");
+        TrapRequests[TrapsTable[(byte)vector].Priority] = vector;
+        Console.WriteLine($"ABORT TRAP REQUESTED: {vector}");
         abort = true;
     }
-    public void RequestPostTrap(Trap trap)
+    public void RequestPostTrap(Vector vector)
     {
-        TrapRequests[TrapsTable[(byte)trap].Priority] = trap;
-        Console.WriteLine($"POST TRAP REQUESTED: {trap}");
+        TrapRequests[TrapsTable[(byte)vector].Priority] = vector;
+        Console.WriteLine($"POST TRAP REQUESTED: {vector}");
     }
     public void RequestTraceTrap()
     {
-        if (suppress) return;
-        TrapRequests[TrapsTable[(byte)Trap.TRACE].Priority] = Trap.TRACE;
+        if (suppress)
+        {
+            suppress = false;
+            return;
+        }
+        TrapRequests[TrapsTable[(byte)Vector.TRACE].Priority] = Vector.TRACE;
         Console.WriteLine($"POST TRAP REQUESTED: TRACE");
     }
     public void RequestInterrupt(ushort vector)
     {
-        TrapsTable[(byte)Trap.INTERRUPT].Vector = vector;
-        TrapRequests[TrapsTable[(byte)Trap.INTERRUPT].Priority] = Trap.INTERRUPT;
+        TrapsTable[(byte)Vector.INTERRUPT].Address = vector;
+        TrapRequests[TrapsTable[(byte)Vector.INTERRUPT].Priority] = Vector.INTERRUPT;
         Console.WriteLine($"INTERRUPT REQUESTED: {Tools.Octal(vector)}");
     }
 
-    public TrapInfo Arbitrate()
+    public Trap Arbitrate()
     {
         for (byte level = 0; level < TrapRequests.Length; level++)
         {
-            if (TrapRequests[level] is not Trap.NONE)
+            if (TrapRequests[level] is not Vector.NONE)
             {
-                TrapInfo arbitrated = TrapsTable[(byte)TrapRequests[level]];
+                var arbitrated = TrapsTable[(byte)TrapRequests[level]];
                 
                 arbitrated.Abort = abort;
                 abort = false;
+                suppress = true;
                 
                 for (byte index = 0; index < 5; index++)
-                    TrapRequests[index] = Trap.NONE;
+                    TrapRequests[index] = Vector.NONE;
                 
                 return arbitrated;
             }

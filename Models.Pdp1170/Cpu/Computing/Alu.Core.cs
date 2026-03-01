@@ -19,7 +19,7 @@ public partial class Alu
 
     private static AluOutput TRP(AluInput input)
     {
-        AluOutput output = new();
+        var output = new AluOutput();
         if ((input.Psw & (ushort)Flag.CM0) != 0) 
             output.Flags |= (ushort)Flag.PM0;
         if ((input.Psw & (ushort)Flag.CM1) != 0) 

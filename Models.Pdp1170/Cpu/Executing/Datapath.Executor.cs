@@ -14,10 +14,9 @@ public partial class Datapath
     private void AluCompute()
     {
         ushort psw = PointCore(Pointer.PSW).Get();
-        AluOutput output =
-            Alu.Compute(
-                new AluInput(Point(signal.First).Get(), Point(signal.Second).Get(), psw, signal.Width is Width.BYTE),
-                signal.Operation);
+        var output = Alu.Compute(
+            new AluInput(Point(signal.First).Get(), Point(signal.Second).Get(), psw, signal.Width is Width.BYTE),
+            signal.Operation);
         PointLatch(Pointer.TMP).Set(output.Result);
         PointCore(Pointer.PSW).Set((ushort)((psw & (ushort)~signal.Mask) | (output.Flags & (ushort)signal.Mask)));
     }

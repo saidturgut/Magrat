@@ -8,10 +8,10 @@ public partial class Microcode
         STATE_COMMIT(state)
     ];
     
-    private static Signal[] TRAP_REQUEST(Trap trap, string nam) =>
+    private static Signal[] TRAP_REQUEST(Vector vector, string nam) =>
     [
         ..SET_NAME(nam),
-        TRAP_REQUEST(trap)
+        TRAP_REQUEST(vector)
     ];
 
     // ------------------------------- PSW OPS ------------------------------- //

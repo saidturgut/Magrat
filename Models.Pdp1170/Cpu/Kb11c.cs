@@ -25,13 +25,11 @@ public class Kb11c
         Datapath.Receive(Control.Emit());
         Datapath.Execute();
         Control.Advance(Datapath.Emit());
-
         if (Control.commit) Commit();
     }
 
     private void Commit()
     {
-        Datapath.Resolve();
         Datapath.Commit(Control.Resolve());
         foreach (var log in Datapath.Debug())
             Console.WriteLine(log);

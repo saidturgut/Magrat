@@ -2,37 +2,38 @@ namespace Models.Pdp1170.Cpu.Signaling;
 
 public partial class Trapper
 {
-    private static readonly TrapInfo[] TrapsTable =
+    private static readonly Trap[] TrapsTable =
     [
-        new (Trap.NONE, 0x00, 6),
+        new (Vector.NONE, 0x00, 6),
 
         // ABORT TRAPS
-        new (Trap.MMU_ABORT, 0xA8, 0),
-        new (Trap.PARITY_ABORT, 0x4C, 0),
-        new (Trap.BUS_ABORT, 0x04, 0),
-        new (Trap.STACK_OVERFLOW, 0x04, 0),
+        new (Vector.MMU_ABORT, 0xA8, 0),
+        new (Vector.PARITY_ABORT, 0x4C, 0),
+        new (Vector.BUS_ABORT, 0x04, 0),
+        new (Vector.ODD_ADDRESS, 0x04, 0),
+        new (Vector.STACK_OVERFLOW, 0x04, 0),
 
         // POST TRAPS
-        new (Trap.ILLEGAL, 0x08, 1),
-        new (Trap.BPT, 0x0C, 2),
-        new (Trap.IOT, 0x10, 2),
-        new (Trap.EMT, 0x18, 2),
-        new (Trap.TRAP, 0x1C, 2),
-        new (Trap.PDR_ERROR, 0xA8, 3),
-        new (Trap.FP_ERROR, 0xA4, 3),
-        new (Trap.TRACE, 0x0C, 4),
+        new (Vector.ILLEGAL, 0x08, 1),
+        new (Vector.BPT, 0x0C, 2),
+        new (Vector.IOT, 0x10, 2),
+        new (Vector.EMT, 0x18, 2),
+        new (Vector.TRAP, 0x1C, 2),
+        new (Vector.PDR_ERROR, 0xA8, 3),
+        new (Vector.FP_ERROR, 0xA4, 3),
+        new (Vector.TRACE, 0x0C, 4),
 
         // INT TRAPS
-        new (Trap.POWER_FAIL, 0x14, 5),
-        new (Trap.PIRQ, 0xA0, 5),
-        new (Trap.INTERRUPT, 0x00, 5),
+        new (Vector.POWER_FAIL, 0x14, 5),
+        new (Vector.PIRQ, 0xA0, 5),
+        new (Vector.INTERRUPT, 0x00, 5),
     ];
 }
 
-public struct TrapInfo(Trap trap, ushort vector, byte priority)
+public struct Trap(Vector vector, ushort address, byte priority)
 {
-    public readonly Trap Trap = trap;
-    public ushort Vector = vector;
+    public readonly Vector Vector = vector;
+    public ushort Address = address;
     public readonly byte Priority = priority;
     public bool Abort;
 }

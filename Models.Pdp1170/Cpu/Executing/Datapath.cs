@@ -1,4 +1,5 @@
 namespace Models.Pdp1170.Cpu.Executing;
+using Microcodes;
 using Signaling;
 using Computing;
 using Bus;
@@ -10,11 +11,11 @@ public partial class Datapath
 
     private Trapper Trapper = null!;
 
+    private string debugName = "";
+
     private bool stall;
     private bool skip;
     
-    private string debugName = "";
-
     public void Init(Unibus unibus, Trapper trapper)
     {
         for (byte i = 0; i < CoreRegisters.Length; i++)
@@ -38,7 +39,6 @@ public partial class Datapath
         statusWord = new StatusWord(0);
         stall = false;
         skip = false;
-        debugName = "";
     }
     
     public void Receive(Signal input)
@@ -47,7 +47,6 @@ public partial class Datapath
     private void Protocol()
     {
         statusWord = new StatusWord(PointCore(Pointer.PSW).Get());
-        if (signal.Name != "") debugName = signal.Name;
         PointCore(Pointer.NIL).Set(0);
     }
     
@@ -67,18 +66,16 @@ public partial class Datapath
     
     public ControlSignal Emit()
         => new (PointCore(Pointer.IR).Get(), stall, skip);
-
-    public void Resolve()
+    
+    public void Commit(Trap trap)
     {
         if(statusWord.Trace) Trapper.RequestTraceTrap();
-    }
-
-    public void Commit(TrapInfo info)
-    {
-        foreach (Register reg in CoreRegisters) reg.Commit(info.Abort);
-        foreach (Register reg in TemporaryLatches) reg.Commit(true);
-        foreach (Register reg in GeneralRegisters) reg.Commit(info.Abort);
-        foreach (Register reg in StackPointers) reg.Commit(info.Abort);
-        PointLatch(Pointer.VEC).Set(info.Vector);
+        debugName = signal.State is not State.TRAP 
+            ? Microcode.LoggerNames[PointCore(Pointer.IR).Get()] : (trap.Abort ? "ABORT " : "POST ") + "TRAP ROUTINE";
+        foreach (var reg in CoreRegisters) reg.Commit(trap.Abort);
+        foreach (var reg in TemporaryLatches) reg.Commit(true);
+        foreach (var reg in GeneralRegisters) reg.Commit(trap.Abort);
+        foreach (var reg in StackPointers) reg.Commit(trap.Abort);
+        PointLatch(Pointer.VEC).Set(trap.Address);
     }
 }

@@ -35,7 +35,7 @@ public class Control
     {
         if(signal.Stall) return;
 
-        bool permit = !signal.Skip && !Trapper.abort && !wait && !halt;
+        var permit = !signal.Skip && !Trapper.abort && !wait && !halt;
         
         if (timeState != decoded.Length - 1 && permit)
             timeState++;
@@ -45,7 +45,6 @@ public class Control
 
     private void Commit(ControlSignal signal)
     {
-        Trapper.suppress = false;
         switch (decoded[timeState].State)
         {
             case State.FETCH: Fetch(); break;
@@ -57,12 +56,12 @@ public class Control
         timeState = 0;
     }
 
-    public TrapInfo Resolve()
+    public Trap Resolve()
     {
-        TrapInfo info = Trapper.Arbitrate();
-        if (info.Trap is Trap.NONE) return new TrapInfo();
+        var trap = Trapper.Arbitrate();
+        if (trap.Vector is Vector.NONE) return new Trap();
         decoded = Decoder.Trap;
-        return info;
+        return trap;
     }
     
     private void Fetch()

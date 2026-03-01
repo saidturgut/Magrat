@@ -7,7 +7,7 @@ public static partial class Microcode
     public static Signal[] NOP => [new ()];
     
     private static Signal[] ILLEGAL 
-        => TRAP_REQUEST(Trap.ILLEGAL, "ILLEGAL");
+        => TRAP_REQUEST(Vector.ILLEGAL, "ILLEGAL");
     
     public static Signal[] FETCH =>
     [
@@ -19,7 +19,6 @@ public static partial class Microcode
     
     public static Signal[] TRAP =>
     [
-        ..SET_NAME("TRAP ENTRY"),
         ..PUSH(Pointer.PSW),
         ..PUSH(Pointer.PC),
         MEM_READ(Pointer.VEC),
@@ -27,6 +26,7 @@ public static partial class Microcode
         ..INCREMENT(Pointer.VEC, Width.WORD),
         MEM_READ(Pointer.VEC),
         REG_MOVE(Pointer.MDR, Pointer.PSW),
+        STATE_COMMIT(State.TRAP),
     ];
     
     private static Signal[] SET_NAME(string nam)
@@ -37,8 +37,8 @@ public static partial class Microcode
     
     private static Signal STATE_COMMIT(State state) => new()
         { Cycle = Cycle.IDLE, State = state, };
-    private static Signal TRAP_REQUEST(Trap trap) => new()
-        { Cycle = Cycle.IDLE, State = State.TRAP, Trap = trap, };
+    private static Signal TRAP_REQUEST(Vector vector) => new()
+        { Cycle = Cycle.IDLE, State = State.REQUEST, Vector = vector, };
     
     private static Signal REG_MOVE(Pointer source, Pointer destination) => new()
         { Cycle = Cycle.REG_MOVE, First = source, Second = destination };

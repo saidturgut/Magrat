@@ -16,23 +16,23 @@ public partial class Datapath
             ushort virtualAddress = Point(signal.First).Get();
             if (signal.Width is Width.WORD && virtualAddress % 2 != 0)
             {
-                Trapper.RequestAbortTrap(Trap.BUS_ABORT);
+                Trapper.RequestAbortTrap(Vector.ODD_ADDRESS);
                 return MemoryOperation.FAULT;
             }
             
             // CHECK IF VIRTUAL ADDRESS IS VALID
-            MmuOutput translated = Mmu.Translate(virtualAddress, space);
-            switch (translated.Trap)
+            var translated = Mmu.Translate(virtualAddress, space);
+            switch (translated.Vector)
             {
-                case Trap.MMU_ABORT: Trapper.RequestAbortTrap(Trap.MMU_ABORT); return MemoryOperation.FAULT;
-                case Trap.PDR_ERROR: Trapper.RequestPostTrap(Trap.PDR_ERROR); break;
+                case Vector.MMU_ABORT: Trapper.RequestAbortTrap(Vector.MMU_ABORT); return MemoryOperation.FAULT;
+                case Vector.PDR_ERROR: Trapper.RequestPostTrap(Vector.PDR_ERROR); break;
             }
             addressLatch = translated.Address;
 
             // CHECK IF PHYSICAL ADDRESS IS VALID
             if (!Biu.Validate(addressLatch))
             {
-                Trapper.RequestAbortTrap(Trap.BUS_ABORT);
+                Trapper.RequestAbortTrap(Vector.BUS_ABORT);
                 return MemoryOperation.FAULT;
             }
             

@@ -61,6 +61,7 @@ public class Control
         var trap = Trapper.Arbitrate();
         if (trap.Vector is Vector.NONE) return new Trap();
         decoded = Decoder.Trap;
+        wait = false;
         return trap;
     }
     

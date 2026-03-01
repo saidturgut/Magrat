@@ -16,20 +16,11 @@ public partial class Alu
     
     private static AluOutput BRC(AluInput input)
         => new() { Result = (ushort)(input.A + ((sbyte)(input.B & 0xFF) << 1)) };
+    private static AluOutput MARK(AluInput input)
+        => new() { Result = (ushort)(input.A + (ushort)((input.B & 0x3F) << 1)) };
+    private static AluOutput SOB(AluInput input)
+        => new() { Result = (ushort)(input.A - (ushort)((input.B & 0x3F) << 1)) };
 
-    private static AluOutput TRP(AluInput input)
-    {
-        var output = new AluOutput();
-        if ((input.Psw & (ushort)Flag.CM0) != 0) 
-            output.Flags |= (ushort)Flag.PM0;
-        if ((input.Psw & (ushort)Flag.CM1) != 0) 
-            output.Flags |= (ushort)Flag.PM1;
-
-        output.Flags |= (ushort)Flag.CM0;
-        output.Flags |= (ushort)Flag.CM1;
-        return output;
-    }
-    
     private static ushort MaskHigh(ushort result)
         => (ushort)(result & xFFFF);
 

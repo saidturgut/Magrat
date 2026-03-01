@@ -3,13 +3,15 @@ namespace Models.Pdp1170.Cpu.Microcodes;
 public partial class Microcode
 {
     // ------------------------------- JUMPS ------------------------------- //
-    
-    private static Signal[] JUMP() => ooooxo() != 0 ?
-    [
-        ..SET_NAME($"JMP {AddressingModeName(ooooxx())}"),
-        ..ADDRESS[ooooxo()](EncodedRegisters[ooooox()], Pointer.DST, Width.WORD),
-        REG_MOVE(Pointer.EA, Pointer.PC),
-    ] : ILLEGAL;
+
+    private static Signal[] JUMP() => ooooxo() != 0
+        ?
+        [
+            ..SET_NAME($"JMP {AddressingModeName(ooooxx())}"),
+            ..ADDRESS[ooooxo()](EncodedRegisters[ooooox()], Pointer.DST, Width.WORD),
+            REG_MOVE(Pointer.EA, Pointer.PC),
+        ]
+        : ILLEGAL;
 
     private static Signal[] JUMP_SR(Pointer register) =>
     [
@@ -19,7 +21,7 @@ public partial class Microcode
         REG_MOVE(Pointer.PC, register),
         REG_MOVE(Pointer.EA, Pointer.PC),
     ];
-    
+
     // ------------------------------- RETURNS ------------------------------- //
 
     private static Signal[] RET_SR() =>
@@ -43,7 +45,7 @@ public partial class Microcode
     ];
 
     // ------------------------------- BRANCHES ------------------------------- //
-    
+
     private static Signal[] BRANCH(Condition condition) =>
     [
         ..SET_NAME($"B{condition} {(sbyte)(opcode & 0xFF)}"),
@@ -51,5 +53,16 @@ public partial class Microcode
         COND_COMPUTE(condition, State.FETCH),
         ALU_COMPUTE(Operation.BRC, Pointer.PC, Pointer.IR, Flag.NONE),
         REG_MOVE(Pointer.TMP, Pointer.PC),
+    ];
+
+    // ------------------------------- MISC ------------------------------- //
+
+    private static Signal[] MARK() =>
+    [
+        ..SET_NAME("MARK"),
+        ALU_COMPUTE(Operation.MARK, Pointer.PC, Pointer.IR, Flag.NONE),
+        REG_MOVE(Pointer.TMP, Pointer.SP),
+        REG_MOVE(Pointer.R5, Pointer.PC),
+        ..POP(Pointer.R5),
     ];
 }

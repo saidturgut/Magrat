@@ -25,6 +25,7 @@ public class Kb11c
         Datapath.Receive(Control.Emit());
         Datapath.Execute();
         Control.Advance(Datapath.Emit());
+
         if (Control.commit) Commit();
     }
 

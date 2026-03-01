@@ -2,15 +2,21 @@ namespace Models.Pdp1170.Cpu.Microcodes;
 
 public partial class Microcode
 {
-        private static readonly Dictionary<string, Func<Signal[]>> BlockCellTable = new()
+    private static readonly Dictionary<string, Func<Signal[]>> BlockCellTable = new()
     {
         ["-"] = () => ILLEGAL,
-        ["MOV"] = () => TWO_OPR(Operation.PASS, true, Width.WORD), ["MOVB"] = () => TWO_OPR(Operation.PASS, true, Width.BYTE),
-        ["CMP"] = () => TWO_OPR(Operation.SUB, false, Width.WORD), ["CMPB"] = () => TWO_OPR(Operation.SUB, false, Width.BYTE),
-        ["BIT"] = () => TWO_OPR(Operation.BIT, false, Width.WORD), ["BITB"] = () => TWO_OPR(Operation.BIT, false, Width.BYTE),
-        ["BIC"] = () => TWO_OPR(Operation.BIC, true, Width.WORD), ["BICB"] = () => TWO_OPR(Operation.BIC, true, Width.BYTE),
-        ["BIS"] = () => TWO_OPR(Operation.BIS, true, Width.WORD), ["BISB"] = () => TWO_OPR(Operation.BIS, true, Width.BYTE),
-        ["ADD"] = () => TWO_OPR(Operation.ADD, true, Width.WORD), ["SUB"] = () => TWO_OPR(Operation.SUB, true, Width.WORD),
+        ["MOV"] = () => TWO_OPR(Operation.PASS, true, Width.WORD),
+        ["MOVB"] = () => TWO_OPR(Operation.PASS, true, Width.BYTE),
+        ["CMP"] = () => TWO_OPR(Operation.SUB, false, Width.WORD),
+        ["CMPB"] = () => TWO_OPR(Operation.SUB, false, Width.BYTE),
+        ["BIT"] = () => TWO_OPR(Operation.BIT, false, Width.WORD),
+        ["BITB"] = () => TWO_OPR(Operation.BIT, false, Width.BYTE),
+        ["BIC"] = () => TWO_OPR(Operation.BIC, true, Width.WORD),
+        ["BICB"] = () => TWO_OPR(Operation.BIC, true, Width.BYTE),
+        ["BIS"] = () => TWO_OPR(Operation.BIS, true, Width.WORD),
+        ["BISB"] = () => TWO_OPR(Operation.BIS, true, Width.BYTE),
+        ["ADD"] = () => TWO_OPR(Operation.ADD, true, Width.WORD),
+        ["SUB"] = () => TWO_OPR(Operation.SUB, true, Width.WORD),
 
         ["CLR"] = () => ONE_OPR(Operation.CLR, Width.WORD), ["CLRB"] = () => ONE_OPR(Operation.CLR, Width.BYTE),
         ["COM"] = () => ONE_OPR(Operation.COM, Width.WORD), ["COMB"] = () => ONE_OPR(Operation.COM, Width.BYTE),
@@ -26,21 +32,26 @@ public partial class Microcode
         ["ASL"] = () => ONE_OPR(Operation.ASL, Width.WORD), ["ASLB"] = () => ONE_OPR(Operation.ASL, Width.BYTE),
         ["SXT"] = () => ONE_OPR(Operation.SXT, Width.WORD), ["SWAB"] = () => ONE_OPR(Operation.SWAB, Width.WORD),
 
-        ["BRC"] = () => BRANCH((Condition)((opcode >> 8) > 7 ? (((opcode >> 8) & 0xF) + 8) : (((opcode >> 8) & 0xF) - 1))), 
+        ["BRC"] = () => BRANCH((Condition)((opcode >> 8) > 7 ? (((opcode >> 8) & 0xF) + 8) : (((opcode >> 8) & 0xF) - 1))),
         ["JMP"] = JUMP, ["JSR"] = () => JUMP_SR(EncodedRegisters![oooxoo()]),
+        
         ["MFPI"] = () => ILLEGAL, ["MTPI"] = () => ILLEGAL,
         ["MFPD"] = () => ILLEGAL, ["MTPD"] = () => ILLEGAL,
-        ["MUL"] = () => ILLEGAL, ["DIV"] = () => ILLEGAL,
-        ["ASH"] = () => ILLEGAL, ["ASHC"] = () => ILLEGAL,
-        ["XOR"] = () => ILLEGAL, ["SOB"] = () => ILLEGAL,
-        ["TRAP"] = () => TRAP_REQUEST(Vector.TRAP, "TRAP"), ["EMT"] = () => TRAP_REQUEST(Vector.EMT, "EMT"), 
-        ["MARK"] = () => ILLEGAL,
+        
+        ["MUL"] = () => HALF_LONG(Operation.MUL_L, Operation.MUL_H, FlagMask.CVZN),
+        ["DIV"] = () => HALF_LONG(Operation.DIV_L, Operation.DIV_H, FlagMask.CVZN),
+        ["ASHC"] = () => HALF_LONG(Operation.ASH_L, Operation.ASH_H, FlagMask.CVZN),
+        ["XOR"] = () => HALF_WORD(Operation.XOR, FlagMask.VZN), ["ASH"] = () => HALF_WORD(Operation.ASH, FlagMask.CVZN),
+        ["SOB"] = SOB, ["MARK"] = MARK,
+        
+        ["TRAP"] = () => TRAP_REQUEST(Vector.TRAP, "TRAP"), ["EMT"] = () => TRAP_REQUEST(Vector.EMT, "EMT"),
     };
     
     private static readonly Dictionary<ushort, Func<Signal[]>> FixedOpcodeTable = new()
     {
         [0x0000] = () => STATE_CHANGE(State.HALT, "HALT"), // HALT
         [0x0001] = () => STATE_CHANGE(State.WAIT, "WAIT"), // HALT
+        [0x0005] = () => STATE_CHANGE(State.RESET, "RESET"), // RESET
         [0x00A0] = () => STATE_CHANGE(State.FETCH, "NOP"), // NOP
 
         [0x0003] = () => TRAP_REQUEST(Vector.BPT, "BPT"), [0x0004] = () => TRAP_REQUEST(Vector.IOT, "IOT"),

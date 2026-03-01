@@ -30,7 +30,7 @@ public partial class Datapath
         Trapper = trapper;
         
         StackPointers[0].Init(0xCCCC);
-        PointCore(Pointer.PC).Init(0x1000);
+        //PointCore(Pointer.PC).Init(0x1000);
     }
     
     public void Restore()
@@ -69,6 +69,7 @@ public partial class Datapath
     
     public void Commit(Trap trap)
     {
+        Clear();
         if(statusWord.Trace) Trapper.RequestTraceTrap();
         debugName = signal.State is not State.TRAP 
             ? Microcode.LoggerNames[PointCore(Pointer.IR).Get()] : (trap.Abort ? "ABORT " : "POST ") + "TRAP ROUTINE";
@@ -77,5 +78,11 @@ public partial class Datapath
         foreach (var reg in GeneralRegisters) reg.Commit(trap.Abort);
         foreach (var reg in StackPointers) reg.Commit(trap.Abort);
         PointLatch(Pointer.VEC).Set(trap.Address);
+    }
+
+    private void Clear()
+    {
+        stall = false;
+        skip = false;
     }
 }

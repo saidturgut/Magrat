@@ -6,6 +6,7 @@ public struct Signal()
     public State State = State.FETCH;
     public Pointer First = Pointer.NIL;
     public Pointer Second = Pointer.NIL;
+    public Pointer Third = Pointer.NIL;
     public Operation Operation = Operation.ZRO;
     public Flag Mask = Flag.NONE;
     public Width Width = Width.WORD;
@@ -22,7 +23,7 @@ public enum Cycle : byte
 
 public enum State : byte
 {
-    FETCH, DECODE, WAIT, HALT,
+    FETCH, DECODE, RESET, WAIT, HALT,
     TRAP, REQUEST, SUPPRESS
 }
 
@@ -40,7 +41,9 @@ public enum Operation : byte
     CLR, COM, NEG, TST, // ONE OPR 1
     INC, DEC, ADC, SBC, // ONE OPR 2
     ROR, ROL, ASR, ASL, SXT, SWAB, // ONE OPR 3
-    BRC // MISC
+    BRC, MARK, SOB, // MISC
+    MUL_L, MUL_H, DIV_L, DIV_H, ASH_L, ASH_H, // HALF LONG OPR
+    XOR, ASH, // HALF WORD OPR
 }
 
 public enum Condition : byte

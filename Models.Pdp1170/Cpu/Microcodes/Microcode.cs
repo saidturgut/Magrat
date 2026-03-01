@@ -61,6 +61,8 @@ public static partial class Microcode
         { Cycle = Cycle.ALU_COMPUTE, Operation = operation, First = source, Second = operand, Mask = mask, Width = Width.WORD};
     private static Signal ALU_COMPUTE(Operation operation, Pointer source, Pointer operand, Flag mask, Width width) => new()
         { Cycle = Cycle.ALU_COMPUTE, Operation = operation, First = source, Second = operand, Mask = mask, Width =  width };
+    private static Signal ALU_COMPUTE(Operation operation, Pointer high, Pointer low, Pointer operand, Flag mask) => new()
+        { Cycle = Cycle.ALU_COMPUTE, Operation = operation, First = high, Second = operand, Third = low, Mask = mask, Width =  Width.WORD };
     
     private static Signal COND_COMPUTE(Condition condition, State state) => new()
         { Cycle = Cycle.COND_COMPUTE, Condition = condition, State = state };

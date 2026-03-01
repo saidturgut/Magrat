@@ -1,3 +1,5 @@
+using System.Data;
+
 namespace Models.Pdp1170.Cpu.Computing;
 
 public partial class Alu
@@ -41,14 +43,18 @@ public partial class Alu
         Operation.INC => INC(input), Operation.DEC => DEC(input), Operation.ADC => ADC(input), Operation.SBC => SBC(input),
         Operation.ROR => ROR(input), Operation.ROL => ROL(input), Operation.ASR => ASR(input), Operation.ASL => ASL(input),
         Operation.SXT => SXT(input), Operation.SWAB => SWAB(input), 
-        Operation.BRC => BRC(input),
+        Operation.BRC => BRC(input), Operation.MARK => MARK(input), Operation.SOB => SOB(input),
+        Operation.MUL_L => MUL_L(input), Operation.MUL_H => MUL_H(input),
+        Operation.DIV_L => DIV_L(input), Operation.DIV_H => DIV_H(input),
+        Operation.XOR => XOR(input), Operation.ASH => ASH(input),
     };
 }
 
-public struct AluInput(ushort a, ushort b, ushort psw, bool byteMode)
+public struct AluInput(ushort a, ushort b, ushort c, ushort psw, bool byteMode)
 {
     public ushort A = a;
     public ushort B = b;
+    public readonly ushort C = c;
     public readonly ushort Psw = psw;
     public readonly bool ByteMode = byteMode;
 }

@@ -7,18 +7,10 @@ public partial class Cache
     private readonly ushort[] DataLow = new ushort[0x200];
     private readonly ushort[] DataHigh = new ushort[0x200];
 
-    private ushort index;
     private byte offset;
-    private ushort tag;
+    private ushort index, tag, entry, oldTag;
+    private bool valid, dirty, highWord, highByte;
     private uint newBase;
-    
-    private ushort entry;
-    private bool valid;
-    private bool dirty;
-    private ushort oldTag;
-    
-    private bool highWord;
-    private bool highByte;
     
     private const byte validBit = 0b01;
     private const byte dirtyBit = 0b10;

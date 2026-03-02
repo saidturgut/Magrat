@@ -1,5 +1,7 @@
     .ORG 0x0000
-    mov #0xFF,r0  
-    mov #0xFF,r1
-    
-   mul r0,r1  
+           mov     #3,r4
+   loop:   nop
+           nop
+           nop
+           .word   077403      ; offset = 3
+           halt

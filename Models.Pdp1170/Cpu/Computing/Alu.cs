@@ -46,6 +46,7 @@ public partial class Alu
         Operation.BRC => BRC(input), Operation.MARK => MARK(input), Operation.SOB => SOB(input),
         Operation.MUL_L => MUL_L(input), Operation.MUL_H => MUL_H(input),
         Operation.DIV_L => DIV_L(input), Operation.DIV_H => DIV_H(input),
+        Operation.ASH_L => ASH_L(input), Operation.ASH_H => ASH_H(input),
         Operation.XOR => XOR(input), Operation.ASH => ASH(input),
     };
 }

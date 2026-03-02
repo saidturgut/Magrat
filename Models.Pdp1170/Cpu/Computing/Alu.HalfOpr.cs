@@ -40,20 +40,36 @@ public partial class Alu
     {
         var (quotient, remainder, flags) = Divide(input.A, (short)input.B, input.C);
         return new AluOutput
-            { Result = quotient, Custom = true, };
+            { Result = remainder, Custom = true, };
     }
     private static AluOutput DIV_H(AluInput input)
     {
         var (quotient, remainder, flags) = Divide(input.A, (short)input.B, input.C);
         return new AluOutput
-            { Result = remainder, Flags = flags, Custom = true, };
+            { Result = quotient, Flags = flags, Custom = true, };
     }
 
     private static (short Count, int value, int Result) ArithmeticShift(AluInput input)
     {
-        short count = (sbyte)(input.B & 0x3F);
-        int value = ((short)input.A << 16) | input.C;
-        int result = count >= 0 ? value << count : value >> -count;
+        int value = ((short)input.A << 16) | (ushort)input.C;
+        int raw = input.B & 0x3F;
+        short count = (short)((raw & 0x20) != 0 ? raw - 64 : raw);
+
+        int result;
+
+        if (count > 0)
+        {
+            if (count >= 32) result = 0;
+            else result = value << count;
+        }
+        else if (count < 0)
+        {
+            int rcount = -count;
+            if (rcount >= 32) result = value < 0 ? -1 : 0;
+            else result = value >> rcount;
+        }
+        else result = value;
+
         return (count, value, result);
     }
     private static AluOutput ASH_L(AluInput input)
@@ -84,29 +100,35 @@ public partial class Alu
     private static AluOutput ASH(AluInput input)
     {
         short value = (short)input.A;
-        short count = (sbyte)(input.B & 0x3F);
+        int raw = input.B & 0x3F;
+        short count = (short)((raw & 0x20) != 0 ? raw - 64 : raw);
         
-        short result = (short)(count >= 0 ? (value << count) : (value >> -count));
-
+        short result;
         ushort flags = 0;
+
+        if (count > 0)
+        {
+            if (count >= 16) result = 0;
+            else result = (short)(value << count);
+
+            if (count <= 16 && ((value << (count - 1)) & 0x8000) != 0)
+                flags |= (ushort)Flag.CARRY;
+
+            if ((value < 0) != (result < 0)) flags |= (ushort)Flag.OVERFLOW;
+        }
+        else if (count < 0)
+        {
+            int rcount = -count;
+            if (rcount >= 16) result = value < 0 ? (short)-1 : (short)0;
+            else result = (short)(value >> rcount);
+
+            if (rcount <= 16 && ((value >> (rcount - 1)) & 1) != 0)
+                flags |= (ushort)Flag.CARRY;
+        }
+        else result = value;
 
         if (result < 0) flags |= (ushort)Flag.NEGATIVE;
         if (result == 0) flags |= (ushort)Flag.ZERO;
-        if (count != 0)
-        {
-            if (count > 0)
-            {
-                if (((value << (count - 1)) & 0x8000) != 0)
-                    flags |= (ushort)Flag.CARRY;
-                if (value < 0 != result < 0)
-                    flags |= (ushort)Flag.OVERFLOW;
-            }
-            else
-            {
-                if (((value >> (-count - 1)) & 1) != 0)
-                    flags |= (ushort)Flag.CARRY;
-            }
-        }
 
         return new AluOutput
             { Result = (ushort)result, Flags = flags };

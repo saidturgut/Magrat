@@ -1,12 +1,13 @@
 namespace Models.Pdp1170;
 using Contracts;
-using Bus;
-using Cpu;
+using Devices;
+using Kernel;
 
 public class Pdp1170 : IMachine
 {
-    private readonly Unibus Unibus = new();
     private readonly Kb11c Kb11c = new();
+    private readonly Membus Membus = new();
+    private readonly Unibus Unibus = new();
 
     public void Init()
     {
@@ -21,22 +22,22 @@ public class Pdp1170 : IMachine
         
         while (!Kb11c.Halt())
         {
-            Tick();
+            Clock();
             
             if (sleep != 0) Thread.Sleep(sleep);
         }
     }
     
-    public void Tick()
+    public void Clock()
     {
         Kb11c.Tick();
-        
-        Unibus.Arbitrate();
+        Unibus.Tick();
+        Membus.Tick();
     }
 
-    public void Load(uint address, byte data) { Unibus.Load(address, data); }
+    public void Load(uint address, byte data) { Membus.Load(address, data); }
 
     public void Insert(byte[] image) { }
 
-    public void Dump() { Unibus.Dump(); }
+    public void Dump() { Membus.Dump(); }
 }

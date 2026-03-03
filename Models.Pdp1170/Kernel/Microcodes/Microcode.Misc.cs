@@ -1,0 +1,34 @@
+namespace Models.Pdp1170.Kernel.Microcodes;
+
+public partial class Microcode
+{
+    private static Signal[] STATE_CHANGE(State state, string nam) =>
+    [
+        ..SET_NAME(nam),
+        STATE_COMMIT(state)
+    ];
+    
+    private static Signal[] TRAP_REQUEST(Vector vector, string nam) =>
+    [
+        ..SET_NAME(nam),
+        TRAP_REQUEST(vector)
+    ];
+
+    // ------------------------------- PSW OPS ------------------------------- //
+    
+    private static Signal[] SET_PRIORITY(byte bit2, byte bit1, byte bit0) =>
+    [
+        ..SET_NAME($"SPL {bit2 << 2 | bit1 << 1 | bit0}"),
+        ALU_COMPUTE(Operation.ZRO, Flag.IP0 | Flag.IP1 | Flag.IP2),
+        ALU_COMPUTE(Operation.SET,
+            (bit0 != 0 ? Flag.IP0 : Flag.NONE) | 
+            (bit1 != 0 ? Flag.IP1 : Flag.NONE) |
+            (bit2 != 0 ? Flag.IP2 : Flag.NONE))
+    ];
+    
+    private static Signal[] PSW_WRITE(Flag flag, bool set, string nam) =>
+    [
+        ..SET_NAME(nam),
+        ALU_COMPUTE(set ? Operation.SET : Operation.ZRO, flag)
+    ];
+}

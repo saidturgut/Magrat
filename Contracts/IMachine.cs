@@ -6,7 +6,7 @@ public interface IMachine
 
     public void Power(byte sleep);
 
-    public void Tick();
+    public void Clock();
     
     public void Load(uint address, byte data);
 

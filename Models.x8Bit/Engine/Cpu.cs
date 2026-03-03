@@ -14,13 +14,13 @@ public class Cpu(IBus Bus, Datapath Datapath, Control Control) : IMachine
     {
         while (!Control.halt)
         {
-            Tick();
+            Clock();
             
             if (sleep != 0) Thread.Sleep(sleep);
         }
     }
     
-    public void Tick()
+    public void Clock()
     {
         Datapath.Receive(Control.Emit());
         

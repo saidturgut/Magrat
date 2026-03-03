@@ -23,7 +23,7 @@ public partial class Monitor
         step = Convert.ToByte(dat);
         while (step > 0)
         {
-            Machine!.Tick();
+            Machine!.Clock();
         }
     }
 }

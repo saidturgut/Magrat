@@ -8,9 +8,9 @@ public class Kb11c
     private readonly Datapath Datapath = new();
     private readonly Control Control = new();
     
-    public void Init(Unibus unibus)
+    public void Init(Unibus unibus, Membus membus)
     {
-        Datapath.Init(unibus, Control.Trapper);
+        Datapath.Init(unibus, membus, Control.Trapper);
         Control.Init();
     }
 

@@ -13,9 +13,10 @@ public class Biu
     private const byte memLevel = 3;
     private const byte uniLevel = 5;
     
-    public void Init(Unibus unibus)
+    public void Init(Unibus unibus, Membus membus)
     {
         Unibus = unibus;
+        Membus = membus;
     }
 
     public bool Validate(uint address)

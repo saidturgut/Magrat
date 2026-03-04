@@ -47,8 +47,3 @@ public struct StatusWord(ushort psw)
         0b11 => Mode.USER,
     };
 }
-
-public enum Mode
-{
-    KERNEL, SUPERVISOR, RESERVED, USER,
-}

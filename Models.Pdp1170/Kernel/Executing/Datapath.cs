@@ -16,7 +16,7 @@ public partial class Datapath
     private bool stall;
     private bool skip;
     
-    public void Init(Unibus unibus, Trapper trapper)
+    public void Init(Unibus unibus, Membus membus, Trapper trapper)
     {
         for (byte i = 0; i < CoreRegisters.Length; i++)
             CoreRegisters[i] =  new CommitRegister();
@@ -26,7 +26,8 @@ public partial class Datapath
             GeneralRegisters[i] =  new CommitRegister();
         for (byte i = 0; i < StackPointers.Length; i++)
             StackPointers[i] =  new CommitRegister();
-        Biu.Init(unibus);
+        Biu.Init(unibus, membus);
+        Mmu.Init();
         Trapper = trapper;
         
         StackPointers[0].Init(0xCCCC);

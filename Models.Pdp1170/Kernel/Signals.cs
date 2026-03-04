@@ -91,4 +91,14 @@ public struct ControlSignal(ushort opcode, bool stall, bool skip)
     public readonly bool Skip = skip;
 }
 
+public enum Mode : byte
+{
+    KERNEL, SUPERVISOR, RESERVED, USER,
+}
+
+public enum Space : byte
+{
+    Instruction, Data
+}
+
 

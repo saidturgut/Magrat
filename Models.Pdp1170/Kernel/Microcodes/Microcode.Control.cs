@@ -54,6 +54,24 @@ public partial class Microcode
         ALU_COMPUTE(Operation.BRC, Pointer.PC, Pointer.IR, Flag.NONE),
         REG_MOVE(Pointer.TMP, Pointer.PC),
     ];
+    
+    private static Signal[] SOB()
+    {
+        Descriptor info = new()
+            { Regs = [EncodedRegisters[oooxoo()]] };
+        return
+        [
+            ..SET_NAME($"SOB {Tools.Octal(ooooxx())},{info.Regs[0]}"),
+            REG_MOVE(Pointer.PSW, Pointer.SRC),
+            ALU_COMPUTE(Operation.DEC, info.Regs[0], Pointer.NIL, Flag.ZERO),
+            REG_MOVE(Pointer.TMP, info.Regs[0]),
+            REG_MOVE(Pointer.PSW, Pointer.TMP),
+            REG_MOVE(Pointer.SRC, Pointer.PSW),
+            COND_COMPUTE(Condition.NE, State.FETCH),
+            ALU_COMPUTE(Operation.SOB, Pointer.PC, Pointer.IR, Flag.NONE),
+            REG_MOVE(Pointer.TMP, Pointer.PC),
+        ];
+    }
 
     // ------------------------------- MISC ------------------------------- //
 

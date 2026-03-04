@@ -12,7 +12,7 @@ public class Pdp1170 : IMachine
     public void Init()
     {
         Unibus.Init();
-        Kb11c.Init(Unibus);
+        Kb11c.Init(Unibus, Membus);
     }
     
     public void Power(byte sleep)

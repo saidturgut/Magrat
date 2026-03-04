@@ -30,13 +30,18 @@ public class DeviceRegister
     
     public byte GetByte(uint address)
         => address % 2 != 0 ? (byte)(value >> 8) : (byte)(value & 0xFF);
-    
-    public ushort GetWord()
-        => value;
-
     public void SetByte(uint address, byte data)
         => value = (ushort)((value & 0x00FF) | ((address % 2 != 0) ? data << 8 : data));
-    
+
+    public ushort GetWord()
+        => value;
     public void SetWord(ushort data)
         => value = data;
+
+    public bool GetBit(byte bit)
+        => (value & (1 << bit)) != 0;
+    public void SetBit(byte bit)
+        => value |= (ushort)(1 << bit);
+    public void ClearBit(byte bit)
+        => value &= (ushort)~(1 << bit);
 }

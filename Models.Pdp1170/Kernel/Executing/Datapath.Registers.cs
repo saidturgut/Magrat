@@ -24,7 +24,7 @@ public partial class Datapath
     private CommitRegister PointLatch(Pointer pointer)
         => TemporaryLatches[(byte)pointer - CoreRegisters.Length];
 
-    private CommitRegister AddressRegister(uint address) => address switch
+    private CommitRegister DecodeAddress(uint address) => address switch
     {
         0x7FFFFE => PointCore(Pointer.PSW), // PSW
         /*
@@ -42,6 +42,7 @@ public partial class Datapath
         0x7FFFE2 => ControlRegisters[(byte)Mapping.HIGH_ERR],
         0x7FFFE0 => ControlRegisters[(byte)Mapping.LOW_ERR],
         */
+        
         0x7FFFCF => StackPointers[3], // SP_U
         0x7FFFCE => StackPointers[1], // SP_S
         0x7FFFCD => GeneralRegisters[11], // R5_1
@@ -62,8 +63,8 @@ public partial class Datapath
     };
 
     private ushort ReadRegister()
-        => AddressRegister(addressLatch).Get();
+        => DecodeAddress(addressLatch).Get();
 
     private void WriteRegister(ushort data)
-        => AddressRegister(addressLatch).Set(data);
+        => DecodeAddress(addressLatch).Set(data);
 }

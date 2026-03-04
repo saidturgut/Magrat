@@ -11,8 +11,4 @@
       <ProjectReference Include="..\Contracts\Contracts.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Memory\" />
-    </ItemGroup>
-
 </Project>

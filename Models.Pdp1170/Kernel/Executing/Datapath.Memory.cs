@@ -8,7 +8,7 @@ public partial class Datapath
     
     private uint addressLatch;
     
-    private MemoryOperation ResolveAddress(Space space)
+    private MemoryOperation ResolveAddress(Space space, bool write)
     {
         if (!stall)
         {
@@ -21,12 +21,12 @@ public partial class Datapath
             }
             
             // CHECK IF VIRTUAL ADDRESS IS VALID
-            var translated = Mmu.Translate(virtualAddress, space);
+            var translated = Mmu.Translate(virtualAddress, statusWord.CurrentMode, space, write);
             switch (translated.Vector)
             {
                 case Vector.MMU_ABORT: Trapper.RequestAbortTrap(Vector.MMU_ABORT); return MemoryOperation.FAULT;
                 case Vector.PDR_ERROR: Trapper.RequestPostTrap(Vector.PDR_ERROR); break;
-            }
+            } 
             addressLatch = translated.Address;
 
             // CHECK IF PHYSICAL ADDRESS IS VALID
@@ -51,7 +51,7 @@ public partial class Datapath
     
     private void MemoryFetch()
     {
-        switch (ResolveAddress(Space.Instruction))
+        switch (ResolveAddress(Space.Instruction, false))
         {
             case MemoryOperation.EXTERNAL: PointLatch(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width)); break;
             case MemoryOperation.REGISTER: PointLatch(Pointer.MDR).Set(ReadRegister()); break;
@@ -60,7 +60,7 @@ public partial class Datapath
     
     private void MemoryRead()
     {
-        switch (ResolveAddress(Space.Data))
+        switch (ResolveAddress(Space.Data, false))
         {
             case MemoryOperation.EXTERNAL: PointLatch(Pointer.MDR).Set(Biu.Read(addressLatch, signal.Width)); break;
             case MemoryOperation.REGISTER: PointLatch(Pointer.MDR).Set(ReadRegister()); break;
@@ -69,7 +69,7 @@ public partial class Datapath
     
     private void MemoryWrite()
     {
-        switch (ResolveAddress(Space.Data))
+        switch (ResolveAddress(Space.Data, true))
         {
             case MemoryOperation.EXTERNAL: Biu.Write(addressLatch, PointLatch(Pointer.MDR).Get(), signal.Width); break;
             case MemoryOperation.REGISTER: WriteRegister(PointLatch(Pointer.MDR).Get()); break;
